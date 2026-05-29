@@ -264,7 +264,6 @@ namespace BALL
 				bool applyInternal_();
 
 				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
-				void recordIntent_(const ApplyPayload& payload);
 
 				Stage* stage_;
 				Scene* scene_;
@@ -299,7 +298,6 @@ namespace BALL
 				// 999.59-03 — re-entrancy state now lives in the base depth
 				// counter (applying_depth_); see ControllerApplyGuard.
 
-				ApplyPayload last_payload_;  // 999.59-03 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

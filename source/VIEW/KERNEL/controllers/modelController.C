@@ -244,12 +244,6 @@ namespace BALL
 			if (rep_ != nullptr) rep_->update(true);
 		}
 
-		void ModelController::recordIntent_(const ApplyPayload& payload)
-		{
-			// v1.7.4 — capture only (no UndoStack yet, §2 step 7). Store the
-			// last payload so a future v2.0 UndoStack can consume it.
-			last_payload_ = payload;
-		}
 
 		void ModelController::setModelType(int t)
 		{

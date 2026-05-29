@@ -11,6 +11,7 @@
 //
 
 #include <BALL/VIEW/KERNEL/controllers/controller.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerJob.h>
 
 using namespace BALL;
 
@@ -45,6 +46,41 @@ namespace BALL
 			// Base no-op. Each subclass declares its own §2a invalidation
 			// level here (soft refresh / display-list rebuild / scene-
 			// structural side effects).
+		}
+
+		void Controller::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — CAPTURE ONLY (§2 step 7 / §2d). Store the last payload
+			// so a future v2.0 UndoStack can consume it. We do NOT push to any
+			// stack and no UI reads it in v1.7.4. Hoisted to the base in
+			// 999.59-05 (the nine controllers previously each held an identical
+			// copy of this body).
+			last_payload_ = payload;
+		}
+
+		const ApplyPayload& Controller::lastIntent_() const
+		{
+			return last_payload_;
+		}
+
+		bool Controller::kickJob_(ControllerJob& job)
+		{
+			// §6 — defer to the job and re-enter on the GUI thread. The QUEUED
+			// connection guarantees applyResult_ runs on this Controller's
+			// (GUI) thread even though the job emits finished() from its worker
+			// thread. apply() returns this false: nothing mutated synchronously.
+			QObject::connect(&job, &ControllerJob::finished,
+			                 this, &Controller::applyResult_,
+			                 Qt::QueuedConnection);
+			job.start();
+			return false;
+		}
+
+		void Controller::applyResult_(const ApplyPayload& /*payload*/)
+		{
+			// Base no-op. A subclass that defers work to a ControllerJob
+			// overrides this to run the §2 apply() contract (guard / mutate /
+			// emit / invalidate) on the GUI thread with the job's result.
 		}
 
 	} // namespace VIEW

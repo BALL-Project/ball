@@ -179,7 +179,6 @@ namespace BALL
 				bool applyInternal_();
 
 				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
-				void recordIntent_(const ApplyPayload& payload);
 
 				Representation* rep_;
 				float ambient_;
@@ -190,7 +189,6 @@ namespace BALL
 				QColor specular_color_;    // mirrors Stage::Material.specular_color
 				QColor reflective_color_;  // mirrors Stage::Material.reflective_color
 				int   transparency_;  // 0–255 per-rep alpha (Representation::setTransparency path).
-				ApplyPayload last_payload_;  // 999.59-02 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

@@ -118,7 +118,6 @@ namespace BALL
 				bool applyInternal_();
 
 				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
-				void recordIntent_(const ApplyPayload& payload);
 
 				Representation* rep_;
 				QString label_text_;
@@ -130,7 +129,6 @@ namespace BALL
 				// owns inserted Representations).
 				Representation* last_built_rep_ = nullptr;
 
-				ApplyPayload last_payload_;  // 999.59-03 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

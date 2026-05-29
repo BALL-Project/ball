@@ -43,6 +43,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+		class ControllerJob;
+
 		/**
 		 * Base class for the BALLView command-shaped controllers
 		 * (ARCHITECTURE-CONTRACT.md §2 / §2a / §9).
@@ -119,12 +121,62 @@ namespace BALL
 				virtual void invalidateDeclared_();
 
 				/**
+				 * Record the reversible intent for a mutation (§2 step 7 / §2d).
+				 * v1.7.4 is CAPTURE-ONLY: it stores @p payload as the last intent
+				 * so a future v2.0 UndoStack can consume it. It does NOT push to
+				 * any stack and no UI reads it in v1.7.4. Every subclass's
+				 * <tt>apply()</tt> calls this with a populated ApplyPayload
+				 * (before/after snapshots, unique command_id, target, timestamp)
+				 * before returning true. Hoisted to the base in 999.59-05 — the
+				 * nine controllers previously each carried an identical copy.
+				 * @param payload the captured before/after intent.
+				 */
+				void recordIntent_(const ApplyPayload& payload);
+
+				/**
+				 * The last reversible intent captured by recordIntent_ (§2d).
+				 * Reachable for v2.0 undo consumption / tests; not consumed in
+				 * v1.7.4.
+				 * @return the most recently recorded ApplyPayload.
+				 */
+				const ApplyPayload& lastIntent_() const;
+
+				/**
+				 * Defer a mutation to an async ControllerJob (§6). The owning
+				 * Controller calls this from <tt>apply()</tt> when the work is
+				 * too long to run synchronously: it connects @p job's
+				 * <tt>finished()</tt> to <tt>applyResult_()</tt> with a QUEUED
+				 * connection (so the result runs on the GUI thread), starts the
+				 * job, and returns false — NOTHING is mutated synchronously. The
+				 * worker thread must not touch the owner or GL context. No
+				 * concrete job ships in v1.7.4; this is the plumbing only.
+				 * @param job the job to kick (lifetime owned by the caller).
+				 * @return always false (nothing mutated synchronously).
+				 */
+				bool kickJob_(ControllerJob& job);
+
+				/**
+				 * GUI-thread handler for a ControllerJob result (§6). Invoked via
+				 * the queued <tt>finished()</tt> connection, on the GUI thread, so
+				 * a subclass override can run the §2 apply() contract — guard /
+				 * mutate / emit / invalidate — safely. The base is a no-op.
+				 * @param payload the job's captured result.
+				 */
+				virtual void applyResult_(const ApplyPayload& payload);
+
+				/**
 				 * Nest-aware re-entrancy depth (§2 / §4). A subclass's
 				 * <tt>apply()</tt> checks <tt>applying_depth_ > 0</tt> and
 				 * drops, then binds a stack-scoped ControllerApplyGuard to
 				 * this counter. GUI-thread-only — not thread-safe by design.
 				 */
 				int applying_depth_ = 0;
+
+				/**
+				 * Capture-only store for the last reversible intent (§2d).
+				 * v2.0 UndoStack consumes this; v1.7.4 only records it.
+				 */
+				ApplyPayload last_payload_;
 		};
 
 	} // namespace VIEW

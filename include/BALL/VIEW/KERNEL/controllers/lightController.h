@@ -143,7 +143,6 @@ namespace BALL
 				bool applyInternal_();
 
 				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
-				void recordIntent_(const ApplyPayload& payload);
 
 				Stage* stage_;
 				int    light_count_;
@@ -155,7 +154,6 @@ namespace BALL
 				// the Stage and re-adds this list.
 				std::vector<LightSource> lights_;
 
-				ApplyPayload last_payload_;  // 999.59-03 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

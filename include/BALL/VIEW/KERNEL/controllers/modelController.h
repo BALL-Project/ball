@@ -174,7 +174,6 @@ namespace BALL
 				 * capture-only — store the last payload; v2.0 pushes it onto
 				 * the UndoStack here.
 				 */
-				void recordIntent_(const ApplyPayload& payload);
 
 				Representation* rep_;
 				int model_type_;
@@ -188,7 +187,6 @@ namespace BALL
 				float surface_probe_radius_;
 				float cartoon_tube_radius_;
 				bool  params_dirty_;
-				ApplyPayload last_payload_;  // 999.59-02 — capture-only reversible intent (§2 step 7).
 		};
 
 	} // namespace VIEW

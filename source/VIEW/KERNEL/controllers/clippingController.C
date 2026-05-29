@@ -271,11 +271,6 @@ namespace BALL
 			revert();
 		}
 
-		void ClippingController::recordIntent_(const ApplyPayload& payload)
-		{
-			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
-			last_payload_ = payload;
-		}
 
 		void ClippingController::setEnabled(bool b)
 		{

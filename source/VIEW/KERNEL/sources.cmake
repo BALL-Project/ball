@@ -37,6 +37,9 @@ SET(SOURCES_LIST
 	# headers controller.h / applyPayload.h / controllerApplyGuard.h are
 	# picked up by the FILE(GLOB ...) in include/BALL/VIEW/KERNEL/sources.cmake.
 	controllers/controller.C
+	# Phase 999.59-05 — minimal async-job base (§6). Q_OBJECT header
+	# controllerJob.h is MOC'd automatically (companion to this .C).
+	controllers/controllerJob.C
 	# Phase 999.44 — BALLView Refresh: *Controller extraction subtree.
 	# The exemplar StageController landed in Plan 01; Plan 04 adds 5
 	# more read-only mirror Controllers for the Representation tab

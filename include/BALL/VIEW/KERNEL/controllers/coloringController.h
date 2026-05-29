@@ -127,13 +127,11 @@ namespace BALL
 				bool applyInternal_();
 
 				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
-				void recordIntent_(const ApplyPayload& payload);
 
 				Representation* rep_;
 				int coloring_method_;
 				float value_min_;
 				float value_max_;
-				ApplyPayload last_payload_;  // 999.59-02 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW
