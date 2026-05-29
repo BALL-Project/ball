@@ -212,6 +212,10 @@ IF (BALL_HAS_VIEW)
 		harness_selftest
 		model_contract_test
 		coloring_contract_test
+		# Phase 999.63 (v1.7.x-17b) — previewRange() non-mutation guard.
+		# Asserts the histogram drag-preview is render-only: mutates nothing,
+		# emits no event, never enters apply() (ARCHITECTURE-CONTRACT.md §5).
+		coloring_preview_nonmutation_test
 		material_contract_test
 		clipping_contract_test
 		label_contract_test
