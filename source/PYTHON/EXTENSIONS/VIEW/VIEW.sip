@@ -41,6 +41,9 @@
 %Include compositeManager.sip
 %Include representationManager.sip
 %Include representation.sip
+// Phase 999.59-06 (v1.7.4) — command-shaped Controllers (the binding surface
+// that replaces the narrowed Representation/Stage owner setters, §3d).
+%Include controllers.sip
 %Include geometricObject.sip
 %Include view-common.sip
 %Include clippingPlane.sip

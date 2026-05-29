@@ -1345,3 +1345,21 @@ jobs:
 
       - name: Reject deleteLater() inside destructors (QT-LIFETIME.md rule 5)
         run: bash cmake/scripts/check-deletelater-discipline.sh
+
+  # sip-refresh — phase 999.59-06 (v1.7.4) PyBALL binding-surface lint.
+  # SIP is disabled in the modernization build and is slated for full
+  # replacement in v2.1 (Phase 6 generator bake-off), so we do NOT resurrect
+  # SIP 4.9 to regenerate the bindings here. Instead this lightweight,
+  # blocking lint enforces the durable §3d guarantee: every method declared in
+  # controllers.sip maps to a real C++ symbol — catching the setter-rename rot
+  # that 999.59-04's privatization would otherwise have hidden. Full regen +
+  # runtime coverage land with the v2.1 PyBALL milestone.
+  sip-refresh:
+    name: sip-refresh (PyBALL binding-symbol lint)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify controllers.sip methods map to real C++ symbols
+        run: bash cmake/scripts/check-sip-symbols.sh
