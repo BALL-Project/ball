@@ -333,11 +333,15 @@ IF (BALL_HAS_VIEW)
 		SET_TESTS_PROPERTIES(${name} PROPERTIES LABELS "contract")
 	ENDFUNCTION()
 
-	# Negative: must-not-compile AFTER 999.59-04. EXPECT=pass today.
+	# Negative: must-not-compile AFTER 999.59-04 (setters are now private,
+	# reachable only through StageMutation / RepresentationBuilder friends).
+	# Flipped pass -> fail in 999.59-04. DIAG_MATCH left empty: the "must not
+	# compile" assertion is the contract; the exact diagnostic text differs
+	# across GCC/Clang/MSVC so we don't pin it.
 	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_negative_stage
-		owner_narrowing_negative_stage.C pass "")
+		owner_narrowing_negative_stage.C fail "")
 	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_negative_representation
-		owner_narrowing_negative_representation.C pass "")
+		owner_narrowing_negative_representation.C fail "")
 	# Positive: legal mutation surface — must compile every phase.
 	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_positive
 		owner_narrowing_positive.C pass "")

@@ -23,6 +23,7 @@
 #include <BALLTestConfig.h>
 
 #include "contractTestHarness.h"
+#include <BALL/VIEW/KERNEL/stageMutation.h>
 
 #include <BALL/VIEW/KERNEL/stage.h>          // Stage complete type (setFogIntensity)
 
@@ -59,7 +60,9 @@ CHECK(snapshotOwner is deterministic + reflects owner state)
 	TEST_EQUAL(a == b, true)               // no spurious diff on repeat
 	// Mutating the Stage directly changes the snapshot (sanity: the
 	// snapshot is actually reading owner state, not a constant).
-	h.stage()->setFogIntensity(0.37f);
+	// §3b — Stage mutation flows through the single StageMutation friend
+	// (setFogIntensity is now owner-narrowed after 999.59-04).
+	StageMutation(*h.stage()).fogIntensity(0.37f);
 	OwnerSnapshot c = h.snapshotOwner();
 	TEST_EQUAL(a != c, true)
 	h.tearDown();
