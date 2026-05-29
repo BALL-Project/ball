@@ -151,11 +151,12 @@ namespace BALL
 				connect(controller_, &ColoringController::valueMaxChanged,
 				        this, &ColoringSection::onControllerValueMaxChanged_);
 
-				// v1.7.x-18 — per-section reset.
-				setResettable(true, tr("Reset Coloring settings to the "
-				                       "representation's current values?"));
+				// 999.64 — per-section reset via the single-call Controller::reset()
+				// (sets method-defined defaults, one §2 apply, one reversible
+				// payload), replacing the legacy two-step revert(); apply().
+				setResettable(true, tr("Reset Coloring settings to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}
@@ -280,11 +281,13 @@ namespace BALL
 
 		void ColoringSection::onWidgetReset_()
 		{
-			// Reset — revert to the representation's current values (delegates to
-			// the controller's reset path, 999.64 base) then re-apply.
+			// 999.64 — the ValueRangeWidget's own reset button. Controller::reset()
+			// is now the SINGLE-call reset: it sets the method-defined coloring
+			// defaults AND runs ONE §2 apply() itself, so we must NOT call apply()
+			// again here (that would emit a second event / second payload, the very
+			// dual-path the contract closes). Just refresh the histogram afterwards.
 			if (!controller_) return;
 			controller_->reset();
-			controller_->apply();
 			refreshDistribution_();
 		}
 

@@ -50,11 +50,15 @@ namespace BALL
 				connect(controller_, &StageController::backgroundColorChanged,
 				        this, &BackgroundSection::onControllerColorChanged_);
 
-				// v1.7.x-18 — per-section reset.
-				setResettable(true, tr("Reset Background colour to the "
-				                       "scene's current value?"));
+				// 999.64 — per-section reset via the single-call Controller::reset()
+				// (one §2 apply, one reversible payload), replacing the legacy
+				// two-step revert(); apply(). Background shares StageController
+				// with the Stage section, so reset() restores the stage defaults
+				// (black background among them).
+				setResettable(true, tr("Reset Stage settings (incl. background) "
+				                       "to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}

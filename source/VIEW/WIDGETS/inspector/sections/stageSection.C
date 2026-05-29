@@ -86,11 +86,12 @@ namespace BALL
 				connect(controller_, &StageController::fogIntensityChanged,
 				        this, &StageSection::onControllerFogIntensityChanged_);
 
-				// v1.7.x-18 — per-section reset.
-				setResettable(true, tr("Reset Stage settings to the "
-				                       "scene's current values?"));
+				// 999.64 — per-section reset via the single-call Controller::reset()
+				// (sets method-defined defaults, one §2 apply, one reversible
+				// payload), replacing the legacy two-step revert(); apply().
+				setResettable(true, tr("Reset Stage settings to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}

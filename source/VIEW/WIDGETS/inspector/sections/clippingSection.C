@@ -79,14 +79,14 @@ namespace BALL
 				connect(controller_, &ClippingController::cappedChanged,
 				        this, &ClippingSection::onControllerCappedChanged_);
 
-				// v1.7.x-18 — per-section reset. revert() re-reads the
-				// live clipping state into the controller (which re-emits
-				// the *Changed signals → the widgets resync), then apply()
-				// pushes it back through the clipping-plane backend.
-				setResettable(true, tr("Reset Clipping settings to the "
-				                       "representation's current values?"));
+				// 999.64 — per-section reset. The single-call Controller::reset()
+				// sets the method-defined clipping defaults (which re-emit the
+				// *Changed signals → the widgets resync) and runs ONE §2 apply()
+				// through the clipping-plane backend (one event, one reversible
+				// payload), replacing the legacy two-step revert(); apply().
+				setResettable(true, tr("Reset Clipping settings to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}

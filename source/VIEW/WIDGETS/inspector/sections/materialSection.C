@@ -94,14 +94,14 @@ namespace BALL
 				connect(controller_, &MaterialController::transparencyChanged,
 				        this, &MaterialSection::onControllerTransparencyChanged_);
 
-				// v1.7.x-18 — per-section reset. revert() re-reads the
-				// live Representation material into the controller (which
-				// re-emits the *Changed signals → the sliders resync), then
-				// apply() pushes it back through the scene-material backend.
-				setResettable(true, tr("Reset Material settings to the "
-				                       "representation's current values?"));
+				// 999.64 — per-section reset. The single-call Controller::reset()
+				// sets the method-defined material defaults (which re-emit the
+				// *Changed signals → the sliders resync) and runs ONE §2 apply()
+				// through the scene-material backend (one event, one reversible
+				// payload), replacing the legacy two-step revert(); apply().
+				setResettable(true, tr("Reset Material settings to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}

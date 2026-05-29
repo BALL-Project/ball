@@ -88,13 +88,14 @@ namespace BALL
 				connect(controller_, &LabelController::fontSizeChanged,
 				        this, &LabelSection::onControllerFontSizeChanged_);
 
-				// v1.7.x-18 — per-section reset. revert() re-seeds the
-				// controller defaults (which re-emit the *Changed signals →
-				// the widgets resync), then apply() pushes the label through
-				// the LabelModel + MainControl backend against the selection.
+				// 999.64 — per-section reset. The single-call Controller::reset()
+				// sets the method-defined label defaults (which re-emit the
+				// *Changed signals → the widgets resync) and runs ONE §2 apply()
+				// (one event, one reversible payload), replacing the legacy
+				// two-step revert(); apply().
 				setResettable(true, tr("Reset Label settings to defaults?"));
 				connect(this, &InspectorSection::resetRequested, this, [this]() {
-					if (controller_) { controller_->revert(); controller_->apply(); }
+					if (controller_) controller_->reset();
 				});
 			}
 		}
