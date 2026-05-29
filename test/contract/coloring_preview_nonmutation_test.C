@@ -69,7 +69,7 @@ QApplication app(argc, argv);
 // enters apply(). (ENABLED — ColoringController is cut over to bool apply() in
 // 999.59-02, and previewRange() lands in 999.63.)
 // ---------------------------------------------------------------------------
-CHECK(previewRange mutates nothing, emits no event, never enters apply)
+CHECK(previewRange mutates nothing - emits no event - never enters apply)
 	Representation rep;
 	ColoringController c(&rep);
 

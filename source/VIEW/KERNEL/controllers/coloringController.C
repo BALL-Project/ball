@@ -225,7 +225,7 @@ namespace BALL
 			for (const Composite* c : comps)
 			{
 				if (c == nullptr) continue;
-				if (RTTI::isKindOf<AtomContainer>(*c))
+				if (RTTI::isKindOf<AtomContainer>(c))
 				{
 					const AtomContainer* ac = dynamic_cast<const AtomContainer*>(c);
 					if (ac == nullptr) continue;
@@ -235,7 +235,7 @@ namespace BALL
 						values.push_back(atomValue_(*it));
 					}
 				}
-				else if (RTTI::isKindOf<Atom>(*c))
+				else if (RTTI::isKindOf<Atom>(c))
 				{
 					const Atom* a = dynamic_cast<const Atom*>(c);
 					if (a != nullptr) values.push_back(atomValue_(*a));

@@ -44,6 +44,8 @@
 
 namespace BALL
 {
+	class Atom;
+
 	namespace VIEW
 	{
 		class Representation;
@@ -212,7 +214,7 @@ namespace BALL
 				 * / charge / …), so the histogram bins the same values the
 				 * colormap paints. @return the scalar, or 0 for unknown methods.
 				 */
-				float atomValue_(const class Atom& atom) const;
+				float atomValue_(const Atom& atom) const;
 
 				/**
 				 * Recompute the bin summary for the current composites + method +
