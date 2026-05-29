@@ -1363,3 +1363,21 @@ jobs:
 
       - name: Verify controllers.sip methods map to real C++ symbols
         run: bash cmake/scripts/check-sip-symbols.sh
+
+  # opaque-paint — phase 999.62 close-out (v1.7.4) opaque-paint contract lint.
+  # Flags any VIEW/WIDGETS container that animates a child's height (the
+  # UFG-05/09/10 flicker class) without declaring an opaque-paint marker
+  # (WA_OpaquePaintEvent / autoFillBackground / opaqueContainer). Centralizes
+  # the lesson as a themeable token (theme-neutral.qss) + a doc (THEME.md).
+  opaque-paint:
+    name: opaque-paint (container opaque-paint lint)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Self-test the lint (compliant passes / violation fails / whitelist exempts)
+        run: bash test/contract/opaque-paint-lint-selftest.sh
+
+      - name: Enforce the opaque-paint contract on VIEW/WIDGETS
+        run: bash cmake/scripts/check-opaque-paint.sh

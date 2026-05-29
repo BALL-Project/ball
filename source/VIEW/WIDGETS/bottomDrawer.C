@@ -43,6 +43,15 @@ namespace BALL
 			  expanded_(false)
 		{
 			setObjectName("bottomDrawer");
+			// Opaque-paint contract (ARCHITECTURE-CONTRACT.md §10 / THEME.md):
+			// this dock animates its own maximumHeight (height_animation_ below),
+			// so it must paint opaquely or the parent shows through during the
+			// slide (the UFG-05/09/10 flicker class). We use the SAFE half for a
+			// styled QDockWidget — autoFillBackground + the opaqueContainer theme
+			// token (themed fill via theme-neutral.qss) — and deliberately NOT
+			// WA_OpaquePaintEvent, which would suppress the dock's own frame paint.
+			setAutoFillBackground(true);
+			setProperty("opaqueContainer", true);
 			// Bottom drawer should be allowed only in the bottom area.
 			setAllowedAreas(Qt::BottomDockWidgetArea);
 			// We hide the standard title bar and use a custom one (the

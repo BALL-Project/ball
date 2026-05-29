@@ -1,0 +1,13 @@
+# opaque-paint-whitelist.txt — Phase 999.62 close-out (v1.7.4)
+#
+# Files (basenames) exempt from cmake/scripts/check-opaque-paint.sh.
+# A file belongs here ONLY if it references a height-animation token
+# (setMaximumHeight / "maximumHeight") for a reason that is NOT a
+# flicker-prone opaque container — e.g. it computes a height but does not own
+# the painted surface, or the animation is on a transient overlay. Each entry
+# MUST carry a one-line rationale. Empty today: every height-animating
+# container in source/VIEW/WIDGETS currently declares an opaque-paint marker
+# (WA_OpaquePaintEvent + autoFillBackground + opaqueContainer), so the lint is
+# clean with no exemptions.
+#
+# format: <basename.C>   # rationale
