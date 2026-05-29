@@ -1,10 +1,9 @@
-# DRAFT — Inspector Depth + the Controller Contract (tentative v1.7.4)
+# v1.7.4 — Inspector Depth + the Controller Contract
 
-> **STATUS: DRAFT / UNRELEASED.** Tag held pending (1) the UAT batch
-> (`.planning/v1.7.4-UAT-BATCH.md`) and (2) the version-sequencing decision
-> (this work vs. the deferred v1.7.3 legacy-dialog deletion). Folds into
-> `RELEASE-NOTES-v1.7.md` with the final number once decided. Built on
-> `v1.7.4-inspector-depth` @ `f96e9aac62` (off the v1.7.2 tag).
+> **STATUS: RELEASED.** Tagged `v1.7.4` (2026-05-29) off `v1.7.4-inspector-depth`.
+> UAT passed (`.planning/v1.7.4-UAT-BATCH.md`); CI green on all 4 platforms.
+> Version-sequencing decision: tag v1.7.4 now; the deferred v1.7.3 legacy-dialog
+> deletion ships later as its own patch off its branch.
 
 ## Headline
 

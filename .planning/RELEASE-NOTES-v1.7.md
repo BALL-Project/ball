@@ -24,6 +24,23 @@ If you're a non-GUI consumer of `libBALL` / `libVIEW`, **v1.7 is a transparent u
 
 ---
 
+## v1.7.4 patch cycle (2026-05-29) — Inspector Depth + the Controller Contract
+
+The structural milestone of the v1.7.x line: every mutating BALLView control now
+routes through a single command-shaped `Controller::apply()` (validate → guard →
+mutate the one owner → emit one event → declared invalidation → record a
+reversible payload). `Stage`/`Representation` owner setters are privatized behind
+narrow `StageMutation`/`RepresentationBuilder` friends — external mutation no
+longer compiles — so there is exactly one mutation path per domain. On top of the
+contract: a coloring value-range **histogram** (drag handles + presets, render-only
+drag preview) and a per-section **Reset**. New CI gates: contract-tests (Linux),
+sip-refresh, opaque-paint, lifetime-discipline. Transparent to non-GUI consumers.
+Full detail: [`RELEASE-NOTES-v1.7.4-DRAFT.md`](RELEASE-NOTES-v1.7.4-DRAFT.md).
+Known issue: minor Inspector right-edge clipping when scrolled (cosmetic) →
+v1.7.5. The deferred v1.7.3 legacy-dialog deletion remains on its own branch.
+
+---
+
 ## Removed in v1.7
 
 ### The legacy 5-dock "Classic" workspace preset (Phase 999.49)

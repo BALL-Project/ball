@@ -20,7 +20,7 @@ IF(POLICY CMP0167)
 ENDIF()
 
 
-PROJECT("BALL" VERSION 1.7.2) # 1.7.2 — Inspector cut-over + build accel (legacy-dialog deletion deferred to v1.7.3)
+PROJECT("BALL" VERSION 1.7.4) # 1.7.4 — Inspector depth + command-shaped controller contract (v1.7.3 legacy-dialog deletion deferred to its own patch)
 
 
 ########################################################
