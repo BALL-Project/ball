@@ -25,6 +25,10 @@ SET(SOURCES_LIST
 	labeledSlider.C
 	sectionHeader.C
 	swatchButton.C
+	# Phase 999.63 (v1.7.x-17b) — value-range histogram widget for
+	# value-based coloring. Reusable QWidget (lives in WIDGETS, not
+	# inspector/sections/); the ColoringSection consumes it.
+	valueRangeWidget.C
 	# Phase 999.44 — Unified Inspector shell + sections. Each TU is
 	# fully gated by #ifdef BALL_UI_V2 in its body so listing them
 	# unconditionally keeps the OFF cell's symbol table identical to
