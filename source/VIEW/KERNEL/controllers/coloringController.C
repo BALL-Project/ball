@@ -28,7 +28,17 @@
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/timeStamp.h>
+#include <BALL/CONCEPT/composite.h>
+#include <BALL/COMMON/rtti.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PDBAtom.h>
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/atomIterator.h>
+#include <BALL/KERNEL/forEach.h>
 
+#include <algorithm>
+#include <cmath>
+#include <functional>
 #include <sstream>
 
 namespace BALL
@@ -99,6 +109,193 @@ namespace BALL
 		{
 			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
 			revert();
+		}
+
+		void ColoringController::setRange(float min, float max)
+		{
+			// 999.63 — stage both endpoints atomically. NOT a mutation of the
+			// owner (apply() does that); just updates the staged mirror state and
+			// emits the per-endpoint change notifications the section listens for.
+			if (max < min) std::swap(min, max);
+			setValueMin(min);
+			setValueMax(max);
+		}
+
+		void ColoringController::previewRange(float min, float max)
+		{
+			// 999.63 / ARCHITECTURE-CONTRACT.md §5 — RENDER-ONLY drag-preview hint.
+			//
+			// This is explicitly NON-OWNER. It MUST NOT:
+			//   - create an ApplyPayload,
+			//   - emit a typed event,
+			//   - call any owner setter (Representation::update / RepresentationBuilder),
+			//   - take a ControllerApplyGuard,
+			//   - touch the staged mutation state (coloring_method_ / value_min_ /
+			//     value_max_) — otherwise a subsequent apply() would silently
+			//     commit the dragged value, turning this into a second mutation
+			//     path (exactly the regression the contract test guards against).
+			//
+			// In v1.7.4 the render-side overlay falls back to the cheaper
+			// "recolor the histogram bars in-range during drag" hint owned by the
+			// widget itself (see the plan's Risk note), so there is no scene-side
+			// owner touch here. The method is the explicit, named, non-mutating
+			// render seam: idempotent, freely re-callable per drag-frame, and a
+			// no-op against the owner. The diagnostic log makes the render-only
+			// intent observable without any state change.
+			if (max < min) std::swap(min, max);
+			Log.info() << "[ColoringController::previewRange] render-only hint ["
+			           << min << ", " << max << "] — no mutation." << std::endl;
+		}
+
+		bool ColoringController::isValueBasedMethod_(int method)
+		{
+			switch (method)
+			{
+				case COLORING_TEMPERATURE_FACTOR:
+				case COLORING_OCCUPANCY:
+				case COLORING_ATOM_CHARGE:
+				case COLORING_DISTANCE:
+				case COLORING_FORCES:
+				case COLORING_CUSTOM:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		float ColoringController::atomValue_(const Atom& atom) const
+		{
+			switch (coloring_method_)
+			{
+				case COLORING_ATOM_CHARGE:
+					return static_cast<float>(atom.getCharge());
+				case COLORING_FORCES:
+					return static_cast<float>(atom.getForce().getLength());
+				case COLORING_TEMPERATURE_FACTOR:
+				{
+					const PDBAtom* pa = dynamic_cast<const PDBAtom*>(&atom);
+					return (pa != nullptr) ? pa->getTemperatureFactor() : 0.0f;
+				}
+				case COLORING_OCCUPANCY:
+				{
+					const PDBAtom* pa = dynamic_cast<const PDBAtom*>(&atom);
+					return (pa != nullptr) ? pa->getOccupancy() : 0.0f;
+				}
+				case COLORING_DISTANCE:
+				case COLORING_CUSTOM:
+				default:
+					// Distance / custom carry their scalar on a per-atom named
+					// property the InterpolateColorProcessor reads. Fall back to 0
+					// when the property is absent (e.g. distances not yet computed).
+					return atom.hasProperty("ColorValue")
+						? static_cast<float>(atom.getProperty("ColorValue").getFloat())
+						: 0.0f;
+			}
+		}
+
+		std::size_t ColoringController::compositeHash_() const
+		{
+			if (rep_ == nullptr) return 0;
+			std::size_t h = 1469598103934665603ull;     // FNV-ish seed.
+			const std::list<const Composite*>& comps = rep_->getComposites();
+			for (const Composite* c : comps)
+			{
+				h ^= reinterpret_cast<std::size_t>(c);
+				h *= 1099511628211ull;
+			}
+			h ^= comps.size();
+			return h;
+		}
+
+		void ColoringController::rebuildDistribution_(int bins)
+		{
+			BinSummary s;
+			s.valid = false;
+
+			if (rep_ == nullptr || !isValueBasedMethod_(coloring_method_) || bins < 1)
+			{
+				dist_cache_ = s;
+				return;
+			}
+
+			// O(N) single pass: collect the per-method scalar for every atom in
+			// the Representation's composites, find the extent, then bin.
+			std::vector<float> values;
+			const std::list<const Composite*>& comps = rep_->getComposites();
+			for (const Composite* c : comps)
+			{
+				if (c == nullptr) continue;
+				if (RTTI::isKindOf<AtomContainer>(*c))
+				{
+					const AtomContainer* ac = dynamic_cast<const AtomContainer*>(c);
+					if (ac == nullptr) continue;
+					AtomConstIterator it;
+					BALL_FOREACH_ATOM(*ac, it)
+					{
+						values.push_back(atomValue_(*it));
+					}
+				}
+				else if (RTTI::isKindOf<Atom>(*c))
+				{
+					const Atom* a = dynamic_cast<const Atom*>(c);
+					if (a != nullptr) values.push_back(atomValue_(*a));
+				}
+			}
+
+			if (values.empty())
+			{
+				dist_cache_ = s;
+				return;
+			}
+
+			float vmin = values.front();
+			float vmax = values.front();
+			for (float v : values)
+			{
+				vmin = std::min(vmin, v);
+				vmax = std::max(vmax, v);
+			}
+
+			// Guard against a degenerate (all-equal) extent so the bins are valid.
+			if (vmax <= vmin) vmax = vmin + 1.0f;
+
+			s.valid = true;
+			s.min = vmin;
+			s.max = vmax;
+			s.bin_edges.resize(static_cast<std::size_t>(bins) + 1);
+			s.bin_counts.assign(static_cast<std::size_t>(bins), 0);
+			float width = (vmax - vmin) / static_cast<float>(bins);
+			for (int i = 0; i <= bins; ++i)
+				s.bin_edges[static_cast<std::size_t>(i)] = vmin + width * static_cast<float>(i);
+
+			for (float v : values)
+			{
+				int idx = static_cast<int>((v - vmin) / width);
+				if (idx < 0) idx = 0;
+				if (idx >= bins) idx = bins - 1;
+				++s.bin_counts[static_cast<std::size_t>(idx)];
+			}
+
+			dist_cache_ = s;
+		}
+
+		BinSummary ColoringController::distribution(int bins)
+		{
+			std::size_t chash = compositeHash_();
+			bool hit = dist_cache_valid_
+				&& dist_cache_composite_hash_ == chash
+				&& dist_cache_method_ == coloring_method_
+				&& dist_cache_bins_ == bins;
+
+			if (!hit)
+			{
+				rebuildDistribution_(bins);
+				dist_cache_composite_hash_ = chash;
+				dist_cache_method_ = coloring_method_;
+				dist_cache_bins_ = bins;
+				dist_cache_valid_ = true;
+			}
+			return dist_cache_;
 		}
 
 		bool ColoringController::apply()

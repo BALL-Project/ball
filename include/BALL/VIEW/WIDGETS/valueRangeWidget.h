@@ -22,6 +22,14 @@
 # include <BALL/COMMON/global.h>
 #endif
 
+// BinSummary is the Controller-owned read-model (KERNEL layer is the
+// producer, ARCHITECTURE-CONTRACT.md §5) — include it from the controller
+// header rather than redeclaring it here, so producer and consumer share
+// one definition.
+#ifndef BALL_VIEW_KERNEL_CONTROLLERS_COLORINGCONTROLLER_H
+# include <BALL/VIEW/KERNEL/controllers/coloringController.h>
+#endif
+
 #include <QtWidgets/QWidget>
 
 #include <vector>
@@ -30,27 +38,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/**
-		 * Bin-summary read-model produced by ColoringController::distribution()
-		 * and consumed by ValueRangeWidget (ARCHITECTURE-CONTRACT.md §5). A
-		 * plain value type — the widget cannot mutate the owner through it.
-		 *
-		 * Invariant: when @c valid is true, @c bin_edges has exactly
-		 * <tt>bin_counts.size() + 1</tt> entries (the left/right edge of each
-		 * bin), @c min == bin_edges.front(), @c max == bin_edges.back().
-		 */
-		struct BALL_VIEW_EXPORT BinSummary
-		{
-			bool               valid = false;  ///< false ⇒ empty selection / non-value method.
-			float              min   = 0.0f;   ///< Smallest observed value (== bin_edges.front()).
-			float              max   = 0.0f;   ///< Largest observed value  (== bin_edges.back()).
-			std::vector<float> bin_edges;      ///< size == bin_counts.size() + 1.
-			std::vector<Size>  bin_counts;     ///< Per-bin sample counts.
-
-			/// True iff the summary describes a non-empty, well-formed distribution.
-			bool isValid() const { return valid && !bin_counts.empty(); }
-		};
-
 		/**
 		 * Histogram + dual-handle range widget for value-based coloring.
 		 *
