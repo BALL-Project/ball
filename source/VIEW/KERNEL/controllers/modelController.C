@@ -107,9 +107,40 @@ namespace BALL
 
 		void ModelController::reset()
 		{
-			// §2 reset path (999.64 consumes) — re-sync the mirror from the
-			// owner in a single pass. revert() already does exactly this.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Set the mirror to the
+			// controller's documented defaults (the same values the constructor
+			// seeds: BALL/STICK model, full precision, opaque, the per-type
+			// radii), emit the change notifications so the Inspector widgets
+			// resync, then run the SINGLE §2 apply() — which captures the current
+			// owner state as the payload `before`, mutates the owner to these
+			// defaults, emits exactly ONE event and records the reversible
+			// ApplyPayload (undoable in v2.0). No owner round-trip happens before
+			// apply(), so there is no "between defaults and current" flicker.
+			model_type_             = 0;
+			drawing_mode_           = 0;
+			drawing_precision_      = 0;
+			transparency_           = 0;
+			ball_radius_            = 0.4f;
+			ball_stick_bond_radius_ = 0.2f;
+			dashed_bonds_           = false;
+			stick_radius_           = 0.2f;
+			surface_probe_radius_   = 1.5f;
+			cartoon_tube_radius_    = 0.4f;
+			params_dirty_           = true;
+
+			Q_EMIT modelTypeChanged(model_type_);
+			Q_EMIT drawingModeChanged(drawing_mode_);
+			Q_EMIT drawingPrecisionChanged(drawing_precision_);
+			Q_EMIT transparencyChanged(transparency_);
+			Q_EMIT ballRadiusChanged(ball_radius_);
+			Q_EMIT ballStickBondRadiusChanged(ball_stick_bond_radius_);
+			Q_EMIT dashedBondsChanged(dashed_bonds_);
+			Q_EMIT stickRadiusChanged(stick_radius_);
+			Q_EMIT surfaceProbeRadiusChanged(surface_probe_radius_);
+			Q_EMIT cartoonTubeRadiusChanged(cartoon_tube_radius_);
+
+			apply();
 		}
 
 		bool ModelController::apply()

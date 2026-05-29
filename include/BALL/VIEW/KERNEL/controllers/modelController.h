@@ -110,11 +110,15 @@ namespace BALL
 				bool apply() override;
 
 				/**
-				 * Reset the controller's mirror to the owner's current state
-				 * (the 999.64 single-event reset path). Overrides
-				 * Controller::reset(); delegates to revert(), which pulls the
-				 * Representation's live model/drawing/transparency state back
-				 * into the mirror and emits the change notifications.
+				 * Reset the model settings to the controller's METHOD-DEFINED
+				 * defaults in a SINGLE §2 event (the 999.64 reset path — NOT the
+				 * legacy two-step revert(); apply()). Sets the mirror to the
+				 * documented defaults (BALL/STICK, full precision, opaque, the
+				 * per-type radii), emits the change notifications, then runs one
+				 * apply() that captures the current owner state as the payload
+				 * `before`, installs the defaults as `after`, emits exactly one
+				 * event and records the reversible ApplyPayload (undoable in v2.0).
+				 * Overrides Controller::reset().
 				 */
 				void reset() override;
 

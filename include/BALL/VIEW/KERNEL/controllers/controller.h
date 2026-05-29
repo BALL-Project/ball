@@ -99,11 +99,16 @@ namespace BALL
 				virtual bool apply();
 
 				/**
-				 * Reset the controller to the owner's current state in a single
-				 * event — the reset path 999.64 consumes (NOT the legacy
-				 * two-step revert(); apply()). The base implementation is a
-				 * documented no-op; subclasses pull owner state into their
-				 * mirror and emit one change notification.
+				 * Reset the controller to its METHOD-DEFINED defaults in a SINGLE
+				 * §2 event (the 999.64 reset path — NOT the legacy two-step
+				 * revert(); apply()). A subclass sets its mirror to the documented
+				 * defaults, emits the change notifications so the Inspector widgets
+				 * resync, then runs one apply() that captures the current owner
+				 * state as the payload `before`, installs the defaults as `after`,
+				 * emits exactly ONE typed event and records the reversible
+				 * ApplyPayload (undoable in v2.0). The base implementation is a
+				 * documented no-op — correct for the read-only sections
+				 * (Properties / Summary / RepHeader) which have no owner to reset.
 				 */
 				virtual void reset();
 

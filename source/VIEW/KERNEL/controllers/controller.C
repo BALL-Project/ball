@@ -37,8 +37,11 @@ namespace BALL
 
 		void Controller::reset()
 		{
-			// Base no-op. Subclasses pull the owner's current state into their
-			// mirror in a single event (the 999.64 reset path).
+			// Base no-op (the 999.64 reset path). A mutating subclass sets its
+			// mirror to its method-defined defaults, emits the change
+			// notifications, then runs one §2 apply() — exactly one event, one
+			// reversible payload. The read-only sections (Properties / Summary /
+			// RepHeader) have no owner, so this base no-op is their correct reset.
 		}
 
 		void Controller::invalidateDeclared_()
