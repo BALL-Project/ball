@@ -85,8 +85,12 @@ namespace BALL
 				bool apply() override;
 
 				/**
-				 * Reset the mirror to the owner's current state (999.64 reset
-				 * path). Overrides Controller::reset(); delegates to revert().
+				 * Reset the clipping settings to the method-defined defaults
+				 * (disabled, zero offset, capping enabled) in a SINGLE §2 event
+				 * (999.64 reset path — NOT the legacy two-step revert(); apply()).
+				 * Sets the mirror to the defaults, emits the change notifications,
+				 * then runs one apply() (one event, one reversible payload).
+				 * Overrides Controller::reset().
 				 */
 				void reset() override;
 

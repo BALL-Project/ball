@@ -103,8 +103,13 @@ namespace BALL
 				bool apply() override;
 
 				/**
-				 * Reset the mirror to the owner's current state (999.64 reset
-				 * path). Overrides Controller::reset(); delegates to revert().
+				 * Reset the aggregate ambient intensity to the method-defined
+				 * default (0.3) in a SINGLE §2 event (999.64 reset path — NOT the
+				 * legacy two-step revert(); apply()). Sets the mirror to the
+				 * default, emits the change notification, then runs one apply()
+				 * (one event, one reversible payload). The non-ambient light list
+				 * is structural state and is preserved. Overrides
+				 * Controller::reset().
 				 */
 				void reset() override;
 

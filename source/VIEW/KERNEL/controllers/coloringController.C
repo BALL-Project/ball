@@ -107,8 +107,21 @@ namespace BALL
 
 		void ColoringController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Default coloring method (0 =
+			// element) and the default 0..100 value range; emit the change
+			// notifications so the Inspector + histogram resync, then run the
+			// SINGLE §2 apply() (captures current owner as `before`, installs the
+			// defaults as `after`, one event, one reversible payload).
+			coloring_method_ = 0;
+			value_min_       = 0.0f;
+			value_max_       = 100.0f;
+
+			Q_EMIT coloringMethodChanged(coloring_method_);
+			Q_EMIT valueMinChanged(value_min_);
+			Q_EMIT valueMaxChanged(value_max_);
+
+			apply();
 		}
 
 		void ColoringController::setRange(float min, float max)

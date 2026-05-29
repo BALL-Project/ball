@@ -410,8 +410,57 @@ namespace BALL
 
 		void StageController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Restores the full non-stereo
+			// render-config field set the controller owns to the constructor's
+			// seed values: black background, no coordinate system, no fog, zero
+			// eye/focal, perspective projection, no light-source markers, zero
+			// animation smoothness, no offscreen rendering (factor 1), black
+			// capping color, no FPS overlay, no preview, no vertex buffers, no
+			// smooth lines, downsampling 1.0, OpenGL renderer. Mouse / wheel
+			// sensitivity keep their "unset" sentinel (-1) so reset does NOT
+			// clobber the user's interaction sensitivity (apply() skips sentinel
+			// values). Both the Background and Stage Inspector sections drive this
+			// controller, so a reset from either restores the shared stage state.
+			// Emit the change notifications, then run the SINGLE §2 apply() (one
+			// event, one reversible payload).
+			background_color_        = QColor(Qt::black);
+			show_coordinate_system_  = false;
+			fog_intensity_           = 0.0f;
+			eye_distance_            = 0.0f;
+			focal_distance_          = 0.0f;
+			perspective_projection_  = true;
+			show_light_sources_      = false;
+			animation_smoothness_    = 0.0f;
+			offscreen_rendering_     = false;
+			offscreen_factor_        = 1;
+			capping_color_           = QColor(Qt::black);
+			fps_enabled_             = false;
+			preview_                 = false;
+			vertex_buffers_enabled_  = false;
+			smooth_lines_            = false;
+			downsampling_factor_     = 1.0f;
+			renderer_type_           = static_cast<int>(RenderSetup::OPENGL_RENDERER);
+
+			Q_EMIT backgroundColorChanged(background_color_);
+			Q_EMIT showCoordinateSystemChanged(show_coordinate_system_);
+			Q_EMIT fogIntensityChanged(fog_intensity_);
+			Q_EMIT eyeDistanceChanged(eye_distance_);
+			Q_EMIT focalDistanceChanged(focal_distance_);
+			Q_EMIT perspectiveProjectionChanged(perspective_projection_);
+			Q_EMIT showLightSourcesChanged(show_light_sources_);
+			Q_EMIT animationSmoothnessChanged(animation_smoothness_);
+			Q_EMIT offScreenRenderingChanged(offscreen_rendering_);
+			Q_EMIT offScreenFactorChanged(offscreen_factor_);
+			Q_EMIT cappingColorChanged(capping_color_);
+			Q_EMIT fpsEnabledChanged(fps_enabled_);
+			Q_EMIT previewChanged(preview_);
+			Q_EMIT vertexBuffersEnabledChanged(vertex_buffers_enabled_);
+			Q_EMIT smoothLinesChanged(smooth_lines_);
+			Q_EMIT downsamplingFactorChanged(downsampling_factor_);
+			Q_EMIT rendererTypeChanged(renderer_type_);
+
+			apply();
 		}
 
 

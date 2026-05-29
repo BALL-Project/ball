@@ -176,8 +176,33 @@ namespace BALL
 
 		void MaterialController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). The documented material
+			// defaults: ambient 0.3 / diffuse(=reflective) 0.7 / specular 0.2 /
+			// shininess 30, the three colors white, opaque (transparency 0) —
+			// the same values the constructor seeds and the legacy
+			// MaterialSettings dialog's initial labels show. Emit the change
+			// notifications, then run the SINGLE §2 apply() (one event, one
+			// reversible payload).
+			ambient_           = 0.3f;
+			diffuse_           = 0.7f;
+			specular_          = 0.2f;
+			shininess_         = 30.0f;
+			ambient_color_     = QColor(255, 255, 255);
+			specular_color_    = QColor(255, 255, 255);
+			reflective_color_  = QColor(255, 255, 255);
+			transparency_      = 0;
+
+			Q_EMIT ambientFactorChanged(ambient_);
+			Q_EMIT diffuseFactorChanged(diffuse_);
+			Q_EMIT specularFactorChanged(specular_);
+			Q_EMIT shininessChanged(shininess_);
+			Q_EMIT ambientColorChanged(ambient_color_);
+			Q_EMIT specularColorChanged(specular_color_);
+			Q_EMIT reflectiveColorChanged(reflective_color_);
+			Q_EMIT transparencyChanged(transparency_);
+
+			apply();
 		}
 
 		bool MaterialController::apply()

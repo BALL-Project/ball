@@ -247,8 +247,20 @@ namespace BALL
 
 		void LightController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED default (NOT the
+			// legacy two-step revert(); apply()). The Inspector exposes a single
+			// aggregate "Ambient" control; its method-defined default is 0.3 (the
+			// constructor's seed). Reset the ambient intensity, emit the change
+			// notification, then run the SINGLE §2 apply() — which re-adds the
+			// controller-owned non-ambient lights and one AMBIENT light at the
+			// default 0.3, emits one event and records one reversible payload. The
+			// non-ambient light list is per-Representation/scene structural state,
+			// not a Material-style "default", so it is preserved (the Inspector
+			// offers no control to reset it).
+			ambient_intensity_ = 0.3f;
+			Q_EMIT ambientIntensityChanged(ambient_intensity_);
+
+			apply();
 		}
 
 

@@ -267,8 +267,22 @@ namespace BALL
 
 		void ClippingController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Defaults: clipping disabled,
+			// zero offset, capping enabled (the constructor's seed values). Emit
+			// the change notifications, then run the SINGLE §2 apply() — which
+			// pushes the disabled/zero-offset/capped state onto the (find-or-
+			// create) clip plane, emits one event and records one reversible
+			// payload.
+			enabled_ = false;
+			offset_  = 0.0f;
+			capped_  = true;
+
+			Q_EMIT enabledChanged(enabled_);
+			Q_EMIT offsetChanged(offset_);
+			Q_EMIT cappedChanged(capped_);
+
+			apply();
 		}
 
 

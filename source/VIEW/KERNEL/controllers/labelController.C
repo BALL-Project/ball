@@ -208,8 +208,23 @@ namespace BALL
 
 		void LabelController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Defaults: empty text, ALL_ITEMS
+			// placement (type 0), Helvetica 12 (the constructor's seed values).
+			// Emit the change notifications so the Inspector widgets resync, then
+			// run the SINGLE §2 apply() (one event, one reversible payload). With
+			// an attached Representation this rebuilds the MODEL_LABEL with the
+			// default empty/all-items label; with only a selection it is a no-op
+			// rejection (empty selection or no MainControl), which is correct.
+			label_text_ = QString();
+			label_type_ = 0;
+			font_size_  = 12;
+
+			Q_EMIT labelTextChanged(label_text_);
+			Q_EMIT labelTypeChanged(label_type_);
+			Q_EMIT fontSizeChanged(font_size_);
+
+			apply();
 		}
 
 

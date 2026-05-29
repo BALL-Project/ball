@@ -158,8 +158,25 @@ namespace BALL
 
 		void StereoController::reset()
 		{
-			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
-			revert();
+			// 999.64 — SINGLE-call reset to the METHOD-DEFINED defaults (NOT the
+			// legacy two-step revert(); apply()). Defaults: stereo disabled, zero
+			// eye/focal distance, no side-by-side swap (the constructor's seed).
+			// Emit the change notifications, then run the SINGLE §2 apply() —
+			// which writes the zero eye/focal + cleared swap to the Stage, emits
+			// one event and records one reversible payload. enabled_ is a
+			// renderer-mode mirror (no owner write yet, per the apply() note); it
+			// is reset for UI consistency.
+			enabled_        = false;
+			eye_distance_   = 0.0f;
+			focal_distance_ = 0.0f;
+			swap_sbs_       = false;
+
+			Q_EMIT stereoEnabledChanged(enabled_);
+			Q_EMIT eyeDistanceChanged(eye_distance_);
+			Q_EMIT focalDistanceChanged(focal_distance_);
+			Q_EMIT swapSideBySideChanged(swap_sbs_);
+
+			apply();
 		}
 
 
