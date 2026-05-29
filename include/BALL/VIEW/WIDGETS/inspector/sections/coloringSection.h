@@ -15,8 +15,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 
-#include <QtCore/QTimer>
-
 class QComboBox;
 class QStackedWidget;
 
@@ -25,7 +23,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColoringController;
-		class LabeledSlider;
+		class ValueRangeWidget;
 
 		class BALL_VIEW_EXPORT ColoringSection : public InspectorSection
 		{
@@ -38,30 +36,38 @@ namespace BALL
 
 			private Q_SLOTS:
 				void onMethodChosen_(int idx);
-				void onValueMinChanged_(int v);
-				void onValueMaxChanged_(int v);
 				void onControllerMethodChanged_(int m);
 				void onControllerValueMinChanged_(float v);
 				void onControllerValueMaxChanged_(float v);
-				void onDebounceFire_();
+
+				// 999.63 — value-range histogram widget signals.
+				void onRangeChanged_(float min, float max);     // drag → preview.
+				void onRangeCommitted_(float min, float max);   // release → apply.
+				void onAutoFit_();
+				void onFullRange_();
+				void onRobustRange_();
+				void onWidgetReset_();
 
 			private:
 				ColoringController* controller_;
-				QTimer              debounce_;
 				QComboBox*          method_;
 
-				// v1.7.x-17 — per-method options in a QStackedWidget below
-				// the Method dropdown; the visible page tracks the selected
-				// coloring method. The one populated page is the value-range
-				// (Min/Max) shared by the value-based coloring methods.
+				// v1.7.x-17 → 999.63 — per-method options in a QStackedWidget
+				// below the Method dropdown; the visible page tracks the selected
+				// coloring method. The populated page now hosts the value-range
+				// histogram widget (replacing the v1.7.x-17 Min/Max sliders),
+				// shared by the value-based coloring methods.
 				QStackedWidget*     type_options_;
-				LabeledSlider*      value_min_;
-				LabeledSlider*      value_max_;
+				ValueRangeWidget*   range_widget_;
 				int                 page_empty_;
 				int                 page_value_range_;
 
-				void scheduleApply_();
 				void showPageForMethod_(int method);
+				/// Pull distribution() from the controller into the widget for
+				/// the current method (no-op for non-value methods).
+				void refreshDistribution_();
+				/// Method-defined full-range limits (Full range preset).
+				void fullRangeLimitsForMethod_(int method, float& lo, float& hi) const;
 		};
 
 	} // namespace VIEW

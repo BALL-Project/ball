@@ -3,13 +3,22 @@
 //
 // Phase 999.44 Plan 04 — ColoringSection implementation.
 //
+// Phase 999.63 (v1.7.x-17b) — the value-based methods' Min/Max sliders are
+// replaced by the ValueRangeWidget (histogram + draggable handles + 4
+// presets). The section is pure presentation (ARCHITECTURE-CONTRACT.md §5):
+//   - rangeCommitted (handle release) → setRange(min,max).apply()  [§2 MUTATION]
+//   - rangeChanged   (drag)           → previewRange(min,max)       [§5 RENDER]
+//   - presets                         → setRange(...).apply() / reset()
+// The histogram data comes from ColoringController::distribution(); the
+// section never walks the Composite tree.
+//
 
 #include <BALL/VIEW/WIDGETS/inspector/sections/coloringSection.h>
 
 
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
+#include <BALL/VIEW/WIDGETS/valueRangeWidget.h>
 #include <BALL/VIEW/WIDGETS/formRow.h>
-#include <BALL/VIEW/WIDGETS/labeledSlider.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtCore/QSignalBlocker>
@@ -18,6 +27,8 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
+#include <algorithm>
+
 namespace BALL
 {
 	namespace VIEW
@@ -25,8 +36,6 @@ namespace BALL
 
 		namespace
 		{
-			constexpr int DEBOUNCE_MS = 100;
-
 			void populateMethods_(QComboBox* c)
 			{
 				c->addItem(QStringLiteral("Element"),             COLORING_ELEMENT);
@@ -50,6 +59,22 @@ namespace BALL
 					if (c->itemData(i).toInt() == value) return i;
 				return -1;
 			}
+
+			bool isValueBasedMethod_(int method)
+			{
+				switch (method)
+				{
+					case COLORING_TEMPERATURE_FACTOR:
+					case COLORING_OCCUPANCY:
+					case COLORING_ATOM_CHARGE:
+					case COLORING_DISTANCE:
+					case COLORING_FORCES:
+					case COLORING_CUSTOM:
+						return true;
+					default:
+						return false;
+				}
+			}
 		}
 
 		ColoringSection::ColoringSection(ColoringController* controller, QWidget* parent)
@@ -59,7 +84,7 @@ namespace BALL
 				controller_(controller),
 				method_(nullptr),
 				type_options_(nullptr),
-				value_min_(nullptr), value_max_(nullptr),
+				range_widget_(nullptr),
 				page_empty_(0), page_value_range_(0)
 		{
 			QWidget* content = new QWidget(this);
@@ -71,41 +96,23 @@ namespace BALL
 			populateMethods_(method_);
 			col->addWidget(new FormRow(tr("Method"), method_, content));
 
-			// v1.7.x-17 — per-method options. One QStackedWidget page per
-			// option group; an empty page for methods without extra
-			// options. The visible page tracks the selected method.
+			// v1.7.x-17 → 999.63 — per-method options. One QStackedWidget page
+			// per option group; an empty page for methods without extra options.
+			// The visible page tracks the selected method. The value-based
+			// methods share the histogram + range-handle widget page.
 			type_options_ = new QStackedWidget(content);
 
 			// Empty page (default for methods without extra options).
 			QWidget* empty_page = new QWidget(type_options_);
 			page_empty_ = type_options_->addWidget(empty_page);
 
-			// Value-range page (shared by the value-based methods).
-			// Float value <-> int slider mapped by *10 / /10.0f over
-			// range 0..1000 (=> 0.0–100.0 in 0.1 steps).
-			{
-				QWidget* page = new QWidget(type_options_);
-				QVBoxLayout* pcol = new QVBoxLayout(page);
-				pcol->setContentsMargins(0, 0, 0, 0);
-				pcol->setSpacing(6);
-				value_min_ = new LabeledSlider(0, 1000,
-					static_cast<int>((controller_ ? controller_->valueMin() : 0.0f) * 10.0f),
-					QStringLiteral(""), page);
-				value_max_ = new LabeledSlider(0, 1000,
-					static_cast<int>((controller_ ? controller_->valueMax() : 100.0f) * 10.0f),
-					QStringLiteral(""), page);
-				pcol->addWidget(new FormRow(tr("Min value"), value_min_, page));
-				pcol->addWidget(new FormRow(tr("Max value"), value_max_, page));
-				page_value_range_ = type_options_->addWidget(page);
-			}
+			// Value-range histogram page (shared by the value-based methods).
+			range_widget_ = new ValueRangeWidget(type_options_);
+			page_value_range_ = type_options_->addWidget(range_widget_);
 
 			col->addWidget(type_options_);
 
 			setContent(content);
-
-			debounce_.setSingleShot(true);
-			debounce_.setInterval(DEBOUNCE_MS);
-			connect(&debounce_, &QTimer::timeout, this, &ColoringSection::onDebounceFire_);
 
 			if (controller_)
 			{
@@ -117,10 +124,19 @@ namespace BALL
 			        QOverload<int>::of(&QComboBox::currentIndexChanged),
 			        this, &ColoringSection::onMethodChosen_);
 
-			connect(value_min_, &LabeledSlider::valueChanged,
-			        this, &ColoringSection::onValueMinChanged_);
-			connect(value_max_, &LabeledSlider::valueChanged,
-			        this, &ColoringSection::onValueMaxChanged_);
+			// 999.63 — histogram widget wiring.
+			connect(range_widget_, &ValueRangeWidget::rangeChanged,
+			        this, &ColoringSection::onRangeChanged_);
+			connect(range_widget_, &ValueRangeWidget::rangeCommitted,
+			        this, &ColoringSection::onRangeCommitted_);
+			connect(range_widget_, &ValueRangeWidget::autoFitRequested,
+			        this, &ColoringSection::onAutoFit_);
+			connect(range_widget_, &ValueRangeWidget::fullRangeRequested,
+			        this, &ColoringSection::onFullRange_);
+			connect(range_widget_, &ValueRangeWidget::robustRangeRequested,
+			        this, &ColoringSection::onRobustRange_);
+			connect(range_widget_, &ValueRangeWidget::resetRequested,
+			        this, &ColoringSection::onWidgetReset_);
 
 			// Show the page matching the initial coloring method.
 			showPageForMethod_(controller_ ? controller_->coloringMethod()
@@ -144,31 +160,48 @@ namespace BALL
 			}
 		}
 
-		ColoringSection::~ColoringSection()
-		{
-			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
-			if (debounce_.isActive())
-			{
-				debounce_.stop();
-				onDebounceFire_();
-			}
-		}
-
-		void ColoringSection::scheduleApply_() { debounce_.start(); }
+		ColoringSection::~ColoringSection() = default;
 
 		void ColoringSection::showPageForMethod_(int method)
 		{
 			if (!type_options_) return;
-			int page = page_empty_;
+			int page = isValueBasedMethod_(method) ? page_value_range_ : page_empty_;
+			type_options_->setCurrentIndex(page);
+			if (page == page_value_range_) refreshDistribution_();
+		}
+
+		void ColoringSection::refreshDistribution_()
+		{
+			if (!controller_ || !range_widget_) return;
+			// §5 — the histogram data is the Controller's read-model; the section
+			// never walks the Composite tree. distribution() is cached.
+			BinSummary s = controller_->distribution(range_widget_->binCount());
+			range_widget_->setDistribution(s);
+			// Reflect the controller's currently-staged range onto the handles.
+			QSignalBlocker b(range_widget_);
+			range_widget_->setRange(controller_->valueMin(), controller_->valueMax());
+		}
+
+		void ColoringSection::fullRangeLimitsForMethod_(int method,
+		                                                float& lo, float& hi) const
+		{
+			// Method-defined full-range limits for the Full range preset.
 			switch (method)
 			{
 				case COLORING_TEMPERATURE_FACTOR:
 				case COLORING_OCCUPANCY:
-				case COLORING_DISTANCE:
-				case COLORING_FORCES:       page = page_value_range_; break;
-				default:                    page = page_empty_;       break;
+					lo = 0.0f;   hi = 100.0f; break;
+				case COLORING_ATOM_CHARGE:
+					lo = -5.0f;  hi = 5.0f;   break;
+				case COLORING_FORCES:
+					lo = 0.0f;   hi = 1000.0f; break;
+				default:
+					// Distance / Custom — fall back to the observed data extent.
+					if (range_widget_ && range_widget_->hasDistribution())
+					{ lo = range_widget_->dataMin(); hi = range_widget_->dataMax(); }
+					else { lo = 0.0f; hi = 100.0f; }
+					break;
 			}
-			type_options_->setCurrentIndex(page);
 		}
 
 		void ColoringSection::onMethodChosen_(int idx)
@@ -177,22 +210,85 @@ namespace BALL
 			int m = method_->itemData(idx).toInt();
 			controller_->setColoringMethod(m);
 			showPageForMethod_(m);
-			scheduleApply_();
+			// A method change commits immediately through the §2 path.
+			controller_->apply();
+			if (isValueBasedMethod_(m)) refreshDistribution_();
 		}
 
-		void ColoringSection::onValueMinChanged_(int v)
+		// ── 999.63 — histogram widget intent ───────────────────────────────────
+
+		void ColoringSection::onRangeChanged_(float min, float max)
 		{
-			if (!controller_) return;
-			controller_->setValueMin(v / 10.0f);
-			scheduleApply_();
+			// Drag-time — the RENDER-ONLY preview path (§5). NO apply(), NO owner
+			// mutation, NO typed event. previewRange() is explicitly non-owner.
+			if (controller_) controller_->previewRange(min, max);
 		}
 
-		void ColoringSection::onValueMaxChanged_(int v)
+		void ColoringSection::onRangeCommitted_(float min, float max)
+		{
+			// Handle release — the ONLY mutation path (§2): setRange().apply().
+			if (!controller_) return;
+			controller_->setRange(min, max);
+			controller_->apply();
+		}
+
+		void ColoringSection::onAutoFit_()
+		{
+			if (!controller_ || !range_widget_) return;
+			refreshDistribution_();
+			if (range_widget_->hasDistribution())
+			{
+				controller_->setRange(range_widget_->dataMin(), range_widget_->dataMax());
+				controller_->apply();
+			}
+		}
+
+		void ColoringSection::onFullRange_()
 		{
 			if (!controller_) return;
-			controller_->setValueMax(v / 10.0f);
-			scheduleApply_();
+			float lo = 0.0f, hi = 100.0f;
+			fullRangeLimitsForMethod_(controller_->coloringMethod(), lo, hi);
+			controller_->setRange(lo, hi);
+			controller_->apply();
 		}
+
+		void ColoringSection::onRobustRange_()
+		{
+			if (!controller_ || !range_widget_) return;
+			// Robust 5–95% — percentile bin edges from the (cached) distribution.
+			BinSummary s = controller_->distribution(range_widget_->binCount());
+			if (!s.isValid()) return;
+
+			Size total = 0;
+			for (Size c : s.bin_counts) total += c;
+			if (total == 0) return;
+
+			Size lo_target = static_cast<Size>(0.05 * total);
+			Size hi_target = static_cast<Size>(0.95 * total);
+			Size cum = 0;
+			float lo = s.min, hi = s.max;
+			bool lo_set = false;
+			for (std::size_t i = 0; i < s.bin_counts.size(); ++i)
+			{
+				cum += s.bin_counts[i];
+				if (!lo_set && cum >= lo_target) { lo = s.bin_edges[i]; lo_set = true; }
+				if (cum >= hi_target) { hi = s.bin_edges[i + 1]; break; }
+			}
+			controller_->setRange(lo, hi);
+			controller_->apply();
+		}
+
+		void ColoringSection::onWidgetReset_()
+		{
+			// Reset — revert to the representation's current values (delegates to
+			// the controller's reset path, 999.64 base) then re-apply.
+			if (!controller_) return;
+			controller_->reset();
+			controller_->apply();
+			refreshDistribution_();
+		}
+
+		// ── controller → section resync ─────────────────────────────────────────
 
 		void ColoringSection::onControllerMethodChanged_(int m)
 		{
@@ -207,29 +303,17 @@ namespace BALL
 
 		void ColoringSection::onControllerValueMinChanged_(float v)
 		{
-			int iv = static_cast<int>(v * 10.0f);
-			if (value_min_->value() != iv)
-			{
-				QSignalBlocker b(value_min_);
-				value_min_->setValue(iv);
-			}
+			if (!range_widget_) return;
+			QSignalBlocker b(range_widget_);
+			range_widget_->setRange(v, controller_ ? controller_->valueMax() : range_widget_->rangeMax());
 		}
 
 		void ColoringSection::onControllerValueMaxChanged_(float v)
 		{
-			int iv = static_cast<int>(v * 10.0f);
-			if (value_max_->value() != iv)
-			{
-				QSignalBlocker b(value_max_);
-				value_max_->setValue(iv);
-			}
-		}
-
-		void ColoringSection::onDebounceFire_()
-		{
-			if (controller_) controller_->apply();
+			if (!range_widget_) return;
+			QSignalBlocker b(range_widget_);
+			range_widget_->setRange(controller_ ? controller_->valueMin() : range_widget_->rangeMin(), v);
 		}
 
 	} // namespace VIEW
 } // namespace BALL
-
