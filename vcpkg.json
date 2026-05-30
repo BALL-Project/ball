@@ -3,9 +3,6 @@
   "name": "ball",
   "version-string": "1.6.0-dev",
   "dependencies": [
-    "qtbase",
-    "qtsvg",
-    "qttools",
     "boost-any",
     "boost-asio",
     "boost-bind",
