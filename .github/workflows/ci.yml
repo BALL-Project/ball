@@ -175,7 +175,9 @@ jobs:
             "runner": "windows-2025",
             "blocking": true,
             "smoke": false,
-            "ccache_dir": "C:\\Users\\runneradmin\\AppData\\Local\\ccache"
+            "ccache_dir": "C:\\Users\\runneradmin\\AppData\\Local\\ccache",
+            "qt_host": "windows",
+            "qt_version": "6.8.*"
           }'
           if [[ "${cross_platform}" == "true" ]]; then
             INCLUDE="[${MAC_ENTRY},${LINUX_X64_ENTRY},${LINUX_ARM64_ENTRY},${WINDOWS_ENTRY}]"
@@ -763,6 +765,26 @@ jobs:
           $after = (Get-PSDrive C).Free / 1GB
           Write-Host ("Free space after cleanup:  {0:N1} GB (gained {1:N1} GB)" -f $after, ($after - $before))
 
+      - name: Install Qt 6 (Windows — jurplel/install-qt-action / aqtinstall)
+        if: matrix.os == 'windows-x64'
+        # 999.66 — Windows Qt via aqtinstall. Mirrors the Linux step above:
+        # install the official prebuilt Qt 6.8 desktop kit (MSVC 2022 x64)
+        # instead of building qtbase/qtsvg/qttools from source via vcpkg.
+        # This eliminates the ~1.5-2h cold Qt-from-source build and the
+        # windeployqt-missing failure class. The action exposes Qt6_DIR +
+        # QT_ROOT_DIR so FIND_PACKAGE(Qt6) resolves (same as Linux).
+        # `modules:` intentionally omitted — BALL's Qt modules (Core/Network/
+        # Xml/OpenGL/PrintSupport/Test/Widgets/OpenGLWidgets/Svg/LinguistTools)
+        # are all in the default install; aqt 6.8 rejects qtbase/qtopengl/qttools
+        # as module names.
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt_version }}
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          cache: true
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
@@ -774,6 +796,13 @@ jobs:
           # it must be read inside the shell.)
           $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
           Write-Host "VCPKG_ROOT=$env:VCPKG_ROOT"
+          # 999.66 — Windows Qt via aqtinstall. Qt is no longer in vcpkg.json,
+          # so the vcpkg toolchain no longer provides Qt6 config files. The aqt
+          # action exports QT_ROOT_DIR (+ Qt6_DIR); pass it as CMAKE_PREFIX_PATH
+          # so FIND_PACKAGE(Qt6) resolves the prebuilt kit (same effect as Linux,
+          # where Qt6_DIR alone suffices). vcpkg toolchain is still used for
+          # Boost/Eigen/FFTW/TBB/GLEW/etc.
+          Write-Host "QT_ROOT_DIR=$env:QT_ROOT_DIR"
           # D-07: ci-windows preset inherits windows-vcpkg (vcpkg toolchainFile,
           # VCPKG_TARGET_TRIPLET=x64-windows-release + overlay triplet,
           # USE_LPSOLVE=OFF, BALL_HAS_OPENBABEL=OFF, ccache) and installs
@@ -801,6 +830,7 @@ jobs:
           # Phase 999.48 §8.7 step (b) — -DBALL_UI_V2=<matrix.ui_v2>
           # dropped here along with the axis removal.
           cmake --preset ci-windows `
+            -DCMAKE_PREFIX_PATH="$env:QT_ROOT_DIR" `
             -DUSE_QTWEBENGINE=OFF `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
@@ -938,11 +968,14 @@ jobs:
           # BALL_DATA_PATH MUST be set — see macOS gatekeeper for the post-mortem.
           $env:BALL_DATA_PATH = "${{ github.workspace }}\data"
           # Windows DLL search path: extend PATH so test EXEs (in bin\TEST\)
-          # find BALL.dll + VIEW.dll (in bin\) and Qt6 + Boost DLLs (in
+          # find BALL.dll + VIEW.dll (in bin\), Qt6 DLLs (in the aqt kit's
+          # $env:QT_ROOT_DIR\bin\) and Boost DLLs (in
           # vcpkg_installed\x64-windows-release\bin\). Without this, every
           # test exits with STATUS_DLL_NOT_FOUND (0xc0000135) and ctest reports
           # mass failures unrelated to the BALL code under test.
-          $env:PATH = "$PWD\bin;$PWD\vcpkg_installed\x64-windows-release\bin;$env:PATH"
+          # 999.66 — Windows Qt via aqtinstall: Qt DLLs now live in the aqt kit,
+          # not in vcpkg_installed, so $env:QT_ROOT_DIR\bin is prepended here.
+          $env:PATH = "$PWD\bin;$env:QT_ROOT_DIR\bin;$PWD\vcpkg_installed\x64-windows-release\bin;$env:PATH"
           # Phase 999.34 (2026-05-17): gatekeeper is BLOCKING; ctest exits
           # non-zero if any non-WILL_FAIL test fails. ui_v2 in JUnit filename
           # so ON + OFF cells don't clobber each other's output at the
