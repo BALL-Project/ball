@@ -1757,6 +1757,45 @@ Plans:
 Plans:
 - [ ] TBD (promote when capacity allows; trivial fit anywhere post-v1.6.2)
 
+### Phase 999.66: release.yml vcpkg-cache warming + windeployqt-locate robustness (BACKLOG · build-accel cluster)
+
+**Filed 2026-05-29** as a direct follow-up to the **v1.7.4 release incident**: the
+`v1.7.4` tag was cut 5 days after `v1.7.2`, so the Windows `release.yml`
+**vcpkg binary cache had been evicted** (GitHub's ~7-day / >10 GB policy). The
+Windows package job rebuilt all vcpkg deps (Qt6 + Boost) from source — **~1h46m**
+vs the ~25min warm path in v1.7.2 — and that cold from-source Qt6 install came out
+**incomplete**: the packaging step `Locate BALLView.exe + windeployqt (Windows)`
+failed with `windeployqt.exe not found in vcpkg_installed` (+ `Qt6Svg.dll: Cannot
+open`), so `Create GitHub Release` + `Publish appcast` were skipped. The `Build
+(Windows)` step itself SUCCEEDED — this is a **release-infra** failure, not a code
+regression. Recovery was a warm-cache re-run.
+
+**Goal — two parts:**
+1. **vcpkg-cache warming for release tags (speed).** `release.yml` warms `ccache`
+   (BUILD-ACCEL-07 / 999.50-02) but its **vcpkg binary cache** is subject to
+   eviction, so a release tag cut after a quiet week always builds cold. Options:
+   cross-restore from `ci.yml`'s vcpkg cache scope; a scheduled keep-warm job that
+   touches the cache within the eviction window; or pin/seed the vcpkg binary cache
+   (e.g. a vendored binary-cache source / longer-lived artifact). Eliminate the
+   cold from-source Qt6 rebuild on release tags.
+2. **windeployqt-locate robustness (reliability).** Harden the
+   "Locate BALLView.exe + windeployqt" step so an incomplete vcpkg Qt6 install
+   FAILS LOUD EARLY (verify `qtbase[tools]` / `windeployqt.exe` present right after
+   `vcpkg install`, before the long build) and/or falls back to a known tool path.
+   A cold-build packaging gap should never burn ~2h before surfacing.
+
+**Why it matters:** recurs on **every** release cut after a quiet week; cost one
+failed 2h release on v1.7.4. Workflow-config only (no source impact, reversible).
+
+**Estimated effort:** 2-4 hours (release.yml edits + 1-2 cold-cache validation runs).
+
+**Promotion:** pulled into **v1.7.4** per maintainer direction 2026-05-29 (tackle
+immediately after the v1.7.4 release lands; fold into the v1.7.4 tag). No new REQ
+ID — extends the BUILD-ACCEL cluster (BUILD-ACCEL-07).
+
+Plans:
+- [ ] TBD (promote on v1.7.4 release-land)
+
 ### Phase 999.37: VRMLRenderer removal + STL-export rename (COMPLETE · v1.7 · 2026-05-17)
 
 **Goal:** Remove the `BALL_DEPRECATED` `VRMLRenderer` class entirely from BALL/VIEW, plus the misnamed STL-export UI surface that historically lived under "VRML" identifiers (despite always writing STL via `STLRenderer`).
