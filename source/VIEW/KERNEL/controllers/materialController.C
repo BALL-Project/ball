@@ -362,13 +362,13 @@ namespace BALL
 		void MaterialController::applyDefaultMaterial()
 		{
 			// 999.58-01 cut-over — the all-representations default-material
-			// path the legacy MaterialSettings::apply() preferences branch
-			// drove (materialSettings.C:85-90): write the mirrored material
-			// fields onto the Stage default material, then refresh every
-			// representation via Scene::updateAllMaterials(). This is what
-			// Scene::applyPreferences() now calls in place of
-			// material_settings_->apply(). No Representation is required
-			// (this is the default, not a per-rep edit), so rep_ is ignored.
+			// path the legacy material-settings preferences branch drove:
+			// write the mirrored material fields onto the Stage default
+			// material, then refresh every representation via
+			// Scene::updateAllMaterials(). This is what Scene::applyPreferences()
+			// now calls in place of the legacy material-dialog apply(). No
+			// Representation is required (this is the default, not a per-rep
+			// edit), so rep_ is ignored.
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{

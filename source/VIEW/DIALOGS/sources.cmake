@@ -9,7 +9,6 @@ SET(UI_LIST
 	contourSurfaceDialog.ui
 	coloringSettingsDialog.ui
 	compositeProperties.ui
-	clippingDialog.ui
 	dockDialog.ui
 	dockProgressDialog.ui
 	dockResultDialog.ui
@@ -24,9 +23,7 @@ SET(UI_LIST
 	generateCrystalDialog.ui
 	gridColorWidget.ui
 	gridVisualizationDialog.ui
-	labelDialog.ui
 	mainControlPreferences.ui
-	materialSettings.ui
 	minimizationDialog.ui
 	modelSettingsDialog.ui
 	modifyRepresentationDialog.ui
@@ -62,7 +59,6 @@ SET(SOURCES_LIST
 	contourSurfaceDialog.C
 	coloringSettingsDialog.C
 	compositeProperties.C
-	clippingDialog.C
 	dockDialog.C
 	dockProgressDialog.C
 	dockResultDialog.C
@@ -75,9 +71,7 @@ SET(SOURCES_LIST
 	FDPBDialog.C
 	generateCrystalDialog.C
 	gridVisualizationDialog.C
-	labelDialog.C
 	mainControlPreferences.C
-	materialSettings.C
 	minimizationDialog.C
 	modelSettingsDialog.C
 	modifyRepresentationDialog.C
