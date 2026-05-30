@@ -1784,6 +1784,22 @@ regression. Recovery was a warm-cache re-run.
    `vcpkg install`, before the long build) and/or falls back to a known tool path.
    A cold-build packaging gap should never burn ~2h before surfacing.
 
+**RECOMMENDED STRUCTURAL FIX (added 2026-05-30) — prebuilt Qt on Windows via
+`aqtinstall`.** The real asymmetry: macOS/Linux build in minutes because they use
+**prebuilt Qt** (Homebrew/system); Windows is the only platform that builds **Qt
+from source via vcpkg** (`qtbase`/`qtsvg`/`qttools`) — ~90% of the ~1.5-2h cold
+Configure. Switch Windows to `jurplel/install-qt-action` (official prebuilt Qt,
+~2-4 min download, **ships windeployqt.exe**): this eliminates BOTH the cold
+build-time AND the missing-windeployqt failure class in one move, and lets us
+retire the `x64-windows-release` overlay triplet + the host-triplet windeployqt
+staging dance. Tradeoff: hybrid dep story (Qt from aqt, Boost/Eigen/FFTW/TBB/GLEW/
+libsvm/WinSparkle still vcpkg) — a real restructure needing its own validation
+cycle, so it's a deliberate follow-up, NOT a mid-release hot-patch. The 999.66
+fail-fast/self-heal (landed in v1.7.4, commit c86d202f8e) is the BRIDGE.
+**Secondary option:** durable remote vcpkg binary cache (GitHub Packages NuGet
+feed backend) — keeps vcpkg for everything but makes the cache ref-independent +
+eviction-proof (fixes the cache-scoping root cause; smaller win, lower risk).
+
 **Why it matters:** recurs on **every** release cut after a quiet week; cost one
 failed 2h release on v1.7.4. Workflow-config only (no source impact, reversible).
 
