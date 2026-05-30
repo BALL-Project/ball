@@ -5,7 +5,6 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/DIALOGS/preferences.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 
