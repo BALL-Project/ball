@@ -2,9 +2,14 @@
 
 This document describes how to build and run the BALL library, the VIEW
 visualization library, and the BALLView GUI application on macOS (Apple
-Silicon) against Homebrew-provided dependencies. These are the exact,
-verified commands used to build the v1.6 modernization baseline on
-macOS Tahoe (arm64).
+Silicon) against Homebrew-provided dependencies. These mirror the exact
+commands the CI release pipeline uses (`.github/workflows/release.yml`,
+macOS job — Qt 6.8 via Homebrew, the `ci-macos` preset, `-DBALL_LICENSE=GPL`).
+
+> The shipped macOS release artifact is **GPL** — CI configures with
+> `-DBALL_LICENSE=GPL`, which activates the GPL-gated optional deps
+> (FFTW + OpenBabel). See `LICENSE-REVIEW.md` for the per-component audit
+> and the resulting combined-work license.
 
 **`ball_contrib` is NOT used** by this build flow and should not be
 revived — its bundled ~2016-era dependency tarballs do not build on
@@ -12,11 +17,15 @@ modern macOS toolchains. All dependencies come from Homebrew instead.
 
 ## Dependencies
 
-Install the required libraries and build tools with Homebrew:
+Install the required libraries and build tools with Homebrew. BALL is on
+**Qt 6.8 LTS** — use the unversioned `qt` formula (Qt 6), NOT `qt@5`:
 
 ```sh
-brew install qt@5 boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison
+brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache
 ```
+
+(CI additionally installs `create-dmg` for the signed `.dmg` artifact; it is
+not needed for a plain local build.)
 
 `bison` and `flex` are keg-only. Their `bin` directories must be put on
 `PATH` when using the manual configure command below. With the preset
@@ -26,20 +35,28 @@ optional.
 
 ## Configure
 
-Use the named preset:
+Use the `ci-macos` preset — this is the **authoritative** CI/release
+configuration (Ninja generator, ccache launchers, `BALL_HAS_OPENBABEL=ON`).
+Pass `-DBALL_LICENSE=GPL` to match the shipped artifact and to actually
+enable the GPL-gated FFTW + OpenBabel paths:
 
 ```sh
-cmake --preset macos-homebrew
+cmake --preset ci-macos -DBALL_LICENSE=GPL
 ```
 
-This configures into `build/macos-homebrew/` and sets `CMAKE_BUILD_TYPE`,
+This configures into `build/ci-macos/` and sets `CMAKE_BUILD_TYPE`,
 `CMAKE_PREFIX_PATH`, `BISON_EXECUTABLE`, `FLEX_EXECUTABLE`, and the other
 required cache variables automatically (see `CMakePresets.json`).
+
+> `ci-macos` inherits the `macos-homebrew` preset. If you want a plain build
+> without ccache/Ninja, `cmake --preset macos-homebrew -DBALL_LICENSE=GPL`
+> works too (configures into `build/macos-homebrew/`). Drop the
+> `-DBALL_LICENSE=GPL` flag for a pure-LGPL build (no FFTW/OpenBabel).
 
 ## Build
 
 ```sh
-cmake --build --preset macos-homebrew --target BALL VIEW BALLView
+cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
 ```
 
 ## Run
@@ -50,8 +67,8 @@ linker at the freshly built libraries:
 
 ```sh
 BALL_DATA_PATH=$PWD/data BALLVIEW_DATA_PATH=$PWD/data \
-  DYLD_LIBRARY_PATH=$PWD/build/macos-homebrew/lib \
-  build/macos-homebrew/bin/BALLView.app/Contents/MacOS/BALLView
+  DYLD_LIBRARY_PATH=$PWD/build/ci-macos/lib \
+  build/ci-macos/bin/BALLView.app/Contents/MacOS/BALLView
 ```
 
 ## Build presets
@@ -99,7 +116,7 @@ This means:
 
 The signing pipeline, GitHub secrets, and 2-human recovery procedure are
 documented in
-`.planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md`.
+`.planning/archive/phases-thru-v1.7.4/08a-packaging-macos/08a-SECRETS-RUNBOOK.md`.
 
 ## Notes
 
@@ -109,3 +126,10 @@ documented in
   (`USE_RTFACT=OFF`), and VRPN/SpaceNavigator are disabled.
 - `CMAKE_POLICY_VERSION_MINIMUM=3.5` (set by the preset) is required so
   CMake 3.21+ accepts the project's historical minimum policy version.
+
+## See also
+
+- `BUILD-linux.md` — Linux build (apt + aqt Qt)
+- `BUILD-windows.md` — Windows build (VS 2022 / MSVC + aqt Qt + vcpkg)
+- `LICENSE-REVIEW.md` — per-component license audit + shipped-artifact license
+- `.github/workflows/release.yml` — CI's authoritative build + package commands
