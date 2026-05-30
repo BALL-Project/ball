@@ -341,3 +341,6 @@ Filled by the v1.8 roadmap (2026-05-30). Phase numbers continue the `999.NN` bac
 
 **Coverage:** 22 v1.8 requirements mapped to 8 phases (999.67–999.74); 0 orphaned; 0 duplicated. *(The §-header "21 requirements" count is one low — the listed REQ-IDs total 22 across the 6 categories; all 22 are mapped above.)*
 
+
+### Dark-mode theming (added 2026-05-30 from 999.67 UAT — maps to the cosmetic phase)
+- [ ] **THEME-DARK-01**: Dropdown / QComboBox popups (and other native-popup widgets) are readable when macOS is in dark appearance — the neutral theme must not leave black-text-on-black (only the highlighted row visible). Root cause: the macOS QComboBox popup renders natively + ignores QSS (theme-neutral.qss:9), and themeManager follows the system color scheme. Fix via a non-native popup view / forced palette / pinned appearance. (Found during 999.67 render-parity UAT; the project deferred dark mode to v1.8.)
