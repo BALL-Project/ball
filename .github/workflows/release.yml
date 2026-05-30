@@ -980,6 +980,46 @@ jobs:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
 
+      # Phase 999.66 (v1.7.4) — FAIL-FAST windeployqt guard + self-heal.
+      # The v1.7.4 release incident: a cold from-source Qt6 vcpkg build (the
+      # tag-ref release run can't see the branch-scoped warm cache) left the
+      # HOST-triplet qttools tools un-installed, so windeployqt.exe was absent
+      # and the packaging step failed — but only AFTER the ~30-min Build + test.
+      # This step runs RIGHT AFTER the vcpkg install (Configure) and BEFORE the
+      # heavy Build, so a missing deploy tool surfaces in minutes; and it
+      # self-heals by installing the host-triplet qttools when absent.
+      - name: Ensure windeployqt present (Windows — 999.66 fail-fast)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          function Find-Wdq {
+            $roots = @(
+              "build\ci-windows\vcpkg_installed",
+              "$env:VCPKG_INSTALLATION_ROOT\installed"
+            ) | Where-Object { Test-Path $_ }
+            foreach ($r in $roots) {
+              $hit = Get-ChildItem -Path $r -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($hit) { return $hit.FullName }
+            }
+            return $null
+          }
+          $wdq = Find-Wdq
+          if ($wdq) { Write-Host "windeployqt OK: $wdq"; exit 0 }
+
+          Write-Host "::warning::windeployqt.exe absent after vcpkg install — host-triplet qttools tools missing (cold-build incomplete install). Self-healing via classic-mode install."
+          $vcpkg = Join-Path $env:VCPKG_INSTALLATION_ROOT "vcpkg.exe"
+          if (Test-Path $vcpkg) {
+            & $vcpkg install "qttools:x64-windows" 2>&1 | Out-Host
+          } else {
+            Write-Host "::warning::vcpkg.exe not at VCPKG_INSTALLATION_ROOT ($env:VCPKG_INSTALLATION_ROOT) — cannot self-heal."
+          }
+          $wdq = Find-Wdq
+          if (-not $wdq) {
+            Write-Host "::error::windeployqt.exe still not found after self-heal. Failing fast (before the ~30-min Build) so the cause surfaces early. See ROADMAP Phase 999.66."
+            exit 1
+          }
+          Write-Host "windeployqt recovered: $wdq"
+
       - name: Build (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
@@ -1129,10 +1169,21 @@ jobs:
           }
           # Locate the (single) windeployqt.exe — it lives under
           # x64-windows/tools/Qt6/bin/. Keep the Recurse search robust
-          # against future vcpkg layout shifts.
-          $wdq = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          # against future vcpkg layout shifts. Phase 999.66: also search
+          # the runner vcpkg ROOT installed tree, where the fail-fast
+          # self-heal step (classic-mode `vcpkg install qttools:x64-windows`)
+          # lands windeployqt when the manifest build left it out.
+          $wdqRoots = @(
+            "build\ci-windows\vcpkg_installed",
+            "$env:VCPKG_INSTALLATION_ROOT\installed"
+          ) | Where-Object { Test-Path $_ }
+          $wdq = $null
+          foreach ($r in $wdqRoots) {
+            $wdq = Get-ChildItem -Path $r -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($wdq) { break }
+          }
           if (-not $wdq) {
-            Write-Host "::error::windeployqt.exe not found in vcpkg_installed"
+            Write-Host "::error::windeployqt.exe not found in vcpkg_installed or VCPKG_INSTALLATION_ROOT (999.66 self-heal also failed)"
             Get-ChildItem -Path build\ci-windows -Filter "windeployqt*" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { Write-Host $_.FullName }
             exit 1
           }
