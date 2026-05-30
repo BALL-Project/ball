@@ -7,8 +7,11 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/CONCEPT/property.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/MODELS/colorByGridProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
@@ -33,17 +36,21 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 
 namespace BALL
 {
 	 namespace VIEW
 	 {
 
-		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog& mrd)
+		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog& /*mrd*/)
 			: QDialog(0),
 				ModularWidget()
 		{
-			material_settings_ = mrd.material_settings_;
+			// Python-interface-only copy ctor: the material controls are owned by
+			// the Qt widget tree of the original and are not deep-copied.
 		}
 
 		ModifyRepresentationDialog::ModifyRepresentationDialog( QWidget* parent,  const char* name, bool, Qt::WindowFlags fl )
@@ -52,14 +59,25 @@ namespace BALL
 				ModularWidget(name),
 				grid_(0),
 				rep_(0),
-				material_settings_(NULL)
+				material_ambient_slider_(0),
+				material_specularity_slider_(0),
+				material_reflectiveness_slider_(0),
+				material_shininess_slider_(0),
+				material_transparency_slider_(0),
+				material_ambient_label_(0),
+				material_specularity_label_(0),
+				material_reflectiveness_label_(0),
+				material_shininess_label_(0),
+				material_transparency_label_(0),
+				material_ambient_color_label_(0),
+				material_specularity_color_label_(0),
+				material_reflectiveness_color_label_(0)
 		{
 			setupUi(this);
 
-			// NOTE: we *rely* on the object name "MaterialSettingsForRepresentation" to be able to
-			//       distinguish between the dialog used here and the one used in the preferences
-			material_settings_ = new MaterialSettings(material_settings_, "MaterialSettingsForRepresentation");
-			material_setting->layout()->addWidget(material_settings_);
+			// Build the dialog's own material controls into the material_setting
+			// page (replaces the legacy MaterialSettings child widget; 999.67-02).
+			setupMaterialControls_();
 
 			// signals and slots connections
 			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
@@ -112,12 +130,9 @@ namespace BALL
 				applySplit();
 				return;
 			}
-			else if (surface_tab->currentWidget() == material_setting)	
+			else if (surface_tab->currentWidget() == material_setting)
 			{
-				if (material_settings_)
-				{
-					material_settings_->apply();
-				}
+				applyMaterial_();
 			}
 
 			if (rep_->isHidden())
@@ -460,7 +475,7 @@ namespace BALL
 
 			mode_combobox->setCurrentIndex(rep_->getDrawingMode());
 
-			material_settings_->setCurrentRepresentation(rep_);
+			updateMaterialControls_();
 
 			checkApplyButton_();
 		}
@@ -862,6 +877,247 @@ namespace BALL
 		{
 			surface_tab->setCurrentIndex(pos);
 			tabChanged();
+		}
+
+		// ----------------------- Material-tab controls ---------------------------
+		// These reproduce, in code and owned by this dialog, the per-representation
+		// material editing the legacy MaterialSettings child widget provided
+		// (999.67-02). The widget construction mirrors ui_materialSettings.h's
+		// factor sliders/labels + color labels; the apply/update logic mirrors
+		// MaterialSettings::apply() and ::setCurrentRepresentation() so the
+		// "Modify Representation > Material Setting" behavior is unchanged.
+
+		namespace
+		{
+			// Local builder for one "color label + Edit button + factor slider +
+			// value label" row, matching the MaterialSettings layout.
+			QGroupBox* buildMaterialRow_(QWidget* parent, const QString& title,
+			                             QLabel*& color_label, QPushButton*& color_button,
+			                             QSlider*& slider, QLabel*& value_label,
+			                             int slider_max)
+			{
+				QGroupBox* box = new QGroupBox(title, parent);
+				QVBoxLayout* vbox = new QVBoxLayout(box);
+
+				QHBoxLayout* color_row = new QHBoxLayout();
+				color_button = new QPushButton(QObject::tr("Color..."), box);
+				color_label = new QLabel(box);
+				color_label->setMinimumHeight(20);
+				color_label->setAutoFillBackground(true);
+				color_row->addWidget(color_button);
+				color_row->addWidget(color_label, 1);
+				vbox->addLayout(color_row);
+
+				QHBoxLayout* factor_row = new QHBoxLayout();
+				slider = new QSlider(Qt::Horizontal, box);
+				slider->setMinimum(0);
+				slider->setMaximum(slider_max);
+				value_label = new QLabel(box);
+				value_label->setMinimumWidth(50);
+				factor_row->addWidget(slider, 1);
+				factor_row->addWidget(value_label);
+				vbox->addLayout(factor_row);
+
+				return box;
+			}
+		}
+
+		void ModifyRepresentationDialog::setupMaterialControls_()
+		{
+			// material_setting is an (empty) QWidget tab page from the .ui with a
+			// QVBoxLayout (verticalLayout_2). Populate it with our own controls
+			// instead of the previously-added MaterialSettings widget.
+			QLayout* layout = material_setting->layout();
+			if (layout == 0)
+			{
+				layout = new QVBoxLayout(material_setting);
+			}
+
+			QPushButton* ambient_button = 0;
+			QPushButton* specularity_button = 0;
+			QPushButton* reflectiveness_button = 0;
+
+			// Slider maxima mirror ui_materialSettings.h: ambient/specularity/
+			// reflectiveness/transparency 0..100, shininess 0..128.
+			layout->addWidget(buildMaterialRow_(material_setting, tr("Ambient"),
+				material_ambient_color_label_, ambient_button,
+				material_ambient_slider_, material_ambient_label_, 100));
+			layout->addWidget(buildMaterialRow_(material_setting, tr("Specularity"),
+				material_specularity_color_label_, specularity_button,
+				material_specularity_slider_, material_specularity_label_, 100));
+			layout->addWidget(buildMaterialRow_(material_setting, tr("Reflectiveness"),
+				material_reflectiveness_color_label_, reflectiveness_button,
+				material_reflectiveness_slider_, material_reflectiveness_label_, 100));
+
+			// Shininess: no color, slider 0..128 (quadratic mapping, see update).
+			QGroupBox* shininess_box = new QGroupBox(tr("Shininess"), material_setting);
+			QHBoxLayout* shininess_row = new QHBoxLayout(shininess_box);
+			material_shininess_slider_ = new QSlider(Qt::Horizontal, shininess_box);
+			material_shininess_slider_->setMinimum(0);
+			material_shininess_slider_->setMaximum(128);
+			material_shininess_label_ = new QLabel(shininess_box);
+			material_shininess_label_->setMinimumWidth(50);
+			shininess_row->addWidget(material_shininess_slider_, 1);
+			shininess_row->addWidget(material_shininess_label_);
+			layout->addWidget(shininess_box);
+
+			// Transparency: no color, slider 0..100.
+			QGroupBox* transparency_box = new QGroupBox(tr("Transparency"), material_setting);
+			QHBoxLayout* transparency_row = new QHBoxLayout(transparency_box);
+			material_transparency_slider_ = new QSlider(Qt::Horizontal, transparency_box);
+			material_transparency_slider_->setMinimum(0);
+			material_transparency_slider_->setMaximum(100);
+			material_transparency_label_ = new QLabel(transparency_box);
+			material_transparency_label_->setMinimumWidth(50);
+			transparency_row->addWidget(material_transparency_slider_, 1);
+			transparency_row->addWidget(material_transparency_label_);
+			layout->addWidget(transparency_box);
+
+			// Seed color labels to white (mirrors MaterialSettings ctor defaults).
+			setColor(material_ambient_color_label_, ColorRGBA(1.0, 1.0, 1.0));
+			setColor(material_reflectiveness_color_label_, ColorRGBA(1.0, 1.0, 1.0));
+			setColor(material_specularity_color_label_, ColorRGBA(1.0, 1.0, 1.0));
+
+			// Wire the value-label updates (the labels are what apply() reads).
+			connect(material_ambient_slider_, SIGNAL(valueChanged(int)), this, SLOT(materialAmbientFactorChanged_()));
+			connect(material_specularity_slider_, SIGNAL(valueChanged(int)), this, SLOT(materialSpecularityFactorChanged_()));
+			connect(material_reflectiveness_slider_, SIGNAL(valueChanged(int)), this, SLOT(materialReflectivenessFactorChanged_()));
+			connect(material_shininess_slider_, SIGNAL(valueChanged(int)), this, SLOT(materialShininessFactorChanged_()));
+			connect(material_transparency_slider_, SIGNAL(valueChanged(int)), this, SLOT(materialTransparencyFactorChanged_()));
+
+			connect(ambient_button, SIGNAL(clicked()), this, SLOT(editMaterialAmbientColor_()));
+			connect(specularity_button, SIGNAL(clicked()), this, SLOT(editMaterialSpecularityColor_()));
+			connect(reflectiveness_button, SIGNAL(clicked()), this, SLOT(editMaterialReflectivenessColor_()));
+		}
+
+		void ModifyRepresentationDialog::setMaterialLabel_(QLabel& label, float value)
+		{
+			// Mirrors MaterialSettings::setLabel_.
+			String text(10, "%2f", value);
+
+			while (text.has('.') && text.hasSuffix("0"))
+			{
+				text = text.trimRight("0");
+			}
+
+			if (text.hasSuffix(".")) text += "0";
+
+			label.setText(text.c_str());
+		}
+
+		void ModifyRepresentationDialog::materialAmbientFactorChanged_()
+		{
+			setMaterialLabel_(*material_ambient_label_, (float)material_ambient_slider_->value() / 100.0f);
+		}
+
+		void ModifyRepresentationDialog::materialSpecularityFactorChanged_()
+		{
+			setMaterialLabel_(*material_specularity_label_, (float)material_specularity_slider_->value() / 100.0f);
+		}
+
+		void ModifyRepresentationDialog::materialReflectivenessFactorChanged_()
+		{
+			setMaterialLabel_(*material_reflectiveness_label_, (float)material_reflectiveness_slider_->value() / 100.0f);
+		}
+
+		void ModifyRepresentationDialog::materialShininessFactorChanged_()
+		{
+			// Quadratic mapping, mirroring MaterialSettings::setQuadraticValues_:
+			// quad = (value/max)^2 * max.
+			float divisor = (float)material_shininess_slider_->maximum();
+			float quad = (float)material_shininess_slider_->value() / divisor;
+			quad *= quad;
+			quad *= divisor;
+			QString text;
+			text.setNum(quad, 'f', 3);
+			material_shininess_label_->setText(text);
+		}
+
+		void ModifyRepresentationDialog::materialTransparencyFactorChanged_()
+		{
+			material_transparency_label_->setText(String((int)material_transparency_slider_->value()).c_str());
+		}
+
+		void ModifyRepresentationDialog::editMaterialAmbientColor_()
+		{
+			chooseColor(material_ambient_color_label_);
+		}
+
+		void ModifyRepresentationDialog::editMaterialSpecularityColor_()
+		{
+			chooseColor(material_specularity_color_label_);
+		}
+
+		void ModifyRepresentationDialog::editMaterialReflectivenessColor_()
+		{
+			chooseColor(material_reflectiveness_color_label_);
+		}
+
+		void ModifyRepresentationDialog::updateMaterialControls_()
+		{
+			// Mirrors MaterialSettings::setCurrentRepresentation: seed the controls
+			// from rep_'s stored material, falling back to the Stage default.
+			if (rep_ == 0 || Scene::getInstance(0) == 0) return;
+
+			Stage::Material material;
+			if (rep_->hasProperty("Rendering::Material"))
+			{
+				NamedProperty mat_property = rep_->getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
+				Stage::Material* cast = dynamic_cast<Stage::Material*>(mat_ptr.get());
+				if (cast != 0) material = *cast;
+			}
+			else
+			{
+				Stage* stage = Scene::getInstance(0)->getStage();
+				if (stage != 0) material = stage->getMaterial();
+			}
+
+			setColor(material_ambient_color_label_, material.ambient_color);
+			setColor(material_reflectiveness_color_label_, material.reflective_color);
+			setColor(material_specularity_color_label_, material.specular_color);
+
+			setMaterialLabel_(*material_ambient_label_, material.ambient_intensity);
+			material_ambient_slider_->setValue((int)(material.ambient_intensity * (float)material_ambient_slider_->maximum()));
+
+			setMaterialLabel_(*material_specularity_label_, material.specular_intensity);
+			material_specularity_slider_->setValue((int)(material.specular_intensity * (float)material_specularity_slider_->maximum()));
+
+			setMaterialLabel_(*material_reflectiveness_label_, material.reflective_intensity);
+			material_reflectiveness_slider_->setValue((int)(material.reflective_intensity * (float)material_reflectiveness_slider_->maximum()));
+
+			setMaterialLabel_(*material_shininess_label_, material.shininess);
+			material_shininess_slider_->setValue((int)sqrt(material.shininess * (float)material_shininess_slider_->maximum()));
+
+			setMaterialLabel_(*material_transparency_label_, material.transparency);
+			material_transparency_slider_->setValue((int)material.transparency);
+		}
+
+		void ModifyRepresentationDialog::applyMaterial_()
+		{
+			// Mirrors the per-representation branch of MaterialSettings::apply()
+			// (objectName == "MaterialSettingsForRepresentation"): build a
+			// Stage::Material from the controls (labels are authoritative, as in
+			// the legacy widget) and push it onto rep_ via the Scene.
+			if (rep_ == 0 || Scene::getInstance(0) == 0 || Scene::getInstance(0)->getStage() == 0)
+			{
+				return;
+			}
+
+			Stage::Material material;
+
+			material.ambient_color    = getColor(material_ambient_color_label_);
+			material.specular_color   = getColor(material_specularity_color_label_);
+			material.reflective_color = getColor(material_reflectiveness_color_label_);
+
+			material.ambient_intensity    = material_ambient_label_->text().toFloat();
+			material.specular_intensity   = material_specularity_label_->text().toFloat();
+			material.reflective_intensity = material_reflectiveness_label_->text().toFloat();
+
+			material.shininess    = std::max(material_shininess_label_->text().toFloat(), 0.1f);
+			material.transparency = material_transparency_label_->text().toFloat();
+
+			Scene::getInstance(0)->updateMaterialForRepresentation(rep_, material);
 		}
 
 	} // namespace VIEW

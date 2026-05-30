@@ -33,11 +33,10 @@
 # include <BALL/DATATYPE/hashGrid.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOG_MATERIALSETTINGS_H
-# include <BALL/VIEW/DIALOGS/materialSettings.h>
-#endif
-
 #include <BALL/VIEW/UIC/ui_modifyRepresentationDialog.h>
+
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QLabel>
 
 namespace BALL
 {
@@ -100,6 +99,18 @@ namespace BALL
 			void show();
 			void applySplit();
 
+			// Material-tab slots. The dialog hosts its own material controls
+			// directly (999.67-02) instead of embedding the legacy
+			// MaterialSettings child widget, which has been deleted.
+			void materialAmbientFactorChanged_();
+			void materialSpecularityFactorChanged_();
+			void materialReflectivenessFactorChanged_();
+			void materialShininessFactorChanged_();
+			void materialTransparencyFactorChanged_();
+			void editMaterialAmbientColor_();
+			void editMaterialSpecularityColor_();
+			void editMaterialReflectivenessColor_();
+
 			protected Q_SLOTS:
 
 			void customColorTransparencyChanged();
@@ -124,15 +135,42 @@ namespace BALL
 			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots);
 			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
+			// Build the material-tab controls into the material_setting page and
+			// wire their signals (replaces the embedded MaterialSettings widget).
+			void setupMaterialControls_();
+			// Apply the material-tab values to rep_'s material, reproducing the
+			// legacy MaterialSettings::apply() Stage::Material setter sequence.
+			void applyMaterial_();
+			// Populate the material-tab controls from rep_'s current material,
+			// reproducing MaterialSettings::setCurrentRepresentation().
+			void updateMaterialControls_();
+			// Slider-value -> label helper (mirrors MaterialSettings::setLabel_).
+			void setMaterialLabel_(QLabel& label, float value);
+
 			RegularData3D* grid_;
 			float square_distance_;
 
-			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
+			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;
 
 			Representation* rep_;
 			std::list<RegularData3D*> grid_list_;
 			vector<Vector3> vertices_;
-			MaterialSettings* material_settings_;
+
+			// Material-tab controls (own widgets, hosted in the material_setting
+			// page; replaces the deleted MaterialSettings child widget).
+			QSlider* material_ambient_slider_;
+			QSlider* material_specularity_slider_;
+			QSlider* material_reflectiveness_slider_;
+			QSlider* material_shininess_slider_;
+			QSlider* material_transparency_slider_;
+			QLabel* material_ambient_label_;
+			QLabel* material_specularity_label_;
+			QLabel* material_reflectiveness_label_;
+			QLabel* material_shininess_label_;
+			QLabel* material_transparency_label_;
+			QLabel* material_ambient_color_label_;
+			QLabel* material_specularity_color_label_;
+			QLabel* material_reflectiveness_color_label_;
 		};
 
 	} // namespace VIEW

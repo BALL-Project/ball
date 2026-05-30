@@ -18,7 +18,6 @@
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
-#include <BALL/VIEW/DIALOGS/clippingDialog.h>
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 
 #include <QtWidgets/QFileDialog>
@@ -685,9 +684,25 @@ namespace BALL
 		{
 			if (context_plane_ == 0) return;
 
-			ClippingDialog dialog;
-			dialog.setClippingPlane(context_plane_);
-			dialog.exec();
+			MainControl* mc = getMainControl();
+			if (mc == 0) return;
+
+			// Clip every current Representation against this plane. This mirrors
+			// the legacy clip-apply mutation (rebuild plane->getRepresentations()
+			// from the current representation list) and the canonical Inspector
+			// ClippingController::apply() path. The legacy modal per-rep checkbox
+			// selection (ClippingDialog, retired 999.67-02) is gone; the Inspector
+			// ClippingSection is the place to fine-tune which representations a
+			// clipping plane affects.
+			RepresentationManager& pm = mc->getRepresentationManager();
+			context_plane_->getRepresentations().clear();
+			RepresentationList::const_iterator it = pm.getRepresentations().begin();
+			for (; it != pm.getRepresentations().end(); ++it)
+			{
+				context_plane_->getRepresentations().insert(*it);
+			}
+
+			mc->redrawAllRepresentations();
 		}
 
 		void GeometricControl::createNewClippingPlane()

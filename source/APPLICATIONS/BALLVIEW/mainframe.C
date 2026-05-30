@@ -51,7 +51,6 @@
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/downloadElectronDensity.h>
-#include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -248,7 +247,10 @@ namespace BALL
 
 		Path path;
 
-		new LabelDialog(        this, ((String)tr("LabelDialog")).c_str());
+		// LabelDialog registration removed (999.67-02): the legacy
+		// Display > Create > Label menu it self-registered is superseded by
+		// the Inspector LabelSection/LabelController. Dropping the construction
+		// removes that menu surface and the last live LabelDialog reference.
 		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
 
 		// Phase 999.45 — Workspace consolidation. The bottom area:
