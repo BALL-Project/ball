@@ -9,8 +9,8 @@
 # include <BALL/VIEW/KERNEL/mainControl.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
-# include <BALL/VIEW/DIALOGS/displayProperties.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATIONCREATOR_H
+# include <BALL/VIEW/KERNEL/representationCreator.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -62,7 +62,11 @@ namespace BALL
 		MolecularControl*					control_;
 		DatasetControl* 					dataset_control_;
 		GeometricControl*					geometric_control_;
-		DisplayProperties*    		display_properties_;
+		// Phase 999.67 Plan 03 (LEGACYDEL-01): DisplayProperties is deleted. Its
+		// sole role in DCD2PNG was to exist as the NEW_MOLECULE auto-create
+		// subscriber so batch renders auto-build a default representation; that
+		// subscriber is re-homed onto the non-dialog RepresentationCreator.
+		RepresentationCreator*		representation_creator_;
 		MolecularStructure*  			molecular_structure_;
 		MolecularFileDialog*  		file_dialog_;
 	};

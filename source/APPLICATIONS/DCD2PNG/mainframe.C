@@ -23,7 +23,7 @@ namespace BALL
 		:	MainControl(parent, name, ".BALLView"),
 			control_(0),
 			geometric_control_(0),
-			display_properties_(0),
+			representation_creator_(0),
 			molecular_structure_(0)
 	{
 		registerThis();
@@ -39,7 +39,12 @@ namespace BALL
 		scene_ = new Scene(this, tr("3D View"));
 		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
-		display_properties_ = new DisplayProperties(this, tr("DisplayProperties"));
+		// Phase 999.67 Plan 03 (LEGACYDEL-01): re-register the re-homed NEW_MOLECULE
+		// auto-create subscriber in place of the deleted DisplayProperties dialog.
+		// DCD2PNG never called a method on DisplayProperties — it only needed it to
+		// EXIST as the subscriber that auto-builds the default representation, so
+		// batch frames still render (non-blank) output.
+		representation_creator_ = new RepresentationCreator(this, ((String)tr("RepresentationCreator")).c_str());
 		file_dialog_ = new MolecularFileDialog(this, tr("MolecularFileDialog"));
  		molecular_structure_ = new MolecularStructure(this, tr("MolecularStructure"));
 

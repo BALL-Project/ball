@@ -37,7 +37,7 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/KERNEL/representationCreator.h>
 
 #include <BALL/VIEW/DATATYPE/dataset.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -2113,11 +2113,16 @@ namespace BALL
 		fetchPreferences(in);
 		applyPreferences();
 
-		bool has_dp = (DisplayProperties::getInstance(0) != 0);
+		// Phase 999.67 Plan 03: the suppress-during-load guard is re-homed off
+		// DisplayProperties onto the non-dialog RepresentationCreator. A project
+		// file restores its OWN saved representations (restoreRepresentations
+		// below), so NEW_MOLECULE auto-create must stay suppressed while the
+		// project loads and be re-enabled afterwards.
+		bool has_rc = (RepresentationCreator::getInstance(0) != 0);
 
-		if (has_dp)
+		if (has_rc)
 		{
-			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
+			RepresentationCreator::getInstance(0)->enableCreationForNewMolecules(false);
 		}
 
 		vector<const Composite*> new_systems;
@@ -2152,7 +2157,7 @@ namespace BALL
             if (!RTTI::isKindOf<System>(po))
 			{
 				setStatusbarText((String)tr("Error while reading project file, could not read molecule."), true);
-				if (has_dp)	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
+				if (has_rc)	RepresentationCreator::getInstance(0)->enableCreationForNewMolecules(true);
 				return;
 			}
 
@@ -2175,7 +2180,7 @@ namespace BALL
 		delete (pm);
 
 		file.close();
-		if (has_dp) DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
+		if (has_rc) RepresentationCreator::getInstance(0)->enableCreationForNewMolecules(true);
 
 		getRepresentationManager().restoreRepresentations(in, new_systems);
 

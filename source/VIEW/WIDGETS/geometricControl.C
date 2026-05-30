@@ -16,7 +16,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 
@@ -400,7 +399,9 @@ namespace BALL
 		{
 			if (context_representation_ == 0) return;
 
-			notify_(new ShowDisplayPropertiesMessage);
+			// Phase 999.67 Plan 03: the legacy DisplayProperties dialog is deleted.
+			// Representation modification is now done via the Inspector, so this
+			// context-menu action no longer pops up a dialog.
 		}
 
 		void GeometricControl::updateSelection()

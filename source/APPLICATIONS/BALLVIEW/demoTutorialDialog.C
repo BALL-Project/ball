@@ -9,7 +9,7 @@
 #include <BALL/VIEW/KERNEL/stageMutation.h>
 #include <BALL/VIEW/MODELS/representationBuilder.h>
 
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/KERNEL/representationCreator.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -216,8 +216,10 @@ void DemoTutorialDialog::initTutorials_()
 		// dialog-widget refresh is dropped; the Stage::Material writes above + the
 		// applyPreferences() below carry the render effect via the MaterialController.
 
-		// set ball and stick as next model
-		DisplayProperties::getInstance(0)->selectModel(MODEL_BALL_AND_STICK);
+		// Phase 999.67 Plan 03: the DisplayProperties dialog is deleted. This
+		// RTfact-only tutorial step previously primed the dialog's model combo to
+		// Ball-and-Stick; with the dialog gone there is no widget state to set and
+		// the auto-create path uses the default RepresentationSpec.
 
 		// apply everything to the scene...
 		Scene::getInstance(0)->applyPreferences();
@@ -568,8 +570,11 @@ void DemoTutorialDialog::nextStepDemo_()
 	// initialisation for first real step
 	if (current_step_ == 1)
 	{
-		DisplayProperties* dp = DisplayProperties::getInstance(0);
-		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
+		// Phase 999.67 Plan 03: the DisplayProperties dialog is deleted. Its
+		// suppress-during-load guard is re-homed onto the non-dialog
+		// RepresentationCreator. The former setDrawingPrecision(HIGH) priming is
+		// now the default RepresentationSpec precision, so no priming is needed.
+		RepresentationCreator* rc = RepresentationCreator::getInstance(0);
 
 		((Mainframe*)getMainControl())->reset();
 
@@ -582,9 +587,9 @@ void DemoTutorialDialog::nextStepDemo_()
 			MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
 			if (!dialog) return;
 
-			dp->enableCreationForNewMolecules(false);
+			if (rc) rc->enableCreationForNewMolecules(false);
 			system_ = dialog->openMolecularFile(file_name);
-			dp->enableCreationForNewMolecules(true);
+			if (rc) rc->enableCreationForNewMolecules(true);
 
 		  if (!system_)
 			{

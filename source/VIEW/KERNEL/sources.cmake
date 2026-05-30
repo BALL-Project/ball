@@ -13,6 +13,9 @@ SET(SOURCES_LIST
 	message.C
 	modelInformation.C
 	modularWidget.C
+	# Phase 999.67 Plan 03 (LEGACYDEL-01) — non-dialog NEW_MOLECULE
+	# auto-create subscriber re-homed off the deleted DisplayProperties.
+	representationCreator.C
 	preferencesEntry.C
 	representationManager.C
 	representation.C

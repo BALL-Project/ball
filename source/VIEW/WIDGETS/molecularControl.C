@@ -1491,12 +1491,12 @@ namespace BALL
 
 		void MolecularControl::createRepresentation() 
 		{
-			// make sure selection is send, to enter create Represenation Mode in DP
+			// Phase 999.67 Plan 03: the legacy DisplayProperties dialog is deleted,
+			// so there is no dialog to pop up here. The selection notify below still
+			// drives the Inspector's representation-creation surface.
 			ControlSelectionMessage* message = new ControlSelectionMessage;
 			message->setSelection(selected_);
 			notify_(message);
-
-			notify_(new ShowDisplayPropertiesMessage);
 		}
 
 		void MolecularControl::collapseAll()

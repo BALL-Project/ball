@@ -51,7 +51,7 @@
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/downloadElectronDensity.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/KERNEL/representationCreator.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #ifdef BALL_PYTHON_SUPPORT
@@ -404,7 +404,13 @@ namespace BALL
 				showWelcomeScreen_();
 		}
 
-		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
+		// Phase 999.67 Plan 03 (LEGACYDEL-01): the DisplayProperties settings
+		// dialog is gone. Its sole load-bearing role — the NEW_MOLECULE
+		// auto-create subscriber that builds a default representation when a
+		// molecule is loaded — is re-homed onto this minimal non-dialog
+		// ModularWidget. Interactive model/coloring/material editing lives in the
+		// Inspector (999.65 supersession surface).
+		new RepresentationCreator(this, ((String)tr("RepresentationCreator")).c_str());
 
 		#ifdef BALL_PYTHON_SUPPORT
 			PyInterpreter::initialize();
@@ -633,13 +639,11 @@ namespace BALL
 
 		clearData();
 
-		DisplayProperties* dp = DisplayProperties::getInstance(0);
-		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
-		dp->selectModel(MODEL_STICK);
-		dp->selectColoringMethod(COLORING_ELEMENT);
-		dp->selectMode(DRAWING_MODE_SOLID);
-		dp->setTransparency(0);
-		dp->setSurfaceDrawingPrecision(6.5);
+		// Phase 999.67 Plan 03: the former DisplayProperties default-rep seed
+		// (STICK / ELEMENT / SOLID / HIGH precision / opaque / 6.5 surface
+		// precision) is now the out-of-box default of RepresentationSpec
+		// (representationBuilder.h:62), which the re-homed RepresentationCreator
+		// builds on NEW_MOLECULE. No dialog state needs priming here.
 	}
 
 	
@@ -1083,7 +1087,10 @@ namespace BALL
 						tb->addAction(qsave_action_);
 
 						tb->addSeparator();
-						DisplayProperties::getInstance(0)->addToolBarEntries(tb);
+						// Phase 999.67 Plan 03: DisplayProperties is deleted. It
+						// contributed no toolbar actions of its own (it never
+						// populated main_toolbar_actions_), so dropping its
+						// addToolBarEntries() call removes nothing from the toolbar.
 						MolecularStructure::getInstance(0)->addToolBarEntries(tb);
 		}
 

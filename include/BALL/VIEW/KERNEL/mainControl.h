@@ -90,7 +90,7 @@ namespace BALL
 				it is responsible for the handling of all messages.
 				To add ModularWidgets all that is necessary are the creation of the derived modular
 				widgets with the MainControl as their parents like e.g.<br>
-				new DisplayProperties(this, "DisplayProperties");<br>
+				new MolecularControl(this, "MolecularControl");<br>
 				For examples have a look at BALL/source/APPLICATIONS/mainframe.C
 				<br>
 				<br>
