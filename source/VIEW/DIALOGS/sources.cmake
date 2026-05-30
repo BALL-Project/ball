@@ -25,7 +25,6 @@ SET(UI_LIST
 	gridColorWidget.ui
 	gridVisualizationDialog.ui
 	labelDialog.ui
-	lightSettings.ui
 	mainControlPreferences.ui
 	materialSettings.ui
 	minimizationDialog.ui
@@ -49,8 +48,6 @@ SET(UI_LIST
 	setClippingPlane.ui
 	shortcutDialog.ui
 	snapShotVisualisation.ui
-	stageSettings.ui
-	stereoSettingsDialog.ui
 	undoManagerDialog.ui
 )
 
@@ -79,7 +76,6 @@ SET(SOURCES_LIST
 	generateCrystalDialog.C
 	gridVisualizationDialog.C
 	labelDialog.C
-	lightSettings.C
 	mainControlPreferences.C
 	materialSettings.C
 	minimizationDialog.C
@@ -103,8 +99,6 @@ SET(SOURCES_LIST
 	serverPreferences.C
 	shortcutDialog.C
 	snapShotVisualisation.C
-	stageSettings.C
-	stereoSettingsDialog.C
 	undoManagerDialog.C
 )
 
