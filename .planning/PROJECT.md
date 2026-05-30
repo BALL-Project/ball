@@ -14,22 +14,22 @@ BALLView must **build and visibly render molecules** on macOS, Linux, and Window
 from current, supported dependencies — the 3D scene working cross-platform is the
 non-negotiable outcome.
 
-## Current Milestone: v1.6.2 — Build acceleration + scope-cleanup patch release
+## Current Milestone: v1.8 — "Clear the v1.x decks"
 
-**Started:** 2026-05-16 (after v1.6.1 tagged on commit `8e5495a`)
+**Started:** 2026-05-30 (off `master` at the `v1.7.4` tag, commit `30b5f7c9`)
 
-**Goal:** Faster CI, cleaner tracker, deferred cleanups closed — patch shape, not feature shape. Big chunk of work, but mostly corrective.
+**Goal:** Close out the v1.x line — finish the deferred cleanups, complete packaging/distribution, and clear a triaged batch of open bug issues. Stays on the 1.x substrate: **no API or substrate breaks** (the v2.0 KERNEL/REST/YAML/gemmi rework and v2.1 PyBALL bindings stay parked).
 
-**Target features (7 phases + 1 stretch, ~7-13 days effort):**
-- **Build acceleration cluster (5):** PCH (999.16), Windows CMake build-tree cache (999.17), path-aware CI triggers + concurrency groups (999.18), per-TU build profiling artifact (999.19), action artifact pins v6/v7 (999.20)
-- **Phase 9 close:** triage 3 baseline failures + flip CI gatekeeper to blocking
-- **Issue + PR triage (999.14):** 5-category triage of open issues + open PRs (triage first), stale-doc audit alongside, 5-PR legacy bundle merge as clean tail (#640, #600, #554, #550, #546)
-- **Dead-code cleanups (2):** DockResultFile QtXml dead overload (999.21, ~1h), Tier-C warning census-only (999.22, no execution)
-- **Stretch:** CIF Bison grammar audit (999.23)
+**Target features:**
+- **Legacy-dialog deletion (999.53):** finish the Wave-4 cleanup tail — resume the `v1.7.3-legacy-deletion` branch (plans 01+02 done); delete the lynchpin displayProperties/model/coloring triple + retire the Tools → Legacy Settings menu (now unblocked: the 999.65 builder extraction shipped in v1.7.4).
+- **Packaging & Distribution completion (Phase 8):** signed Windows installer (SignPath Foundation), documented build-from-source, license/distribution review → unblocks **999.8** auto-update.
+- **PDF tutorial refresh (999.56, #560):** content/screenshots/URLs/build-flow updated to the v1.7.x stack.
+- **Inspector right-edge clipping fix (v1.7.5 cosmetic):** the scroll-clip known-issue documented in the v1.7.4 release notes.
+- **Open-issue bug batch:** a triaged set of real defects (memory leak, infinite loops, OS-dependent test, UX settings) — scoped in REQUIREMENTS.md.
 
-**Out of scope (deferred to v1.7 / v2.x):** Phase 6 PyBALL bake-off (→ v2.1 first step per 2026-05-16 user direction), Phase 8 packaging + signed installers (→ v1.7), 999.8 auto-update (→ v1.7), 999.1 UI maintainer questions (→ v1.7), 999.4b residue color persistence (→ v1.7), SEED-001 BALLView UI Refresh (→ v1.7), Tier-C warning execution (→ v1.7/v2.0 per 999.22 census split-list).
+**Out of scope (parked for later milestones):** v2.0 substrate — KERNEL redesign, REST API (999.10 / #652), YAML config, gemmi mmCIF, deprecated-code removal, transparent-surface OIT (PIPE-01), Size/Position/Index redefinition (#531). v2.1 — PyBALL bindings bake-off (Phase 6) + bulk wrap (999.15 / #663).
 
-**Detailed scope:** [`MILESTONE-CONTEXT.md`](MILESTONE-CONTEXT.md). Predecessor: [`MILESTONE-CONTEXT-v1.6.1.md`](MILESTONE-CONTEXT-v1.6.1.md).
+**Predecessors:** see [`MILESTONES.md`](MILESTONES.md) (shipped v1.6.0 → v1.7.4). Prior phase artifacts archived under `.planning/archive/phases-thru-v1.7.4/`.
 
 ## Requirements
 

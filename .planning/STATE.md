@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.6.2
-milestone_name: · 2026-05-16)
-status: paused
-stopped_at: "999.65-03 at BLOCKING checkpoint:human-verify (project-restore + molecule-load render-parity UAT pending; code complete + grep-proven dead orchestration removed + BALLView links clean BALL_UI_V2=ON)"
-last_updated: "2026-05-22T11:00:40.547Z"
-last_activity: 2026-05-22
+milestone: v1.8
+milestone_name: Clear the v1.x decks
+status: planning
+last_updated: "2026-05-30T03:19:43.441Z"
+last_activity: 2026-05-30
 progress:
-  total_phases: 74
-  completed_phases: 34
-  total_plans: 89
-  completed_plans: 87
-  percent: 46
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,10 +23,10 @@ progress:
 
 ## Current Position
 
-Phase: 999.65
-Plan: Not started
-Status: PAUSED at blocking GUI UAT (999.65-03 Task 3) — all code done (NEW_MOLECULE auto-rep + project-restore both repointed onto the headless RepresentationBuilder; dead DisplayProperties::createRepresentation(String) orchestration removed, grep-proven no live external caller); VIEW + BALLView link clean BALL_UI_V2=ON; awaiting human project-restore + molecule-load render-parity confirmation. On approval VIEW-CLEAN-04 flips and 999.53 (legacy dialog deletion) is unblocked.
-Last activity: 2026-05-22
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-05-30 — Milestone v1.8 started
 
 ## Performance Metrics
 
