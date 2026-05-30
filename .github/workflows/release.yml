@@ -12,7 +12,11 @@ name: Release
 #   notarytool + stapled .dmg. MANDATORY: the job fails if the 7 MACOS_*
 #   secrets are absent (no unsigned fallback). See
 #   .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md.
-# - Windows (Phase 8b): SignPath — still pending.
+# - Windows (Phase 999.68 / WINSIGN-01): SignPath Foundation scaffold in place
+#   but OPTIONAL-skip — enrollment + SIGNPATH_API_TOKEN secret still pending.
+#   When the secret is absent the release ships the UNSIGNED NSIS installer
+#   with a ::warning:: (does NOT fail). When present it signs via SignPath.
+#   See .planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md.
 # - Linux (Phase 8c): AppImage / .deb / .rpm — still pending.
 
 on:
@@ -1323,23 +1327,39 @@ jobs:
           retention-days: 30
 
       # ---------------------------------------------------------------------
-      # Phase 8b Task 3: signtool integration via SignPath Foundation GitHub
-      # Action — GATED on secret presence. When SIGNPATH_API_TOKEN is unset
-      # (current state: foundation review pending), the step skips silently
-      # and the unsigned installer ships per the Plan B deliverable. See
-      # .planning/phases/08b-packaging-windows/SECRETS-RUNBOOK.md for the
-      # secret-configuration procedure and the bus-factor recovery flow.
+      # Phase 999.68 (WINSIGN-01) — Windows installer signing via SignPath
+      # Foundation GitHub Action. GATED on the SIGNPATH_API_TOKEN secret.
       #
-      # The action takes the github-artifact-id of the unsigned installer
-      # uploaded above, submits to SignPath, waits for an admin to click
-      # "approve" in the foundation UI (intentional anti-supply-chain-attack
-      # control), and downloads the signed .exe into signed-installer/.
+      # CURRENT STATE: SignPath Foundation (OSS program) enrollment is PENDING
+      # — the maintainer has not yet enrolled the project and the
+      # SIGNPATH_API_TOKEN secret is ABSENT. Until then this is a no-op SCAFFOLD:
+      #   - When the secret is ABSENT  → the "SignPath not configured" step
+      #     below emits a clear ::warning:: and the release ships the UNSIGNED
+      #     NSIS installer (uploaded at the step above). The release path is
+      #     NOT broken and does NOT fail.
+      #   - When the secret is PRESENT → the sign step submits the unsigned
+      #     installer to SignPath, waits for an admin to click "approve" in the
+      #     SignPath UI (intentional anti-supply-chain control), downloads the
+      #     signed .exe, and re-uploads it over the unsigned artifact.
+      #
+      # NOTE: the gate uses `secrets.SIGNPATH_API_TOKEN != ''` directly in the
+      # `if:` (the earlier scaffold gated on `env.SIGNPATH_API_TOKEN`, which was
+      # never defined at job level — so the gate could never turn ON even with
+      # the secret present; that latent bug is fixed here).
+      #
+      # Maintainer setup (apply to SignPath, create project/policy, generate
+      # token, add the repo secrets) is documented step-by-step in:
+      #   .planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md
       # ---------------------------------------------------------------------
-      - name: Sign installer via SignPath Foundation (Windows — gated on cert)
-        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+      - name: SignPath not configured — ship unsigned (Windows — warn + skip)
+        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN == ''
+        shell: pwsh
+        run: |
+          Write-Host "::warning title=Windows installer is UNSIGNED::SIGNPATH_API_TOKEN is not set — SignPath Foundation enrollment is still pending (WINSIGN-01). Shipping the UNSIGNED NSIS installer; Windows SmartScreen will warn users on first run. To enable signing, follow .planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md and add the SIGNPATH_API_TOKEN + SIGNPATH_ORG_ID repo secrets."
+
+      - name: Sign installer via SignPath Foundation (Windows — gated on secret)
+        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
         id: signpath-sign
-        env:
-          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
         uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
@@ -1352,7 +1372,7 @@ jobs:
           output-artifact-directory: 'signed-installer'
 
       - name: Recompute SHA256 + re-upload signed installer (Windows — gated)
-        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
         shell: pwsh
         run: |
           $signed = Get-ChildItem -Path "signed-installer" -Filter "*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -1370,7 +1390,7 @@ jobs:
           }
 
       - name: Re-upload signed installer artifact (Windows — gated)
-        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
         uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.nsis-build.outputs.installer_name }}

@@ -1,10 +1,10 @@
 # Windows SmartScreen Warning — How to install BALLView (unsigned installer)
 
 This release of BALLView ships with an **unsigned** Windows installer. The
-SignPath Foundation OSS code-signing application is in flight (status:
-`.planning/phases/08b-packaging-windows/08b-SIGNPATH-STATUS.md`); once
-approved, future releases (and this one, retroactively) will be
-Authenticode-signed.
+SignPath Foundation OSS code-signing application is in flight (setup +
+status: `.planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md`);
+once approved and the `SIGNPATH_API_TOKEN` secret is configured, future
+releases will be Authenticode-signed.
 
 Until then, Windows will warn the first time you run the installer.
 This README explains why, how to install safely, and how to verify the

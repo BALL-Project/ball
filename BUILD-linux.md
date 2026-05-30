@@ -1,6 +1,6 @@
 # BUILD-linux.md — from-source build on Ubuntu 24.04 (x86_64 + arm64)
 
-**Target:** BALL + VIEW + BALLView, LGPL-only (no FFTW per Phase 8c's SHIP-LGPL-ONLY decision; see `.planning/phases/08c-packaging-linux/08c-FFTW-GPL-DECISION.md` for rationale).
+**Target:** BALL + VIEW + BALLView, LGPL-only (no FFTW per Phase 8c's SHIP-LGPL-ONLY decision; see `.planning/archive/phases-thru-v1.7.4/08c-packaging-linux/08c-FFTW-GPL-DECISION.md` for rationale).
 
 **Tested on:** ubuntu-24.04 (x86_64) and ubuntu-24.04-arm (ARM64) GitHub-hosted runners. Local Ubuntu 24.04 LTS builds should be identical.
 
@@ -151,6 +151,8 @@ This is a documented fallback — CPack is the primary path in CI.
 
 ## See also
 
-- `BUILD-macos.md` — macOS Apple Silicon build
+- `BUILD-macos.md` — macOS Apple Silicon build (Homebrew)
+- `BUILD-windows.md` — Windows build (VS 2022 / MSVC + aqt Qt + vcpkg)
+- `LICENSE-REVIEW.md` — per-component license audit + shipped-artifact license (Linux ships LGPL: no FFTW)
 - `.github/workflows/release.yml` — CI's authoritative build commands per platform
-- `.planning/phases/08c-packaging-linux/08c-01-PLAN.md` — full Phase 8c plan (including AppImage / .deb / .rpm parts deferred to part-2)
+- `.planning/archive/phases-thru-v1.7.4/08c-packaging-linux/08c-01-PLAN.md` — full Phase 8c plan (AppImage / .deb / .rpm)
