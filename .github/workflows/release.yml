@@ -945,12 +945,37 @@ jobs:
             ccache-${{ matrix.os }}-pch-v2-
             ccache-${{ matrix.os }}-
 
+      - name: Install Qt 6 (Windows — jurplel/install-qt-action / aqtinstall)
+        if: matrix.os == 'windows-x64'
+        # 999.66 — Windows Qt via aqtinstall. Mirror of ci.yml + the Linux
+        # release step above: install the official prebuilt Qt 6.8 desktop kit
+        # (MSVC 2022 x64) instead of building qtbase/qtsvg/qttools from source
+        # via vcpkg. Eliminates the ~1.5-2h cold Qt build and the
+        # windeployqt-missing failure class — windeployqt.exe ships in the aqt
+        # kit's own bin/, so the host-triplet DLL-staging dance below is gone.
+        # The release matrix has no qt_version field, so '6.8.*' is hardcoded
+        # (same D-01 6.8 LTS floor as Linux/ci.yml). `modules:` intentionally
+        # omitted — BALL's Qt modules are all in the default install.
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          cache: true
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
           $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
           Write-Host "VCPKG_ROOT=$env:VCPKG_ROOT"
+          # 999.66 — Windows Qt via aqtinstall. Qt is no longer in vcpkg.json,
+          # so the vcpkg toolchain no longer provides Qt6 config files. The aqt
+          # action exports QT_ROOT_DIR (+ Qt6_DIR); pass it as CMAKE_PREFIX_PATH
+          # so FIND_PACKAGE(Qt6) resolves the prebuilt kit. vcpkg toolchain is
+          # still used for Boost/Eigen/FFTW/TBB/GLEW/winsparkle/etc.
+          Write-Host "QT_ROOT_DIR=$env:QT_ROOT_DIR"
           # Pass --clean-after-build via CMake cache variable, NOT env var.
           # vcpkg's manifest-mode cmake integration honors the CMake
           # VCPKG_INSTALL_OPTIONS variable; the env-var spelling is for
@@ -968,6 +993,7 @@ jobs:
           # the post-build filename grep on `BALLView-*-installer.exe`
           # silently slips into the legacy `BALL-*.exe` fallback.
           cmake --preset ci-windows `
+            -DCMAKE_PREFIX_PATH="$env:QT_ROOT_DIR" `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
             -DBALL_ENABLE_PACKAGING=ON `
@@ -980,46 +1006,11 @@ jobs:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
 
-      # Phase 999.66 (v1.7.4) — FAIL-FAST windeployqt guard + self-heal.
-      # The v1.7.4 release incident: a cold from-source Qt6 vcpkg build (the
-      # tag-ref release run can't see the branch-scoped warm cache) left the
-      # HOST-triplet qttools tools un-installed, so windeployqt.exe was absent
-      # and the packaging step failed — but only AFTER the ~30-min Build + test.
-      # This step runs RIGHT AFTER the vcpkg install (Configure) and BEFORE the
-      # heavy Build, so a missing deploy tool surfaces in minutes; and it
-      # self-heals by installing the host-triplet qttools when absent.
-      - name: Ensure windeployqt present (Windows — 999.66 fail-fast)
-        if: matrix.os == 'windows-x64'
-        shell: pwsh
-        run: |
-          function Find-Wdq {
-            $roots = @(
-              "build\ci-windows\vcpkg_installed",
-              "$env:VCPKG_INSTALLATION_ROOT\installed"
-            ) | Where-Object { Test-Path $_ }
-            foreach ($r in $roots) {
-              $hit = Get-ChildItem -Path $r -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-              if ($hit) { return $hit.FullName }
-            }
-            return $null
-          }
-          $wdq = Find-Wdq
-          if ($wdq) { Write-Host "windeployqt OK: $wdq"; exit 0 }
-
-          Write-Host "::warning::windeployqt.exe absent after vcpkg install — host-triplet qttools tools missing (cold-build incomplete install). Self-healing via classic-mode install."
-          $vcpkg = Join-Path $env:VCPKG_INSTALLATION_ROOT "vcpkg.exe"
-          if (Test-Path $vcpkg) {
-            & $vcpkg install "qttools:x64-windows" 2>&1 | Out-Host
-          } else {
-            Write-Host "::warning::vcpkg.exe not at VCPKG_INSTALLATION_ROOT ($env:VCPKG_INSTALLATION_ROOT) — cannot self-heal."
-          }
-          $wdq = Find-Wdq
-          if (-not $wdq) {
-            Write-Host "::error::windeployqt.exe still not found after self-heal. Failing fast (before the ~30-min Build) so the cause surfaces early. See ROADMAP Phase 999.66."
-            exit 1
-          }
-          Write-Host "windeployqt recovered: $wdq"
-
+      # Phase 999.66 (v1.7.4) — the former "Ensure windeployqt present" vcpkg
+      # fail-fast/self-heal step was REMOVED here: Windows Qt now comes from the
+      # prebuilt aqt kit, which ships its own self-contained windeployqt.exe at
+      # $env:QT_ROOT_DIR\bin\windeployqt.exe. There is no host-triplet qttools to
+      # install and no incomplete-install failure class to guard against.
       - name: Build (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
@@ -1078,7 +1069,9 @@ jobs:
           # See ci.yml Windows gatekeeper for the BALL_DATA_PATH + PATH
           # discovery rationale.
           $env:BALL_DATA_PATH = "${{ github.workspace }}\data"
-          $env:PATH = "$PWD\bin;$PWD\vcpkg_installed\x64-windows-release\bin;$env:PATH"
+          # 999.66 — Windows Qt via aqtinstall: prepend $env:QT_ROOT_DIR\bin so
+          # test EXEs load Qt6 DLLs from the aqt kit (no longer in vcpkg_installed).
+          $env:PATH = "$PWD\bin;$env:QT_ROOT_DIR\bin;$PWD\vcpkg_installed\x64-windows-release\bin;$env:PATH"
           ctest --output-on-failure --timeout 120 `
                 --output-junit "${{ github.workspace }}\ball-tests-windows-release.xml"
 
@@ -1105,90 +1098,23 @@ jobs:
           Write-Host "Found: $($exe.FullName)"
           "exe=$($exe.FullName)" >> $env:GITHUB_OUTPUT
           "deploy_dir=$($exe.Directory.FullName)" >> $env:GITHUB_OUTPUT
-          # windeployqt ships in vcpkg's installed Qt 6 tools dir.
-          # Phase 8c part-3 bugfix (v1.7.0-rc1 post-mortem #2, 2026-05-18):
-          # vcpkg installs the Qt 6 *host-tools* (windeployqt.exe,
-          # qtpaths.exe, lupdate, lrelease, ...) ONLY under the
-          # `x64-windows` triplet at `vcpkg_installed/x64-windows/tools/
-          # Qt6/bin/`. The `x64-windows-release` overlay triplet is a
-          # release-only build and does NOT ship the tools subdir —
-          # the previous fix's premise (Phase 8c part-2, dab8558d) that
-          # we could just "pick the windeployqt from x64-windows-release"
-          # was incorrect; the lookup ALWAYS falls through to the host
-          # `x64-windows` copy because that's the only one that exists.
-          #
-          # When windeployqt.exe runs from `x64-windows/tools/Qt6/bin/`,
-          # it computes its Qt prefix as `x64-windows/` and resolves
-          # dependent Qt DLLs against `x64-windows/bin/`. But BALLView is
-          # linked against the release-only Qt DLLs that live in
-          # `x64-windows-release/bin/` — so `x64-windows/bin/` is EMPTY
-          # for the Qt modules and windeployqt fails with:
-          #   Unable to find dependent libraries of
-          #   x64-windows/bin/Qt6Svg.dll : Cannot open
-          #   '.../x64-windows/bin/Qt6Svg.dll': The system cannot find
-          #   the file specified.
-          # (and a soft warning about a missing translations/Qt6/
-          # catalogs.json under the same x64-windows prefix.)
-          #
-          # Fix: stage the release-only Qt DLLs (and the translations
-          # tree) from `x64-windows-release/bin/` into the host-tools
-          # `x64-windows/bin/` location windeployqt expects. This is a
-          # no-op if x64-windows/bin/ already has the same files (vcpkg
-          # debug+release triplet); on the release-only overlay it
-          # populates the empty bin/ + translations/ dirs so windeployqt
-          # can resolve every Qt module by simple file lookup. We DO
-          # NOT delete or modify x64-windows-release/ itself — the
-          # build output that links against it remains intact.
-          $relBin   = "build\ci-windows\vcpkg_installed\x64-windows-release\bin"
-          $hostBin  = "build\ci-windows\vcpkg_installed\x64-windows\bin"
-          $relTrans = "build\ci-windows\vcpkg_installed\x64-windows-release\translations"
-          $hostTrans= "build\ci-windows\vcpkg_installed\x64-windows\translations"
-          if (Test-Path $relBin) {
-            New-Item -ItemType Directory -Force -Path $hostBin | Out-Null
-            $copied = 0
-            Get-ChildItem -Path $relBin -Filter "Qt6*.dll" -ErrorAction SilentlyContinue | ForEach-Object {
-              Copy-Item -Path $_.FullName -Destination $hostBin -Force
-              $copied++
+          # 999.66 — Windows Qt via aqtinstall. windeployqt.exe now ships in the
+          # prebuilt aqt kit at $env:QT_ROOT_DIR\bin\windeployqt.exe, and the kit
+          # is self-contained (its own bin/plugins/translations) — so the old
+          # x64-windows host-triplet DLL-staging dance (copying release-only Qt6
+          # DLLs + translations + plugins into x64-windows/bin/ to satisfy the
+          # vcpkg-built windeployqt) is GONE. Just point at the aqt windeployqt;
+          # error fast if it's somehow absent.
+          $wdq = Join-Path $env:QT_ROOT_DIR "bin\windeployqt.exe"
+          if (-not (Test-Path $wdq)) {
+            Write-Host "::error::windeployqt.exe not found at $wdq (QT_ROOT_DIR=$env:QT_ROOT_DIR) — aqt Qt install incomplete. See ROADMAP Phase 999.66."
+            if (Test-Path "$env:QT_ROOT_DIR\bin") {
+              Get-ChildItem -Path "$env:QT_ROOT_DIR\bin" -Filter "windeployqt*" -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { Write-Host $_.FullName }
             }
-            # plugins/ is also queried by windeployqt for the Qt prefix
-            $relPlug  = "build\ci-windows\vcpkg_installed\x64-windows-release\Qt6\plugins"
-            $hostPlug = "build\ci-windows\vcpkg_installed\x64-windows\Qt6\plugins"
-            if ((Test-Path $relPlug) -and -not (Test-Path $hostPlug)) {
-              Copy-Item -Path $relPlug -Destination $hostPlug -Recurse -Force
-              Write-Host "Staged plugins/: $relPlug -> $hostPlug"
-            }
-            Write-Host "Staged $copied Qt6*.dll from x64-windows-release/bin/ -> x64-windows/bin/ for windeployqt"
-          } else {
-            Write-Host "::warning::$relBin not found — cannot stage Qt release DLLs; windeployqt may fail."
-          }
-          if (Test-Path $relTrans) {
-            if (-not (Test-Path $hostTrans)) {
-              Copy-Item -Path $relTrans -Destination $hostTrans -Recurse -Force
-              Write-Host "Staged translations/: $relTrans -> $hostTrans"
-            }
-          }
-          # Locate the (single) windeployqt.exe — it lives under
-          # x64-windows/tools/Qt6/bin/. Keep the Recurse search robust
-          # against future vcpkg layout shifts. Phase 999.66: also search
-          # the runner vcpkg ROOT installed tree, where the fail-fast
-          # self-heal step (classic-mode `vcpkg install qttools:x64-windows`)
-          # lands windeployqt when the manifest build left it out.
-          $wdqRoots = @(
-            "build\ci-windows\vcpkg_installed",
-            "$env:VCPKG_INSTALLATION_ROOT\installed"
-          ) | Where-Object { Test-Path $_ }
-          $wdq = $null
-          foreach ($r in $wdqRoots) {
-            $wdq = Get-ChildItem -Path $r -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            if ($wdq) { break }
-          }
-          if (-not $wdq) {
-            Write-Host "::error::windeployqt.exe not found in vcpkg_installed or VCPKG_INSTALLATION_ROOT (999.66 self-heal also failed)"
-            Get-ChildItem -Path build\ci-windows -Filter "windeployqt*" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { Write-Host $_.FullName }
             exit 1
           }
-          Write-Host "windeployqt: $($wdq.FullName)"
-          "windeployqt=$($wdq.FullName)" >> $env:GITHUB_OUTPUT
+          Write-Host "windeployqt (aqt kit): $wdq"
+          "windeployqt=$wdq" >> $env:GITHUB_OUTPUT
 
       - name: windeployqt (Windows)
         if: matrix.os == 'windows-x64'
