@@ -994,6 +994,7 @@ jobs:
           # silently slips into the legacy `BALL-*.exe` fallback.
           cmake --preset ci-windows `
             -DCMAKE_PREFIX_PATH="$env:QT_ROOT_DIR" `
+            -DUSE_QTWEBENGINE=OFF `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
             -DBALL_ENABLE_PACKAGING=ON `
