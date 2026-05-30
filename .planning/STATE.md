@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.8
 milestone_name: Clear the v1.x decks
 status: planning
-last_updated: "2026-05-30T03:19:43.441Z"
+last_updated: "2026-05-30T00:00:00.000Z"
 last_activity: 2026-05-30
 progress:
-  total_phases: 0
+  total_phases: 8
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -19,14 +19,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.65 — representation-builder-extraction
+**Current Focus:** v1.8 roadmap created — 8 phases (999.67–999.74). First up: Phase 999.67 — legacy-dialog deletion finish-tail (resumes the `v1.7.3-legacy-deletion` branch).
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: Not started (v1.8 roadmap created; awaiting first plan)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-05-30 — Milestone v1.8 started
+Status: Planning — v1.8 roadmap created (999.67–999.74, 22 requirements mapped, 100% coverage)
+Last activity: 2026-05-30 — Milestone v1.8 roadmapped (8 phases appended to ROADMAP.md; REQUIREMENTS.md traceability filled)
 
 ## Performance Metrics
 
@@ -199,6 +199,7 @@ Last activity: 2026-05-30 — Milestone v1.8 started
 
 ### Roadmap Evolution
 
+- 2026-05-30 (v1.8 roadmap): milestone **v1.8 "Clear the v1.x decks"** roadmapped into **8 phases 999.67–999.74** (continuing the 999.NN backlog scheme; last used 999.66), 22 requirements across 6 categories, 100% coverage. Three clusters: cleanup tail (999.67 legacy-dialog deletion finish-tail — resumes the `v1.7.3-legacy-deletion` branch, supersedes the old 999.53 deferral), distribution (999.68 signed installer/build-docs/license → 999.69 auto-update, dependency edge AUTOUPD-01←WINSIGN-01), and the open-issue batch (999.70 docs, 999.71 Inspector clip, 999.72 correctness bugs, 999.73 platform/UX bugs, 999.74 small features). Stays v1.x-compatible — no v2.0 substrate / v2.1 PyBALL work. Phase Details + checklist appended to ROADMAP.md; traceability filled in REQUIREMENTS.md.
 - Phase 02.1 inserted after Phase 2: Renderer boundary extraction — pure refactor that makes Phase 5 a contained backend swap. Depends on Phase 2, blocks Phase 5. Design: `.planning/RENDERER-INTERFACE-BOUNDARY.md`.
 - Design Handover package analyzed (`.planning/DESIGN-HANDOVER-INTEGRATION.md`): a separate UI/UX modernization milestone (~8 phases) that depends on this milestone's Phase 5 (Qt 6). Planted as SEED-001 (Milestone 2 "BALLView Refresh", target 1.7); not folded into the current roadmap.
 - Codex adversarial review run on the roadmap. Cheap fixes AND structural changes applied: Phase 02.2 (early CI matrix) + Phase 05.1 (renderer backend spike) inserted; Phase 5 split to Qt6-only; Phase 6 restructured (decision+slice); Phase 8 scope clarified; DEPS-05/FEAT-01/DIAG-01/SPIKE/PY-02/PKG-03 added; feature matrix added.

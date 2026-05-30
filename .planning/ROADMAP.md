@@ -41,6 +41,16 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 999.63: Coloring · value-range histogram (v1.7.4 · Wave B)** - First visible Inspector-depth win: replace the v1.7.x-17 min/max text inputs with a histogram of the active selection's value distribution + 2 draggable handles + 4 presets, bound through `ColoringController::setRange()` → the command-shaped `apply()`. Maps to v1.7.x-17b. *Depends on 999.59.* See [Phase 999.63 detail](#phase-99963-coloring--value-range-histogram-v174--wave-b).
 - [x] **Phase 999.64: Per-section "Reset section" affordance (v1.7.4 · Wave B)** - Add a section-level Reset glyph to every Inspector section header that reverts that section's Controller to method-defaults through the contract (one `ApplyPayload`). Maps to v1.7.x-36 (new; handover proposed -31, re-minted). *Depends on 999.59.* See [Phase 999.64 detail](#phase-99964-per-section-reset-section-affordance-v174--wave-b).
 
+<!-- v1.8 milestone — "Clear the v1.x decks" (defined 2026-05-30; backlog-numbered 999.67+; continues the existing 999.NN scheme, last used 999.66) -->
+- [ ] **Phase 999.67: Legacy-dialog deletion — finish the tail (v1.8)** - Resume the `v1.7.3-legacy-deletion` branch (plans 01+02 done): delete the lynchpin displayProperties/model/coloring settings triple, retire the Tools → Legacy Settings menu + `LegacySettingsHelper`, and run a render-parity smoke-UAT. Maps to LEGACYDEL-01/02/03. *Depends on 999.57, 999.58, 999.65 (all landed).* See [Phase 999.67 detail](#phase-99967-legacy-dialog-deletion--finish-the-tail-v18).
+- [ ] **Phase 999.68: Signed installer, build-from-source docs, license review (v1.8 · Phase 8 completion)** - Code-sign the Windows installer via SignPath Foundation (CI-integrated), document the Linux/Windows build-from-source flow against a clean checkout, and complete the GPL/LGPL license/distribution review. Maps to WINSIGN-01/BUILDDOC-01/LICREVIEW-01. *Unblocks 999.69.* See [Phase 999.68 detail](#phase-99968-signed-installer-build-from-source-docs-license-review-v18--phase-8-completion).
+- [ ] **Phase 999.69: Auto-update end-to-end (Sparkle/WinSparkle, 999.8) (v1.8)** - Wire Sparkle (macOS) / WinSparkle (Windows) auto-update against the signed artifacts — appcast → download → signature verify → install, end-to-end. Maps to AUTOUPD-01. *Depends on 999.68 (WINSIGN-01 signing).* See [Phase 999.69 detail](#phase-99969-auto-update-end-to-end-sparklewinsparkle-9998-v18).
+- [ ] **Phase 999.70: PDF tutorial + Restore-Defaults scope docs refresh (v1.8 · #560/#523)** - Refresh the PDF tutorial content/screenshots/URLs/build-flow to the v1.7.x stack and document the "Restore Defaults" scope (does not reset font/language/style). Maps to TUT-01/TUT-02. Supersedes the dormant Phase 999.56. See [Phase 999.70 detail](#phase-99970-pdf-tutorial--restore-defaults-scope-docs-refresh-v18--560523).
+- [ ] **Phase 999.71: Inspector right-edge clipping fix (v1.7.5 carry-in) (v1.8)** - Stop the right-edge Inspector controls (reset glyphs, value spinners, unit labels) from being clipped when a tab scrolls — the v1.7.4 known issue. Maps to INSPCLIP-01. See [Phase 999.71 detail](#phase-99971-inspector-right-edge-clipping-fix-v175-carry-in-v18).
+- [ ] **Phase 999.72: Correctness bug batch (v1.8)** - Fix five real defects: SDGenerator infinite loop (#540), AromaticityProcessor failures (#539), ribbon-on-selection wrong model (#497), `computeMoments()` no-op (#601), and the DisplayProperties memory leak (#636). Maps to BUG-540/539/497/601/636. See [Phase 999.72 detail](#phase-99972-correctness-bug-batch-v18).
+- [ ] **Phase 999.73: Platform robustness + UX-settings bug batch (v1.8)** - Un-quarantine `AssignBondOrderProcessor_test` cross-platform (#576), make `Directory` behave consistently on Windows (#627), scope keyboard shortcuts appropriately (#622), and stop supplied project files from overriding user settings (#621). Maps to BUG-576/627/622/621. See [Phase 999.73 detail](#phase-99973-platform-robustness--ux-settings-bug-batch-v18).
+- [ ] **Phase 999.74: Small features (v1.8)** - Add PropertyPlotter axis/value limits (#524), a progress bar during the continuous simulation loop (#487), and an auto-stop-on-quality-criterion for that loop (#486). Maps to FEATPLOT-01/FEATLOOP-01/FEATLOOP-02. See [Phase 999.74 detail](#phase-99974-small-features-v18).
+
 ## Phase Details
 
 ### Phase 1: Build Baseline
@@ -2686,6 +2696,127 @@ Plans:
 **Plan doc:** [`phases/999.64-per-section-reset/999.64-01-PLAN.md`](phases/999.64-per-section-reset/999.64-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §2.
 **v1.7.x mapping:** v1.7.x-36 (new — handover minted -31, re-minted at ingest because -31 was taken by #501/Phase 999.54). **Wave:** B. **Requirements:** `INSP-RESET-01`.
 **Depends on:** 999.59 (`Controller::reset()` in the base). **Status:** not started.
+
+---
+
+## v1.8 milestone — "Clear the v1.x decks"
+
+> **Defined 2026-05-30** off `master` at the `v1.7.4` tag (commit `30b5f7c9`). v1.x-compatible close-out — **no API/substrate breaks** (the v2.0 KERNEL/REST/YAML/gemmi/OIT rework + v2.1 PyBALL bindings stay parked). See [`PROJECT.md`](PROJECT.md) (Current Milestone) + [`MILESTONES.md`](MILESTONES.md) + [`REQUIREMENTS.md`](REQUIREMENTS.md) §"Milestone v1.8 requirements".
+>
+> **Phase numbering** continues the existing `999.NN` backlog scheme — last used `999.66`, so v1.8 runs **999.67 → 999.74** (8 phases, 22 requirements across 6 categories).
+>
+> **Theme:** finish the deferred legacy-dialog deletion, complete packaging/distribution + auto-update, refresh docs, fix the Inspector clip, and clear a triaged bug batch. Three natural clusters — cleanup tail, distribution, and the open-issue batch.
+>
+> **Dependency notes:** AUTOUPD-01 (999.69) depends on WINSIGN-01 signing (999.68). LEGACYDEL-03 smoke-UAT (999.67) depends on LEGACYDEL-01/02 (same phase). Everything else is independent and parallelizable.
+
+### Phase 999.67: Legacy-dialog deletion — finish the tail (v1.8)
+
+**Goal:** Close out the Wave-4 cleanup by deleting the last legacy settings dialogs now that the render pipeline is fully detached (999.57 factories + 999.58 scene.C cut-over + 999.65 representation-builder all landed + tri-OS green). This resumes the parked `v1.7.3-legacy-deletion` branch — plans 01 (clear the 3 live refs) + 02 (delete the 6 deletable triples) already executed locally; only the lynchpin triple, the Tools menu retirement, and the smoke-UAT remain.
+**Depends on:** 999.57, 999.58, 999.65 (all landed). Resumes the `v1.7.3-legacy-deletion` branch.
+**Requirements:** LEGACYDEL-01, LEGACYDEL-02, LEGACYDEL-03 (LEGACYDEL-03 depends on LEGACYDEL-01/02, in-phase).
+**Success Criteria** (what must be TRUE):
+  1. The displayProperties / modelSettingsDialog / coloringSettingsDialog triple (incl. `displayProperties.{C,h,ui,.sip}` + `lightSettings.sip`) is deleted; `grep -r` for all 9 superseded dialog names in `source/` + `include/` returns 0.
+  2. The Tools → Legacy Settings submenu and its `LegacySettingsHelper` wiring are gone — the menu no longer appears in a running BALLView.
+  3. libVIEW + BALLView build clean on macOS, Linux, and Windows (tri-OS CI green).
+  4. A render-parity smoke-UAT passes: load a molecule, change model/coloring/material via the Inspector, and the scene renders correctly with no regression vs. pre-deletion.
+**Effort:** small (finish-the-tail — most work landed on the branch). **Carries:** the v1.7.x-08 / VIEW-CLEAN-01 lineage, now under the v1.8 LEGACYDEL IDs.
+**Note:** this supersedes the old Phase 999.53 "DEFERRED TO v1.7.3" entry — that phase's residual scope (the lynchpin triple + Tools menu + smoke-UAT) IS this phase.
+**Plans:** TBD
+**UI hint**: yes
+
+### Phase 999.68: Signed installer, build-from-source docs, license review (v1.8 · Phase 8 completion)
+
+**Goal:** Complete the deferred Phase 8 distribution work that the macOS-signed v1.7.1 release left open for Windows. Code-sign the Windows installer through SignPath Foundation (CI-integrated, signed artifact attached to the release), document the from-source build for Linux and Windows against a clean checkout, and finish the license/distribution review covering the GPL-gated paths. This unblocks auto-update (999.69), which needs a signed artifact to verify against.
+**Depends on:** none (builds on the existing release pipeline). **Blocks:** 999.69 (auto-update needs the signing).
+**Requirements:** WINSIGN-01, BUILDDOC-01, LICREVIEW-01.
+**Success Criteria** (what must be TRUE):
+  1. A release build produces a SignPath-Foundation-signed Windows installer, attached to the GitHub release, that installs without an unknown-publisher SmartScreen block.
+  2. `BUILD-linux.md` + `BUILD-windows.md` document the deps / presets / steps and have been verified to build BALLView from a clean checkout on each platform.
+  3. A license/distribution review document covers the GPL/LGPL component audit (esp. the GPL-gated OpenBabel + FFTW paths), Qt deployment mode, and bundled `data/`, with per-artifact license clarity.
+**Effort:** medium (CI signing integration + docs + audit). **Carries:** the Phase-8 PKG-03 lineage, scoped here under WINSIGN/BUILDDOC/LICREVIEW.
+**Plans:** TBD
+**UI hint**: no
+
+### Phase 999.69: Auto-update end-to-end (Sparkle/WinSparkle, 999.8) (v1.8)
+
+**Goal:** Stand up in-app auto-update (backlog 999.8) end-to-end against the signed artifacts: Sparkle on macOS and WinSparkle on Windows, driven by a published appcast. The user gets notified of a new release, downloads it, the framework verifies the signature, and installs it — the full update loop, gated on the signed artifacts from 999.68.
+**Depends on:** 999.68 (WINSIGN-01 — auto-update verifies against the signed installer; macOS already signed+notarized since v1.7.1).
+**Requirements:** AUTOUPD-01.
+**Success Criteria** (what must be TRUE):
+  1. BALLView checks a published appcast on launch (or on demand) and surfaces an available newer release to the user.
+  2. The update is downloaded and its signature is verified before install; a tampered/unsigned artifact is rejected.
+  3. The user can apply the update and relaunch into the new version — verified end-to-end on macOS (Sparkle) and Windows (WinSparkle).
+**Effort:** medium. **Carries:** backlog 999.8 (auto-update), now promoted into v1.8.
+**Plans:** TBD
+**UI hint**: yes
+
+### Phase 999.70: PDF tutorial + Restore-Defaults scope docs refresh (v1.8 · #560/#523)
+
+**Goal:** Bring the user-facing documentation up to the v1.7.x stack. Refresh the PDF tutorial (content, screenshots, URLs, developer list, build-from-source flow, GitHub Releases download path) and document the "Restore Defaults" scope so users understand it does not reset font / language / style. Supersedes the dormant Phase 999.56 (which carried the same #560 tutorial scope under DOCS-01).
+**Depends on:** none (best after the Inspector clip fix 999.71 lands so screenshots reflect final state).
+**Requirements:** TUT-01, TUT-02.
+**Success Criteria** (what must be TRUE):
+  1. The PDF tutorial's build instructions match the documented Homebrew/vcpkg flow and the GitHub Releases download path; screenshots and URLs reflect v1.7.x BALLView.
+  2. The developer/author list in the tutorial is current.
+  3. User-facing documentation states the "Restore Defaults" scope explicitly — that it does not reset font, language, or style (#523).
+**Effort:** medium–large (content, not code). **Carries:** the Phase 999.56 / DOCS-01 / #560 lineage + #523.
+**Plans:** TBD
+**UI hint**: no
+
+### Phase 999.71: Inspector right-edge clipping fix (v1.7.5 carry-in) (v1.8)
+
+**Goal:** Fix the cosmetic right-edge clipping documented as a v1.7.4 known issue: the per-section reset glyphs, value spinners, and unit labels at the right edge of an Inspector tab get cut off when the tab scrolls. Adjust the scroll-area/section layout so those controls remain fully visible at any scroll position and viewport width.
+**Depends on:** none (post-999.64 reset-glyph work — those glyphs are part of what clips).
+**Requirements:** INSPCLIP-01.
+**Success Criteria** (what must be TRUE):
+  1. With an Inspector tab scrolled, the right-edge controls (reset glyphs, value spinners, unit labels) are fully visible — no horizontal clipping.
+  2. The fix holds across the supported window/viewport widths and across macOS/Linux/Windows.
+  3. No regression to the Inspector section layout or the per-section reset affordance shipped in 999.64.
+**Effort:** small (layout/QSS fix). **Carries:** the v1.7.5 cosmetic carry-in noted in the v1.7.4 release notes.
+**Plans:** TBD
+**UI hint**: yes
+
+### Phase 999.72: Correctness bug batch (v1.8)
+
+**Goal:** Clear the triaged batch of real correctness defects — algorithms that loop forever, error out, compute the wrong thing, no-op, or leak. Each is an independent fix with its own regression check; grouped here because they share the "core-algorithm correctness" character and a common verification shape (a previously-failing input now produces the right result).
+**Depends on:** none. (BUG-636 DisplayProperties leak is independent of the 999.67 deletion — the leak fix lands wherever DisplayProperties still lives at that point.)
+**Requirements:** BUG-540, BUG-539, BUG-497, BUG-601, BUG-636.
+**Success Criteria** (what must be TRUE):
+  1. SDGenerator terminates on the previously-looping input — no infinite loop (#540).
+  2. AromaticityProcessor handles the previously-failing molecules without error (#539).
+  3. Creating a ribbon representation on selected atoms yields the model for the correct selection (#497).
+  4. `NMR/spectrum.iC::computeMoments()` actually computes moments instead of no-op'ing (#601).
+  5. The DisplayProperties memory leak is fixed — verified by a leak check / valgrind / ASan run (#636).
+**Effort:** medium (5 independent defects, each with a regression test).
+**Plans:** TBD
+**UI hint**: no
+
+### Phase 999.73: Platform robustness + UX-settings bug batch (v1.8)
+
+**Goal:** Clear the platform-test and UX/settings defects. Two are about cross-platform consistency (a quarantined test that must pass everywhere, and Windows-specific `Directory` behavior); two are about settings/input behaving correctly from the user's perspective (shortcut scoping, project files not clobbering user settings). Grouped by their "behaves correctly on the platform / for the user" character.
+**Depends on:** none.
+**Requirements:** BUG-576, BUG-627, BUG-622, BUG-621.
+**Success Criteria** (what must be TRUE):
+  1. `AssignBondOrderProcessor_test` passes on macOS, Linux, and Windows and is un-quarantined (`WILL_FAIL` removed) (#576).
+  2. The `Directory` class behaves consistently on Windows (path/listing semantics match the other platforms) (#627).
+  3. BALLView keyboard shortcuts are scoped appropriately (not handled globally), so they fire only in the intended context (#622).
+  4. Loading a supplied project file no longer overrides the user's own settings (#621).
+**Effort:** medium.
+**Plans:** TBD
+**UI hint**: yes
+
+### Phase 999.74: Small features (v1.8)
+
+**Goal:** Land the three small, self-contained feature requests that round out the v1.x line — user-controllable plot limits and two improvements to the continuous simulation loop (progress feedback + an auto-stop criterion). Each is additive and independent.
+**Depends on:** none.
+**Requirements:** FEATPLOT-01, FEATLOOP-01, FEATLOOP-02.
+**Success Criteria** (what must be TRUE):
+  1. PropertyPlotter lets the user set axis/value limits, and the plot honors them (#524).
+  2. A progress bar is shown during the continuous (simulation) loop, reflecting loop progress (#487).
+  3. The continuous loop can auto-stop when a user-specified quality criterion is met (#486).
+**Effort:** small–medium (3 additive features).
+**Plans:** TBD
+**UI hint**: yes
 
 ---
 *Roadmap created: 2026-05-14*

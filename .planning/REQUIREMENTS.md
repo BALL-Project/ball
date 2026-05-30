@@ -307,4 +307,37 @@ collision with prior PKG/DOCS/FEAT IDs.
 - [ ] **FEATLOOP-01**: A progress bar is shown during the continuous (simulation) loop (#487).
 - [ ] **FEATLOOP-02**: The continuous loop can auto-stop when a quality criterion is met (#486).
 
-*v1.8 requirements defined 2026-05-30. 21 requirements across 6 categories. Out of scope: all v2.0 substrate (KERNEL/REST/YAML/gemmi/OIT, #531) + v2.1 PyBALL (#663). Traceability filled by the v1.8 roadmap.*
+*v1.8 requirements defined 2026-05-30. 22 requirements across 6 categories. Out of scope: all v2.0 substrate (KERNEL/REST/YAML/gemmi/OIT, #531) + v2.1 PyBALL (#663). Traceability filled by the v1.8 roadmap.*
+
+
+### Milestone v1.8 traceability
+
+Filled by the v1.8 roadmap (2026-05-30). Phase numbers continue the `999.NN` backlog scheme (999.67–999.74). 22 requirements mapped, 0 orphaned.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| LEGACYDEL-01 | Phase 999.67 — Legacy-dialog deletion (finish the tail) | Pending |
+| LEGACYDEL-02 | Phase 999.67 — Legacy-dialog deletion (finish the tail) | Pending |
+| LEGACYDEL-03 | Phase 999.67 — Legacy-dialog deletion (finish the tail) | Pending (smoke-UAT; depends on LEGACYDEL-01/02) |
+| WINSIGN-01 | Phase 999.68 — Signed installer + build docs + license review | Pending |
+| BUILDDOC-01 | Phase 999.68 — Signed installer + build docs + license review | Pending |
+| LICREVIEW-01 | Phase 999.68 — Signed installer + build docs + license review | Pending |
+| AUTOUPD-01 | Phase 999.69 — Auto-update end-to-end (Sparkle/WinSparkle) | Pending (depends on WINSIGN-01 / 999.68) |
+| TUT-01 | Phase 999.70 — PDF tutorial + Restore-Defaults docs refresh | Pending (supersedes Phase 999.56 / DOCS-01) |
+| TUT-02 | Phase 999.70 — PDF tutorial + Restore-Defaults docs refresh | Pending |
+| INSPCLIP-01 | Phase 999.71 — Inspector right-edge clipping fix | Pending |
+| BUG-540 | Phase 999.72 — Correctness bug batch | Pending |
+| BUG-539 | Phase 999.72 — Correctness bug batch | Pending |
+| BUG-497 | Phase 999.72 — Correctness bug batch | Pending |
+| BUG-601 | Phase 999.72 — Correctness bug batch | Pending |
+| BUG-636 | Phase 999.72 — Correctness bug batch | Pending |
+| BUG-576 | Phase 999.73 — Platform robustness + UX-settings bug batch | Pending |
+| BUG-627 | Phase 999.73 — Platform robustness + UX-settings bug batch | Pending |
+| BUG-622 | Phase 999.73 — Platform robustness + UX-settings bug batch | Pending |
+| BUG-621 | Phase 999.73 — Platform robustness + UX-settings bug batch | Pending |
+| FEATPLOT-01 | Phase 999.74 — Small features | Pending |
+| FEATLOOP-01 | Phase 999.74 — Small features | Pending |
+| FEATLOOP-02 | Phase 999.74 — Small features | Pending |
+
+**Coverage:** 22 v1.8 requirements mapped to 8 phases (999.67–999.74); 0 orphaned; 0 duplicated. *(The §-header "21 requirements" count is one low — the listed REQ-IDs total 22 across the 6 categories; all 22 are mapped above.)*
+
