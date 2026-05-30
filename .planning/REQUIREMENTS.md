@@ -261,3 +261,50 @@ Added 2026-05-22 when the v1.7.4 design handover ("Inspector depth + the contrac
 *Requirements defined: 2026-05-14*
 *Last updated: 2026-05-14 — Codex structural changes applied: Phase 02.2 (CI) + Phase 05.1 (backend spike) inserted; Phase 5 split (Qt6-only); Phase 6 restructured (decision+slice); Phase 8 scope clarified; DEPS-05/FEAT-01/DIAG-01/SPIKE/PY-02/PKG-03 added; feature matrix added.*
 *Updated 2026-05-14 (consolidation): CONFIG-01 added → Phase 4.1 (promoted from backlog 999.4); SPIKE-01/SPIKE-02 re-mapped from former Phase 05.1 into Phase 5 (folded in). Active count 37 → 38.*
+
+---
+
+## Milestone v1.8 requirements — "Clear the v1.x decks" (defined 2026-05-30)
+
+v1.x-compatible close-out. No API/substrate breaks. New REQ-ID prefixes to avoid
+collision with prior PKG/DOCS/FEAT IDs.
+
+### Legacy-dialog deletion (Phase 999.53 — resume `v1.7.3-legacy-deletion` branch)
+- [ ] **LEGACYDEL-01**: The lynchpin legacy dialog triple (displayProperties / model / coloring settings) is deleted; libVIEW + BALLView build clean on all 3 OSes.
+- [ ] **LEGACYDEL-02**: The Tools → Legacy Settings menu entry (and its wiring) is retired.
+- [ ] **LEGACYDEL-03**: A render-parity smoke-UAT confirms no regression — load a molecule, change model/coloring/material via the Inspector, scene renders correctly.
+
+### Packaging & Distribution + auto-update (Phase 8 → unblocks 999.8)
+- [ ] **WINSIGN-01**: The Windows installer is code-signed via SignPath Foundation (CI-integrated; signed artifact attached to the release).
+- [ ] **BUILDDOC-01**: Build-from-source is documented for Linux and Windows (deps, presets, steps), verified against a clean checkout.
+- [ ] **LICREVIEW-01**: License/distribution review complete — GPL/LGPL component audit + per-artifact license clarity (esp. the GPL-gated OpenBabel/FFTW paths).
+- [ ] **AUTOUPD-01**: Sparkle / WinSparkle auto-update (999.8) works end-to-end against signed artifacts — appcast → download → signature verify → install.
+
+### Documentation (Phase 999.56)
+- [ ] **TUT-01**: The PDF tutorial content / screenshots / URLs / build-flow are refreshed to the v1.7.x stack (#560).
+- [ ] **TUT-02**: The "Restore Defaults" scope (does not reset font / language / style) is documented (#523).
+
+### Inspector cosmetic (v1.7.5 carry-in)
+- [ ] **INSPCLIP-01**: Right-edge Inspector controls (per-section reset glyphs, value spinners, unit labels) are not clipped when an Inspector tab scrolls (the v1.7.4 known issue).
+
+### Correctness bugs
+- [ ] **BUG-540**: SDGenerator no longer infinite-loops (#540).
+- [ ] **BUG-539**: AromaticityProcessor handles the previously-failing molecules without error (#539).
+- [ ] **BUG-497**: Creating a ribbon representation on selected atoms yields the model for the correct selection (#497).
+- [ ] **BUG-601**: `NMR/spectrum.iC: computeMoments()` actually computes moments (no longer a no-op) (#601).
+- [ ] **BUG-636**: The DisplayProperties memory leak is fixed (#636).
+
+### Platform / test robustness
+- [ ] **BUG-576**: `AssignBondOrderProcessor_test` passes on all platforms and is un-quarantined (#576).
+- [ ] **BUG-627**: The `Directory` class behaves consistently on Windows (#627).
+
+### UX / settings
+- [ ] **BUG-622**: BALLView keyboard shortcuts are scoped appropriately, not handled globally (#622).
+- [ ] **BUG-621**: Supplied project files no longer override user settings (#621).
+
+### Small features
+- [ ] **FEATPLOT-01**: PropertyPlotter supports axis/value limits (#524).
+- [ ] **FEATLOOP-01**: A progress bar is shown during the continuous (simulation) loop (#487).
+- [ ] **FEATLOOP-02**: The continuous loop can auto-stop when a quality criterion is met (#486).
+
+*v1.8 requirements defined 2026-05-30. 21 requirements across 6 categories. Out of scope: all v2.0 substrate (KERNEL/REST/YAML/gemmi/OIT, #531) + v2.1 PyBALL (#663). Traceability filled by the v1.8 roadmap.*
