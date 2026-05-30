@@ -7,7 +7,6 @@ SET(UI_LIST
 	bondProperties.ui
 	charmmConfigurationDialog.ui
 	contourSurfaceDialog.ui
-	coloringSettingsDialog.ui
 	compositeProperties.ui
 	dockDialog.ui
 	dockProgressDialog.ui
@@ -17,7 +16,6 @@ SET(UI_LIST
 	editSettings.ui
 	editSingleShortcut.ui
 	editorPDBInfoDialog.ui
-	displayProperties.ui
 	fieldLinesDialog.ui
 	FDPBDialog.ui
 	generateCrystalDialog.ui
@@ -25,7 +23,6 @@ SET(UI_LIST
 	gridVisualizationDialog.ui
 	mainControlPreferences.ui
 	minimizationDialog.ui
-	modelSettingsDialog.ui
 	modifyRepresentationDialog.ui
 	molecularDynamicsDialog.ui
 	MMFF94ConfigurationDialog.ui
@@ -57,7 +54,6 @@ SET(SOURCES_LIST
 	bondProperties.C
 	charmmConfigurationDialog.C
 	contourSurfaceDialog.C
-	coloringSettingsDialog.C
 	compositeProperties.C
 	dockDialog.C
 	dockProgressDialog.C
@@ -66,14 +62,12 @@ SET(SOURCES_LIST
 	downloadElectronDensity.C
 	editSettings.C
 	editSingleShortcut.C
-	displayProperties.C
 	fieldLinesDialog.C
 	FDPBDialog.C
 	generateCrystalDialog.C
 	gridVisualizationDialog.C
 	mainControlPreferences.C
 	minimizationDialog.C
-	modelSettingsDialog.C
 	modifyRepresentationDialog.C
 	molecularDynamicsDialog.C
 	molecularFileDialog.C

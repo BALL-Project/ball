@@ -66,10 +66,8 @@ namespace BALL
 		/// build is a debug build (!NDEBUG). See iconBrowser.h.
 		void openIconBrowser();
 
-		/// Phase 999.44 Plan 02: open a legacy Preferences stack page
-		/// by its setWidgetStackName(...) string. Handler for the
-		/// Tools › Legacy Settings ▸ <name> submenu entries.
-		void openLegacySetting(const QString& stackName);
+		// Phase 999.67 Plan 03 (LEGACYDEL-02): openLegacySetting removed with the
+		// retired Tools › Legacy Settings submenu.
 
 		/// Phase 999.44 Plan 02: show the first-run BALLView Refresh
 		/// migration notice (Display/Model/Material moved → Inspector).

@@ -26,7 +26,6 @@
 #	include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 #	include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
 #	include <BALL/VIEW/WIDGETS/inspector/representationAdapter.h>
-#	include <BALL/VIEW/KERNEL/legacySettingsHelper.h>
 // Phase 999.46 — CommandPalette (Cmd/Ctrl+K) + CommandRegistry.
 #	include <BALL/VIEW/WIDGETS/commandPalette.h>
 #	include <BALL/VIEW/KERNEL/commandRegistry.h>
@@ -465,32 +464,10 @@ namespace BALL
 			setMenuHint(action, (String)tr("Phase 999.43: browse theme.qrc icons (debug builds only)"));
 #endif
 
-		// Phase 999.44 Plan 02 — Tools › Legacy Settings submenu.
-		// Sub-PR 4.6 finish: surfaces the 12 inventoried legacy
-		// preferences-stack pages (Display / Lighting / Models / ...)
-		// during the BALLView Refresh migration window. Each entry
-		// opens the Preferences dialog at the matching stack page.
-		// Phase 999.48 §8.8 removes the entire submenu when the legacy
-		// dialogs are deleted.
-		{
-			QMenu* tools_menu = initPopupMenu(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
-			if (tools_menu)
-			{
-				tools_menu->addSeparator();
-				QMenu* legacy_menu = tools_menu->addMenu(tr("Legacy Settings"));
-				legacy_menu->setObjectName("legacySettingsMenu");
-				const QStringList names = VIEW::LegacySettingsHelper::legacyStackNames();
-				for (const QString& stack_name : names)
-				{
-					QAction* a = legacy_menu->addAction(
-						VIEW::LegacySettingsHelper::displayName(stack_name));
-					const QString captured = stack_name;
-					connect(a, &QAction::triggered, this, [this, captured]() {
-						openLegacySetting(captured);
-					});
-				}
-			}
-		}
+		// Phase 999.67 Plan 03 (LEGACYDEL-02): the Tools › Legacy Settings submenu
+		// and its LegacySettingsHelper are retired. The legacy settings dialogs it
+		// pointed at have all been deleted across this phase; the live settings
+		// surface is the Inspector and the Preferences dialog.
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
@@ -1214,30 +1191,8 @@ namespace BALL
 		dlg->show();
 	}
 
-	void Mainframe::openLegacySetting(const QString& stackName)
-	{
-		// Phase 999.44 Plan 02 — Tools › Legacy Settings handler.
-		// Resolves stackName → matching PreferencesEntry stack page via
-		// Preferences::showStackByName, then shows the dialog. The
-		// resolution is implemented inside Preferences because its
-		// entries_ map is protected.
-		VIEW::Preferences* prefs = getPreferences();
-		if (prefs == 0)
-		{
-			Log.warn() << "[Mainframe::openLegacySetting] Preferences dialog not available." << std::endl;
-			return;
-		}
-
-		prefs->show();
-		const String target_name(stackName.toUtf8().constData());
-		if (!prefs->showStackByName(target_name))
-		{
-			Log.warn()
-				<< "[Mainframe::openLegacySetting] No PreferencesEntry stack page named '"
-				<< stackName.toUtf8().constData()
-				<< "' is registered; opening the default page instead." << std::endl;
-		}
-	}
+	// Phase 999.67 Plan 03 (LEGACYDEL-02): Mainframe::openLegacySetting removed
+	// together with the Tools › Legacy Settings submenu that was its only caller.
 
 	void Mainframe::showInspectorMigrationNoticeIfNeeded_()
 	{
@@ -1273,9 +1228,13 @@ namespace BALL
 		                           false).toBool();
 		if (!shown)
 		{
+			// Phase 999.67 Plan 03 (LEGACYDEL-02): strings inlined off the deleted
+			// LegacySettingsHelper. The body no longer points users at the retired
+			// Tools › Legacy Settings menu — those legacy dialogs are now gone.
 			QMessageBox::information(this,
-				VIEW::LegacySettingsHelper::migrationNoticeTitle(),
-				VIEW::LegacySettingsHelper::migrationNoticeBody());
+				tr("BALLView settings have moved"),
+				tr("Display, Model, Material, Light, and other settings are now in "
+				   "the Inspector on the right."));
 			s.setValue(QStringLiteral("firstRunMigrationNoticeShown"), true);
 		}
 		s.endGroup();

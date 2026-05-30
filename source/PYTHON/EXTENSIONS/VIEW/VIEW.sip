@@ -91,7 +91,6 @@
 
 // VIEW/DIALOGS
 %Include preferences.sip
-%Include displayProperties.sip
 %Include molecularFileDialog.sip
 %Include modifyRepresentationDialog.sip
 

@@ -58,10 +58,8 @@ SET(SOURCES_LIST
 	controllers/cameraController.C
 	controllers/lightController.C
 	controllers/stereoController.C
-	# Phase 999.44 — Tools › Legacy Settings interim home helper.
-	# Static data — compiles in both BALL_UI_V2 cells. Mainframe wires
-	# the submenu under the ifdef in a follow-up plan.
-	legacySettingsHelper.C
+	# Phase 999.67 Plan 03 (LEGACYDEL-02): legacySettingsHelper.C removed —
+	# the Tools › Legacy Settings submenu it backed has been retired.
 	# Phase 999.46 (Handover §6.1) — CommandRegistry. Body is wholly
 	# gated behind #ifdef BALL_UI_V2; OFF cell produces an empty TU.
 	commandRegistry.C
