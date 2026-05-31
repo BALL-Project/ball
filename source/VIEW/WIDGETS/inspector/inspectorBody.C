@@ -11,8 +11,10 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtWidgets/QScrollBar>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QStyle>
 #include <QtWidgets/QVBoxLayout>
 
 namespace BALL
@@ -90,6 +92,28 @@ namespace BALL
 			// glyph / spinners) stay REACHABLE via a transient horizontal bar
 			// instead of being silently clipped with no way to get to them.
 			scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+			// Phase 999.71 INSPCLIP-01 — RESERVE space for the vertical
+			// scrollbar instead of guessing a content margin.
+			//
+			// Root cause of the residual clipping (v1.7.4's 18px content margin
+			// + 6px header margin only partially fixed it): on macOS the
+			// vertical scrollbar is a TRANSIENT OVERLAY. With
+			// setWidgetResizable(true) the QScrollArea sizes its inner contents
+			// widget to the FULL viewport width and the overlay scrollbar then
+			// floats ON TOP of the rightmost band of that content — it never
+			// reflows the layout. A fixed content margin is a fragile guess
+			// against the overlay's variable width (it widens on hover, and the
+			// extent differs by appearance / Qt style), so the right-edge
+			// controls (header reset glyph, value spinners, unit labels) still
+			// ended up partly under the bar.
+			//
+			// Robust fix: make the vertical scrollbar NON-transient for this
+			// scroll area (ScrollBarAlwaysOn reserves a permanent gutter that
+			// the layout flows around) and reserve the real scrollbar extent —
+			// queried from the style, not hard-coded — as the contents-layout
+			// right margin below. Content can then never sit under the bar.
+			scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 			// v1.7.0-rc2 UFG-10 — opaque scroll-area viewport.
 			// QScrollArea defaults to a transparent viewport on macOS;
 			// without this fill, the per-tab content area's 8-px outer
@@ -102,14 +126,27 @@ namespace BALL
 
 			QWidget* contents = new QWidget(scroll);
 			QVBoxLayout* lay = new QVBoxLayout(contents);
-			// UAT (v1.7.4) — wider RIGHT gutter so the right-edge section controls
-			// (per-section Reset glyph, value spinners, unit labels) clear the
-			// vertical scrollbar when the content scrolls. On macOS the scrollbar
-			// is an OVERLAY that floats over the content without reflowing the
-			// layout, so an 8-px right margin left those controls partially hidden
-			// under the scrollbar track. 18 px clears the overlay gutter; the
-			// horizontal bar stays off so nothing is reachable-but-clipped.
-			lay->setContentsMargins(8, 8, 18, 8);
+			// Phase 999.71 INSPCLIP-01 — reserve the REAL vertical-scrollbar
+			// width as the right gutter (superseding v1.7.4's hard-coded 18px).
+			//
+			// With ScrollBarAlwaysOn (set on the scroll area above) the bar
+			// occupies a permanent gutter. Query its actual extent from the
+			// style so the reserved space matches the platform/style exactly
+			// instead of a magic number that under- or over-shoots. Add a small
+			// breathing pad on top of the extent so the controls don't sit flush
+			// against the bar. The left/top/bottom keep the prior 8px.
+			int sb_extent = 16;
+			if (QScrollBar* vbar = scroll->verticalScrollBar())
+			{
+				const int e = vbar->sizeHint().width();
+				if (e > 0) sb_extent = e;
+			}
+			else
+			{
+				sb_extent = scroll->style()->pixelMetric(QStyle::PM_ScrollBarExtent, nullptr, scroll);
+			}
+			const int right_gutter = sb_extent + 8;  // scrollbar width + breathing pad
+			lay->setContentsMargins(8, 8, right_gutter, 8);
 			lay->setSpacing(8);
 			lay->addStretch(1);
 			// v1.7.0-rc2 UFG-10 — opaque inner contents widget. Same
