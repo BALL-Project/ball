@@ -144,12 +144,26 @@ namespace BALL
 				dir_ = INVALID_HANDLE_VALUE;
 				return desynchronize_(false);
 			}
-			else
+
+			// Skip the synthetic "." and ".." entries so that a
+			// getFirstEntry/getNextEntry loop visits exactly countItems()
+			// entries on every platform (BUG-627, #627).
+			while (strcmp(fd.cFileName, FileSystem::CURRENT_DIRECTORY) == 0 ||
+			       strcmp(fd.cFileName, FileSystem::PARENT_DIRECTORY ) == 0)
 			{
-				entry = fd.cFileName;
-			
-				return desynchronize_(true);
+				if (FindNextFileA(dirent_, &fd) == 0)
+				{
+					// directory contained only "." and ".."
+					FindClose(dirent_);
+					dirent_ = INVALID_HANDLE_VALUE;
+					CloseHandle(dir_);
+					dir_ = INVALID_HANDLE_VALUE;
+					return desynchronize_(false);
+				}
 			}
+
+			entry = fd.cFileName;
+			return desynchronize_(true);
 
 	#else
 		synchronize_();
@@ -168,20 +182,34 @@ namespace BALL
 			::closedir(dir_);
 			dir_ = 0;
 			return desynchronize_(false);
-		} 
-		else 
-		{
-			entry = dirent_->d_name;
-			return desynchronize_(true);
 		}
+
+		// Skip the synthetic "." and ".." entries so that a
+		// getFirstEntry/getNextEntry loop visits exactly countItems()
+		// entries on every platform (BUG-627, #627).
+		while (strcmp(dirent_->d_name, FileSystem::CURRENT_DIRECTORY) == 0 ||
+		       strcmp(dirent_->d_name, FileSystem::PARENT_DIRECTORY ) == 0)
+		{
+			dirent_ = ::readdir(dir_);
+			if (dirent_ == 0)
+			{
+				// directory contained only "." and ".."
+				::closedir(dir_);
+				dir_ = 0;
+				return desynchronize_(false);
+			}
+		}
+
+		entry = dirent_->d_name;
+		return desynchronize_(true);
 #endif
 	}
 
 	bool Directory::getNextEntry(String& entry)
 	{
-#ifdef BALL_COMPILER_MSVC
+#ifdef BALL_OS_WINDOWS
 		synchronize_();
-		
+
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			
@@ -219,19 +247,33 @@ namespace BALL
 
 			String pat=directory_path_ + "/*";
 			dirent_=FindFirstFileA(pat.c_str(),&fd);
-			
+
 			if (dirent_==INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
 				dir_ = INVALID_HANDLE_VALUE;
 				return desynchronize_(false);
 			}
-			else
-				entry = fd.cFileName;
+
+			// Skip "." and ".." in the forgot-to-call-FirstEntry recovery
+			// path so enumeration stays consistent with countItems() (BUG-627).
+			while (strcmp(fd.cFileName, FileSystem::CURRENT_DIRECTORY) == 0 ||
+			       strcmp(fd.cFileName, FileSystem::PARENT_DIRECTORY ) == 0)
+			{
+				if (FindNextFileA(dirent_, &fd) == 0) return desynchronize_(false);
+			}
+			entry = fd.cFileName;
 		}
 		else
 		{
-			if (FindNextFileA(dirent_,&fd)==0) return desynchronize_(false);
+			// Keep advancing past the synthetic "." and ".." entries so a
+			// getNextEntry loop visits exactly countItems() entries (BUG-627).
+			do
+			{
+				if (FindNextFileA(dirent_,&fd)==0) return desynchronize_(false);
+			}
+			while (strcmp(fd.cFileName, FileSystem::CURRENT_DIRECTORY) == 0 ||
+			       strcmp(fd.cFileName, FileSystem::PARENT_DIRECTORY ) == 0);
 			entry=fd.cFileName;
 		}
 		return desynchronize_(true);
@@ -247,13 +289,21 @@ namespace BALL
 			return desynchronize_(false);	
 		}
 
-		dirent_ = ::readdir(dir_);
-		if (dirent_ == 0)
+		// Keep advancing past the synthetic "." and ".." entries so a
+		// getNextEntry loop visits exactly countItems() entries (BUG-627, #627).
+		do
 		{
-			::closedir(dir_);
-			dir_ = 0;
-			return desynchronize_(false);
+			dirent_ = ::readdir(dir_);
+			if (dirent_ == 0)
+			{
+				::closedir(dir_);
+				dir_ = 0;
+				return desynchronize_(false);
+			}
 		}
+		while (strcmp(dirent_->d_name, FileSystem::CURRENT_DIRECTORY) == 0 ||
+		       strcmp(dirent_->d_name, FileSystem::PARENT_DIRECTORY ) == 0);
+
 		entry = dirent_->d_name;
 		return desynchronize_(true);
 #endif
@@ -261,7 +311,7 @@ namespace BALL
 
 	Size Directory::countItems()
 	{
-#ifdef BALL_COMPILER_MSVC
+#ifdef BALL_OS_WINDOWS
 		synchronize_();
 
 		if (dir_ == INVALID_HANDLE_VALUE)
