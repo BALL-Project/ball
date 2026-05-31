@@ -295,8 +295,8 @@ collision with prior PKG/DOCS/FEAT IDs.
 - [x] **BUG-636**: The DisplayProperties memory leak is fixed (#636). *Resolved-by-deletion in 999.67 (DisplayProperties removed); 999.72 audit confirmed no residual leak.*
 
 ### Platform / test robustness
-- [ ] **BUG-576**: `AssignBondOrderProcessor_test` passes on all platforms and is un-quarantined (#576).
-- [ ] **BUG-627**: The `Directory` class behaves consistently on Windows (#627).
+- [x] **BUG-576**: `AssignBondOrderProcessor_test` passes on all platforms and is un-quarantined (#576). *Fixed in 999.73 — PartialBondOrderAssignment::operator< made a total ordering; also fixed a #539-regression aromatize() infinite loop that was hanging CI. (CI tri-platform confirmation pending run aea7a111d6.)*
+- [x] **BUG-627**: The `Directory` class behaves consistently on Windows (#627). *Fixed in 999.73 — getFirstEntry/getNextEntry skip `.`/`..` to match countItems(); guard unified to BALL_OS_WINDOWS.*
 
 ### UX / settings
 - [ ] **BUG-622**: BALLView keyboard shortcuts are scoped appropriately, not handled globally (#622).
