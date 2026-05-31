@@ -1006,7 +1006,14 @@ CHECK(Option::USE_FINE_PENALTY)
 	storeBondOrders(sys);
 	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), false)
-	abop.apply(5); //3);
+	// BUG-576 (#576): with the deterministic total ordering in
+	// PartialBondOrderAssignment::operator< the degenerate optimal solutions for
+	// AMPTRB10_kek_sol0 enumerate in a fixed, platform-independent order. The stored
+	// (sol0) assignment is now consistently the n-th solution -> index 3 on every
+	// platform. The old index 5 was the libc++/heap-internal position on Intel/Linux
+	// only and produced a different solution per platform (the non-determinism this
+	// fix removes), which is why test2 was previously quarantined on Apple Silicon.
+	abop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys), true)
 RESULT
 

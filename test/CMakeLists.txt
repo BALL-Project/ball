@@ -81,27 +81,15 @@ SET_TESTS_PROPERTIES (
 # as green. Each quarantine has a backlog stub in ROADMAP.md + a row in
 # .planning/phases/09-test-suite-triage/09-TRIAGE.md.
 #
-# AssignBondOrderProcessor_test2 — QUARANTINED (Phase 9, 09-TRIAGE.md row 3)
-#   Failure: test/AssignBondOrderProcessor_test2.C:1010
-#   CHECK(Option::USE_FINE_PENALTY): compareBondOrder(sys) returns 0, expected 1
-#   after abop.apply(5). The fine-penalty ILP/heuristic code path in
-#   source/STRUCTURE/assignBondOrderProcessor.C produces an incorrect bond-order
-#   assignment for AMPTRB10_kek_sol0.mol2 when the 5th solution is requested.
-#   AssignBondOrderProcessor_test1 (default code path) passes — the regression
-#   is isolated to the fine-penalty branch. Algorithmic fix estimated >2h.
-#   Backlog: Phase 999.34 closed 2026-05-17 (Windows test gatekeeper only); the
-#   AssignBondOrderProcessor fine-penalty algorithmic fix is a separate v1.7 /
-#   v2.0 cycle task (no dedicated phase stub yet — re-file if/when picked up).
-#
-#   NOTE (2026-05-16 Rule-1 fix): WILL_FAIL applies only on Apple Silicon (the
-#   failure platform). Linux x64/arm64 pass this test cleanly; unconditional
-#   WILL_FAIL causes an "unexpected pass" error on Linux (ctest exit 8).
-IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-	SET_TESTS_PROPERTIES (
-		AssignBondOrderProcessor_test2
-		PROPERTIES WILL_FAIL TRUE
-	)
-ENDIF()
+# AssignBondOrderProcessor_test2 — UN-QUARANTINED (BUG-576, #576, Phase 999.73).
+#   The Apple-Silicon-only WILL_FAIL is gone: the failure was platform-dependent
+#   solution enumeration, not an algorithmic bug. PartialBondOrderAssignment::
+#   operator< is now a TOTAL strict weak ordering (coarse -> fine -> last_bond ->
+#   lexicographic bond_orders), so the degenerate-optimal solutions enumerate in a
+#   fixed order on libc++/libstdc++/MSVC STL alike; the test asserts the stored sol0
+#   at its now-deterministic index 3 (was the heap-internal "5"). The 60-minute CI
+#   hang was a separate defect in AromaticityProcessor::aromatize (BUG-539 fused-ring
+#   propagation looped forever when overwrite_bond_orders_==false) — also fixed here.
 
 # Regressions from parallel-session PR merge (commit 45dce6971, Phase 999.14,
 # feat: merge C++ slice of PRs #546 #554 #550). These tests broke because the

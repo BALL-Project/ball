@@ -2,6 +2,8 @@
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
+#include <algorithm> // BUG-576: std::lexicographical_compare for the total operator< tie-break
+
 namespace BALL
 {
 #define INFINITE_PENALTY 1e5
@@ -33,21 +35,56 @@ namespace BALL
 
 	// the less operator
 	// note: we want a reverse sort, hence we actually return a "greater"
+	//
+	// BUG-576 (#576): This comparator feeds a std::priority_queue (a max-heap that
+	// pops the highest-priority element, i.e. the LOWEST penalty, first). For that
+	// to be deterministic across platforms the ordering MUST be a TOTAL strict weak
+	// ordering: it must distinguish every pair of entries that differ in content,
+	// otherwise equivalent entries pop in heap-internal (libc++ vs libstdc++ vs MSVC
+	// STL) order and apply(n) returns a different n-th solution per platform.
+	//
+	// We cascade through content-derived keys, returning as soon as a key differs:
+	//   (1) coarsePenalty()  (the optimisation objective)
+	//   (2) finePenalty()    ALWAYS (not gated on use_fine_penalty_ — that option
+	//                        decides which solutions are optimal, not how the queue
+	//                        must order them; applying it always keeps the FINE
+	//                        subtest passing and breaks coarse ties deterministically)
+	//   (3) last_bond        (Position, numeric)
+	//   (4) bond_orders      (lexicographic, vector<short>)
+	// Returning false in both directions is correct ONLY when penalties AND
+	// bond_orders are identical, i.e. the entries are genuinely indistinguishable.
+	//
+	// Direction: operator< returns true when *this should pop AFTER b (i.e. *this is
+	// the "greater" entry). At each level we therefore compare *this's key '>' b's key.
 	bool PartialBondOrderAssignment::operator < (const PartialBondOrderAssignment& b) const
 	{
 		bool value = false;
-		if (coarsePenalty() > b.coarsePenalty())
+
+		float coarse_a = coarsePenalty();
+		float coarse_b = b.coarsePenalty();
+		if (coarse_a != coarse_b)
 		{
-			value = true;
+			value = (coarse_a > coarse_b);
 		}
 		else
 		{
-			if (coarsePenalty() == b.coarsePenalty())
+			float fine_a = finePenalty();
+			float fine_b = b.finePenalty();
+			if (fine_a != fine_b)
 			{
-				if (abop->use_fine_penalty_ && (finePenalty() > b.finePenalty()))
-				{
-					value = true;
-				}
+				value = (fine_a > fine_b);
+			}
+			else if (last_bond != b.last_bond)
+			{
+				value = (last_bond > b.last_bond);
+			}
+			else
+			{
+				// total tie-break on the bond-order vector itself.
+				// std::lexicographical_compare(b, a) is true iff b < a lexicographically,
+				// i.e. iff *this is lexicographically greater -> *this pops after b.
+				value = std::lexicographical_compare(b.bond_orders.begin(), b.bond_orders.end(),
+				                                     bond_orders.begin(), bond_orders.end());
 			}
 		}
 
