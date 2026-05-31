@@ -226,29 +226,28 @@ CHECK(bool getNextEntry(String& entry))
 	d1.create("test1/test2");
 
 	Directory d2("test1");
-	String s;	
-	
-	// On some systems, the order (or even the presence!) of "." and ".." is not clear.
-	// To avoid this, we just skip these entries. These are properties of the
-	// Filesystem, not the Directory.
+	String s;
+
+	// getNextEntry must never return the synthetic "." or ".." entries:
+	// the Directory class now filters them so enumeration is consistent
+	// with countItems() on every platform (BUG-627, #627).
 	bool result = d2.getNextEntry(s);
 	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
 	bool found_test2 = false;
 	while (result)
 	{
-		if ((s != ".") && (s != ".."))
-		{
-			TEST_EQUAL(s, "test2")
-			found_test2 = true;
-		}
+		TEST_NOT_EQUAL(s, ".")
+		TEST_NOT_EQUAL(s, "..")
+		TEST_EQUAL(s, "test2")
+		found_test2 = true;
 	  result = d2.getNextEntry(s);
 	  STATUS("getNextEntry : " << result << " = " << s)
 	}
 	TEST_EQUAL(found_test2, true)
 
 	ok = cleanup();
-	TEST_EQUAL(ok, true)	
+	TEST_EQUAL(ok, true)
 RESULT
 
 CHECK(Size countItems())
@@ -262,6 +261,44 @@ CHECK(Size countItems())
 	d1.create("test3");
 	d1.create("test4");
 	TEST_EQUAL(d1.countItems(), 4)
+}
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
+RESULT
+
+
+CHECK([EXTRA] enumeration count equals countItems() (BUG-627, #627))
+{
+	// Regression for #627: a getFirstEntry/getNextEntry loop must visit
+	// exactly countItems() entries on every platform, and must never return
+	// the synthetic "." or ".." entries.
+	Directory d0(test_dir + "/dir_a/dir_c");
+	d0.create("test1");
+
+	Directory d1(test_dir + "/dir_a/dir_c/test1");
+	d1.create("test1");
+	d1.create("test2");
+	d1.create("test3");
+	d1.create("test4");
+
+	Size n_items = d1.countItems();
+	TEST_EQUAL(n_items, 4)
+
+	// Iterate the SAME directory and count the entries that getFirst/getNext
+	// return. The count must equal countItems(), and no entry may be "." or "..".
+	Directory d2(test_dir + "/dir_a/dir_c/test1");
+	String s;
+	Size n_enumerated = 0;
+	bool result = d2.getFirstEntry(s);
+	while (result)
+	{
+		TEST_NOT_EQUAL(s, ".")
+		TEST_NOT_EQUAL(s, "..")
+		++n_enumerated;
+		STATUS("entry " << n_enumerated << " : " << s)
+		result = d2.getNextEntry(s);
+	}
+	TEST_EQUAL(n_enumerated, n_items)
 }
 	bool ok = cleanup();
 	TEST_EQUAL(ok, true)
