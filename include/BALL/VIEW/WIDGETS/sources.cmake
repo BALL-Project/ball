@@ -14,6 +14,15 @@ FILE(GLOB INSPECTOR_HEADERS_LIST
 	"include/BALL/${GROUP}/inspector/*.h"
 	"include/BALL/${GROUP}/inspector/sections/*.h")
 
+# Phase 999.75 DRAWER-01 — inspectorDock.C is retired from the build
+# (superseded by inspectorDrawer.C) but inspectorDock.h is left on disk.
+# Drop the header from the AUTOMOC list: keeping it would moc the
+# InspectorDock Q_OBJECT and emit a vtable referencing
+# InspectorDock::~InspectorDock(), which no longer has a compiled
+# definition → undefined-symbol link error in libVIEW.
+LIST(REMOVE_ITEM INSPECTOR_HEADERS_LIST
+	"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/inspector/inspectorDock.h")
+
 IF(NOT BALL_HAS_QTWEBENGINE)
 	LIST(REMOVE_ITEM HEADERS_LIST
 		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/HTMLPage.h"

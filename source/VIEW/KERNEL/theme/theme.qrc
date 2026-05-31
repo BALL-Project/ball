@@ -67,6 +67,11 @@
              for the slider's revert-to-default button. -->
         <file alias="actions/chevron-down.svg">icons/lucide/chevron-down.svg</file>
         <file alias="actions/chevron-right.svg">icons/lucide/chevron-right.svg</file>
+        <!-- Phase 999.75 DRAWER-01: chevron-left paired with chevron-right.
+             Used by InspectorDrawer's right-edge rail (collapsed shows
+             chevron-left = "expand inward"; expanded shows chevron-right
+             = "collapse outward"). -->
+        <file alias="actions/chevron-left.svg">icons/lucide/chevron-left.svg</file>
         <file alias="actions/reset.svg">icons/lucide/rotate-ccw.svg</file>
         <!-- Phase 999.45: chevron-up paired with the existing chevron-down.
              Used by BottomDrawer (24px↔240px collapsed/expanded toggle). -->

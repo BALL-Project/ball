@@ -22,7 +22,7 @@
 #	include <BALL/VIEW/WIDGETS/projectDock.h>
 #	include <BALL/VIEW/WIDGETS/bottomDrawer.h>
 // Phase 999.44 Plan 02 — Unified Inspector mainframe wiring.
-#	include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
+#	include <BALL/VIEW/WIDGETS/inspector/inspectorDrawer.h>
 #	include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 #	include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
 #	include <BALL/VIEW/WIDGETS/inspector/representationAdapter.h>
@@ -318,7 +318,11 @@ namespace BALL
 		// Sub-PR 4.1 finish: registers the dock InspectorView builds in
 		// 999.44 Plan 01. WorkspaceManager presets address it by the
 		// inspectorDock objectName the dock sets in its constructor.
-		inspector_dock_ = new VIEW::InspectorDock(this, tr("Inspector"));
+		// Phase 999.75 DRAWER-01 — InspectorDrawer is the collapsible
+		// right-side drawer (horizontal mirror of BottomDrawer). It keeps the
+		// legacy "inspectorDock" objectName so WorkspaceManager presets still
+		// find it; view() returns the same InspectorView*.
+		inspector_dock_ = new VIEW::InspectorDrawer(this, tr("Inspector"));
 		addDockWidget(Qt::RightDockWidgetArea, inspector_dock_);
 
 		// Phase 999.44 Plan 03 — Selection tab wiring (sub-PR 4.2).

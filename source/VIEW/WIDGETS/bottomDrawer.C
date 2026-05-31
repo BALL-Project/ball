@@ -7,6 +7,17 @@
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
+// Phase 999.75 DRAWER-02 — PyBALL tab slot (v2.1 PyBALL revival).
+// BALL_PYTHON_SUPPORT is /* #undef */ in every current build's config.h
+// (SIP 4.9 is unavailable), so this slot is INERT in normal builds. The
+// macro reaches here transitively via bottomDrawer.h → BALL/COMMON/global.h
+// → BALL/CONFIG/config.h. Every PyWidget / pyWidget.h / Python reference
+// MUST stay inside this guard so no Python symbols compile or link when the
+// flag is off. Do NOT enable Python/SIP here — that is parked for v2.1.
+#ifdef BALL_PYTHON_SUPPORT
+# include <BALL/VIEW/WIDGETS/pyWidget.h>
+#endif
+
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
 #include <QtWidgets/QHBoxLayout>
@@ -135,44 +146,66 @@ namespace BALL
 			tab_bar_ = new QTabBar(body_);
 			tab_bar_->setObjectName("bottomDrawerTabs");
 			tab_bar_->setDocumentMode(true);
-			tab_bar_->addTab(tr("Log"));
-			tab_bar_->addTab(tr("Files"));
 
 			stack_ = new QStackedWidget(body_);
 			stack_->setObjectName("bottomDrawerStack");
 
+			// Phase 999.75 DRAWER-02 — all tabs are now registered through the
+			// single addDrawerTab_ helper instead of two duplicated blocks.
 			// LogView and FileObserver inherit GenericControl → DockWidget →
-			// QDockWidget. Reparenting them into a QStackedWidget would
-			// strip their dock chrome but keep their inner widgets. We use
-			// their QDockWidget::widget() inner content directly so we
-			// don't trash the message-bus parent chain.
-			if (log_view_ != nullptr && log_view_->widget() != nullptr)
-			{
-				stack_->addWidget(log_view_->widget());
-				// Hide the original outer dock so we don't see two of it.
-				log_view_->hide();
-			}
-			else
-			{
-				QLabel* placeholder = new QLabel(tr("(log unavailable)"), stack_);
-				stack_->addWidget(placeholder);
-			}
+			// QDockWidget. Reparenting them into a QStackedWidget would strip
+			// their dock chrome but keep their inner widgets. We use their
+			// QDockWidget::widget() inner content directly so we don't trash
+			// the message-bus parent chain (the UFG-17 double-attach fix lives
+			// inside addDrawerTab_: hide the outer dock only when the inner
+			// widget was actually added).
+			addDrawerTab_(tr("Log"),
+			              (log_view_ != nullptr) ? log_view_->widget() : nullptr,
+			              log_view_);
+			addDrawerTab_(tr("Files"),
+			              (file_observer_ != nullptr) ? file_observer_->widget() : nullptr,
+			              file_observer_);
 
-			if (file_observer_ != nullptr && file_observer_->widget() != nullptr)
-			{
-				stack_->addWidget(file_observer_->widget());
-				file_observer_->hide();
-			}
-			else
-			{
-				QLabel* placeholder = new QLabel(tr("(files unavailable)"), stack_);
-				stack_->addWidget(placeholder);
-			}
+#ifdef BALL_PYTHON_SUPPORT
+			// Phase 999.75 DRAWER-02 — PyBALL tab (third tab). Layout-ready for
+			// the v2.1 PyBALL revival; ENTIRELY compile-time guarded so nothing
+			// Python is compiled or linked when BALL_PYTHON_SUPPORT is OFF (the
+			// normal case — SIP 4.9 is unavailable). PyWidget inherits
+			// DockWidget like LogView/FileObserver, so we register its inner
+			// widget() through the same addDrawerTab_ path and hide the outer
+			// dock (UFG-17). Constructed as a child of this drawer.
+			PyWidget* py_widget = new PyWidget(this);
+			addDrawerTab_(tr("Python"),
+			              (py_widget != nullptr) ? py_widget->widget() : nullptr,
+			              py_widget);
+#endif
 
 			connect(tab_bar_, &QTabBar::currentChanged, stack_, &QStackedWidget::setCurrentIndex);
 
 			layout->addWidget(tab_bar_);
 			layout->addWidget(stack_, 1);
+		}
+
+		void BottomDrawer::addDrawerTab_(const QString& label, QWidget* content, QDockWidget* outerToHide)
+		{
+			tab_bar_->addTab(label);
+			if (content != nullptr)
+			{
+				stack_->addWidget(content);
+				// UFG-17 double-attach fix: hide the original outer dock so we
+				// don't see two of it — but ONLY on the real path (when the
+				// inner widget was actually added). A null content keeps the
+				// outer dock visible (matching the original per-tab code).
+				if (outerToHide != nullptr)
+				{
+					outerToHide->hide();
+				}
+			}
+			else
+			{
+				QLabel* placeholder = new QLabel(tr("(unavailable)"), stack_);
+				stack_->addWidget(placeholder);
+			}
 		}
 
 		void BottomDrawer::setExpanded(bool expanded)

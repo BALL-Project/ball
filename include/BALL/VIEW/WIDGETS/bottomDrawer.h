@@ -91,6 +91,22 @@ namespace BALL
 				void buildBody();
 				void animateTo(int targetHeight);
 
+				/**
+				 * Phase 999.75 DRAWER-02 — single tab-registration path.
+				 * Adds one tab to tab_bar_ + stack_:
+				 *  - @p label    the QTabBar tab text.
+				 *  - @p content  the inner widget to host in the QStackedWidget
+				 *                (e.g. log_view_->widget()). If null, a
+				 *                "(unavailable)" placeholder QLabel is added
+				 *                instead and @p outerToHide is left visible.
+				 *  - @p outerToHide  the outer dock (e.g. log_view_) whose chrome
+				 *                we hide ONLY when @p content was actually added
+				 *                — this is the UFG-17 double-attach fix
+				 *                (reparent the inner widget + hide the outer dock
+				 *                so we don't see two of it). May be null.
+				 */
+				void addDrawerTab_(const QString& label, QWidget* content, QDockWidget* outerToHide);
+
 				LogView* log_view_;
 				FileObserver* file_observer_;
 
