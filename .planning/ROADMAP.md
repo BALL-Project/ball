@@ -2788,7 +2788,13 @@ Plans:
   4. `NMR/spectrum.iC::computeMoments()` actually computes moments instead of no-op'ing (#601).
   5. The DisplayProperties memory leak is fixed — verified by a leak check / valgrind / ASan run (#636).
 **Effort:** medium (5 independent defects, each with a regression test).
-**Plans:** TBD
+**Plans:** 5 plans (all Wave 1, parallel — zero file overlap; commit-per-bug)
+Plans:
+- [ ] 999.72-01-PLAN.md — Bound RingAnalyser::sequenceRing loop; fixes SDGenerator infinite loop (#540, BUG-540)
+- [ ] 999.72-02-PLAN.md — Aromatize all rings of fused systems (#539, BUG-539)
+- [ ] 999.72-03-PLAN.md — Implement Spectrum2D computeAllMoments (#601, BUG-601)
+- [ ] 999.72-04-PLAN.md — Ribbon model honors exact residue selection; UAT-gated (#497, BUG-497)
+- [ ] 999.72-05-PLAN.md — Verify/close DisplayProperties leak, resolved-by-deletion + ASan (#636, BUG-636)
 **UI hint**: no
 
 ### Phase 999.73: Platform robustness + UX-settings bug batch (v1.8)
@@ -2802,7 +2808,11 @@ Plans:
   3. BALLView keyboard shortcuts are scoped appropriately (not handled globally), so they fire only in the intended context (#622).
   4. Loading a supplied project file no longer overrides the user's own settings (#621).
 **Effort:** medium.
-**Plans:** TBD
+**Plans:** 4 plans (2 waves)
+  - [ ] 999.73-01-PLAN.md - Un-quarantine AssignBondOrderProcessor_test cross-platform (BUG-576)
+  - [ ] 999.73-02-PLAN.md - Make Directory enumeration consistent on Windows (BUG-627)
+  - [ ] 999.73-03-PLAN.md - Scope keyboard shortcuts to focused widget (BUG-622)
+  - [ ] 999.73-04-PLAN.md - Stop project files from overriding user settings (BUG-621)
 **UI hint**: yes
 
 ### Phase 999.74: Small features (v1.8)
