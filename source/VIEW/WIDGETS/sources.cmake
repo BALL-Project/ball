@@ -38,6 +38,7 @@ SET(SOURCES_LIST
 	inspector/inspectorBody.C
 	inspector/inspectorView.C
 	inspector/inspectorDock.C
+	inspector/inspectorDrawer.C
 	inspector/inspectorEmptyState.C
 	inspector/sections/stageSection.C
 	# Phase 999.44 Plan 03 — Selection tab.
