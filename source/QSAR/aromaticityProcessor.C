@@ -708,7 +708,19 @@ namespace BALL
 				// does the ring share a full edge with the existing aromatic system?
 				// (a ring bond whose two endpoints are both already on an aromatic bond)
 				bool shares_aromatic_edge = false;
-				// is any ring bond still non-aromatic (i.e. is there work to do)?
+				// is any ring bond still NOT marked aromatic (i.e. is there work to do)?
+				//
+				// BUG-576 (#576): the termination signal MUST be measured against the
+				// SAME state that the aromatization below mutates. The aromatization
+				// always sets the Bond::IS_AROMATIC *property* (and the bond *order*
+				// only when overwrite_bond_orders_ is true). The original BUG-539 code
+				// gated this loop on b->getOrder() != ORDER__AROMATIC, so when
+				// overwrite_bond_orders_ == false (the SMARTS / evaluatePenalty path,
+				// e.g. BEWCUB.mol2) the order never changes, has_non_aromatic_ring_bond
+				// stays true forever and the while(changed) loop never terminates —
+				// that infinite loop is the CI hang. Gate on the IS_AROMATIC property,
+				// which the aromatization unconditionally sets, so each fused ring is
+				// processed exactly once and the fixed point is actually reached.
 				bool has_non_aromatic_ring_bond = false;
 				for (HashSet<Atom*>::iterator a = ring.begin(); a != ring.end(); ++a)
 				{
@@ -719,7 +731,7 @@ namespace BALL
 						{
 							continue;
 						}
-						if (b->getOrder() != Bond::ORDER__AROMATIC)
+						if (!b->hasProperty(Bond::IS_AROMATIC))
 						{
 							has_non_aromatic_ring_bond = true;
 						}
