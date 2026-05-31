@@ -288,11 +288,11 @@ collision with prior PKG/DOCS/FEAT IDs.
 - [ ] **INSPCLIP-01**: Right-edge Inspector controls (per-section reset glyphs, value spinners, unit labels) are not clipped when an Inspector tab scrolls (the v1.7.4 known issue).
 
 ### Correctness bugs
-- [ ] **BUG-540**: SDGenerator no longer infinite-loops (#540).
-- [ ] **BUG-539**: AromaticityProcessor handles the previously-failing molecules without error (#539).
-- [ ] **BUG-497**: Creating a ribbon representation on selected atoms yields the model for the correct selection (#497).
-- [ ] **BUG-601**: `NMR/spectrum.iC: computeMoments()` actually computes moments (no longer a no-op) (#601).
-- [ ] **BUG-636**: The DisplayProperties memory leak is fixed (#636).
+- [x] **BUG-540**: SDGenerator no longer infinite-loops (#540). *Fixed in 999.72 — RingAnalyser::sequenceRing no-progress guard (+ regression test).*
+- [x] **BUG-539**: AromaticityProcessor handles the previously-failing molecules without error (#539). *Fixed in 999.72 — system-level fused-ring propagation (+ test, real COD reproducer).*
+- [ ] **BUG-497**: Creating a ribbon representation on selected atoms yields the model for the correct selection (#497). *(999.72-04 — deferred to interactive GUI UAT.)*
+- [x] **BUG-601**: `NMR/spectrum.iC: computeMoments()` actually computes moments (no longer a no-op) (#601). *Fixed in 999.72 — Spectrum2D computeAllMoments re-implemented (+ test).*
+- [x] **BUG-636**: The DisplayProperties memory leak is fixed (#636). *Resolved-by-deletion in 999.67 (DisplayProperties removed); 999.72 audit confirmed no residual leak.*
 
 ### Platform / test robustness
 - [ ] **BUG-576**: `AssignBondOrderProcessor_test` passes on all platforms and is un-quarantined (#576).
