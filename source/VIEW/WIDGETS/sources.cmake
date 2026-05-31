@@ -37,7 +37,7 @@ SET(SOURCES_LIST
 	inspector/inspectorTabs.C
 	inspector/inspectorBody.C
 	inspector/inspectorView.C
-	inspector/inspectorDock.C
+	# superseded by inspectorDrawer.C (Phase 999.75 DRAWER-01)
 	inspector/inspectorDrawer.C
 	inspector/inspectorEmptyState.C
 	inspector/sections/stageSection.C

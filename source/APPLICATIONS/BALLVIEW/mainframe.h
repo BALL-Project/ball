@@ -23,7 +23,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-		class InspectorDock;
+		class InspectorDrawer;
 		class SelectionInspectorAdapter;
 		class RepresentationInspectorAdapter;
 		class WelcomeScreen;  // Phase 999.47 §7.1
@@ -119,9 +119,11 @@ namespace BALL
 			QAction* save_project_action_;
 			QAction* qload_action_, *qsave_action_;
 
-			/// Phase 999.44 Plan 02: right-rail Inspector dock + its
-			/// View ▸ Hide Inspector menu action.
-			VIEW::InspectorDock*              inspector_dock_;
+			/// Phase 999.44 Plan 02: right-rail Inspector + its View ▸ Hide
+			/// Inspector menu action. Phase 999.75 DRAWER-01: now a
+			/// collapsible right-side drawer (InspectorDrawer) — member name
+			/// kept as inspector_dock_ to minimize churn.
+			VIEW::InspectorDrawer*            inspector_dock_;
 			QAction*                          hide_inspector_action_;
 			/// Phase 999.44 Plan 03: selection-bus adapter that
 			/// forwards ControlSelectionMessage / NewSelectionMessage
