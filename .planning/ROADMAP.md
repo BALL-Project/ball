@@ -2761,7 +2761,11 @@ Plans:
   2. The developer/author list in the tutorial is current.
   3. User-facing documentation states the "Restore Defaults" scope explicitly — that it does not reset font, language, or style (#523).
 **Effort:** medium–large (content, not code). **Carries:** the Phase 999.56 / DOCS-01 / #560 lineage + #523.
-**Plans:** TBD
+**Plans:** 3 plans (2 waves)
+Plans:
+- [ ] 999.70-01-PLAN.md — Refresh tutorial URLs/release tag/developer+author list/publications/build-doc pointers (TUT-01, #560)
+- [ ] 999.70-02-PLAN.md — Document Restore Defaults scope: in-app help page + button tooltip (does not reset font/language/style) (TUT-02, #523)
+- [ ] 999.70-03-PLAN.md — Recapture current-UI BALLView screenshot (human) + rendered-PDF UAT review (TUT-01, #560)
 **UI hint**: no
 
 ### Phase 999.71: Inspector right-edge clipping fix (v1.7.5 carry-in) (v1.8)
