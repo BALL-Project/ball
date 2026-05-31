@@ -653,7 +653,108 @@ namespace BALL
 			}
 		}
 
-		// if aromatic bonds are set, i.e. from a fragment db we must set the 
+		// BUG-539: the per-ring while-loop above aromatizes the rings it can score,
+		// but in a peri-/ortho-fused polycyclic system (e.g. pyrene) a fused ring
+		// that shares an edge with the already-built aromatic system can be dropped
+		// because the strict single-ring Hueckel/conjugation test fails once its
+		// neighbours' bonds have already been turned aromatic. Propagate aromaticity
+		// at the SYSTEM level: any original SSSR ring whose atoms are all aromatic-
+		// capable carbons and which shares a complete edge (a bond) with the current
+		// aromatic system is part of that pi system, so aromatize its ring bonds too.
+		// Iterate to a fixed point so chains of fused rings are all reached.
+		bool changed = true;
+		while (changed)
+		{
+			changed = false;
+			for (vector<vector<Atom*> >::const_iterator ring_it = sssr_orig.begin();
+			     ring_it != sssr_orig.end(); ++ring_it)
+			{
+				// collect the ring atom set
+				HashSet<Atom*> ring;
+				for (vector<Atom*>::const_iterator a = ring_it->begin(); a != ring_it->end(); ++a)
+				{
+					ring.insert(*a);
+				}
+
+				// the ring must be made entirely of carbons that can be sp2 (exactly
+				// one double or already-aromatic ring bond, no sp3 carbon). This keeps
+				// the propagation conservative so non-aromatic rings are never touched.
+				bool all_sp2_carbon = true;
+				for (HashSet<Atom*>::iterator a = ring.begin(); a != ring.end(); ++a)
+				{
+					if ((*a)->getElement() != PTE[Element::C])
+					{
+						all_sp2_carbon = false;
+						break;
+					}
+
+					Size d_count = 0, a_count = 0;
+					for (Atom::BondIterator b = (*a)->beginBond(); b != (*a)->endBond(); ++b)
+					{
+						if (b->getOrder() == Bond::ORDER__DOUBLE)   ++d_count;
+						if (b->getOrder() == Bond::ORDER__AROMATIC) ++a_count;
+					}
+					if (!(d_count == 1 || a_count >= 1))
+					{
+						all_sp2_carbon = false;
+						break;
+					}
+				}
+				if (!all_sp2_carbon)
+				{
+					continue;
+				}
+
+				// does the ring share a full edge with the existing aromatic system?
+				// (a ring bond whose two endpoints are both already on an aromatic bond)
+				bool shares_aromatic_edge = false;
+				// is any ring bond still non-aromatic (i.e. is there work to do)?
+				bool has_non_aromatic_ring_bond = false;
+				for (HashSet<Atom*>::iterator a = ring.begin(); a != ring.end(); ++a)
+				{
+					for (Atom::BondIterator b = (*a)->beginBond(); b != (*a)->endBond(); ++b)
+					{
+						Atom* partner = b->getPartner(**a);
+						if (!ring.has(partner))
+						{
+							continue;
+						}
+						if (b->getOrder() != Bond::ORDER__AROMATIC)
+						{
+							has_non_aromatic_ring_bond = true;
+						}
+						if ((*a)->getProperty("IsAromatic").getBool()
+						    && partner->getProperty("IsAromatic").getBool())
+						{
+							shares_aromatic_edge = true;
+						}
+					}
+				}
+
+				if (shares_aromatic_edge && has_non_aromatic_ring_bond)
+				{
+					// aromatize every ring bond and mark the atoms aromatic
+					for (HashSet<Atom*>::iterator a = ring.begin(); a != ring.end(); ++a)
+					{
+						(*a)->setProperty("IsAromatic", true);
+						for (Atom::BondIterator b = (*a)->beginBond(); b != (*a)->endBond(); ++b)
+						{
+							if (ring.has(b->getPartner(**a)))
+							{
+								b->setProperty(Bond::IS_AROMATIC);
+								if (overwrite_bond_orders_)
+								{
+									b->setOrder(Bond::ORDER__AROMATIC);
+								}
+							}
+						}
+					}
+					changed = true;
+				}
+			}
+		}
+
+		// if aromatic bonds are set, i.e. from a fragment db we must set the
 		// isAromatic property for the atoms, in most cases this is not necessary
 		AtomIterator a_it = ac.beginAtom();
 		Atom::BondIterator b_it = a_it->beginBond();

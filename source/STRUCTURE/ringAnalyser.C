@@ -195,7 +195,13 @@ namespace BALL
 		Atom* last_atom = start_atom;
 		while(!ring_atoms.empty())
 		{
-			for (std::list<Atom*>::iterator ring_it  = ring_atoms.begin(); 
+			// BUG-540: guard against a non-threadable ring. If a full pass over the
+			// remaining atoms finds none bound to last_atom, the inner for erases
+			// nothing and the while-condition can never change -> infinite loop (and
+			// a downstream segfault in peelNextRing_). Break out when no progress is
+			// made on a complete pass.
+			bool found = false;
+			for (std::list<Atom*>::iterator ring_it  = ring_atoms.begin();
 			                                ring_it != ring_atoms.end(); ++ring_it)
 			{
 				if (last_atom->isBoundTo(**ring_it))
@@ -203,8 +209,14 @@ namespace BALL
 					ring[++last_index] = *ring_it;
 					last_atom = *ring_it;
 					ring_atoms.erase(ring_it);
+					found = true;
 					break;
 				}
+			}
+
+			if (!found)
+			{
+				break;
 			}
 		}
 
