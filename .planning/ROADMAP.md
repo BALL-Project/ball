@@ -2829,6 +2829,23 @@ Plans:
 **Plans:** TBD
 **UI hint**: yes
 
+### Phase 999.75: Collapsible drawers — Inspector right-drawer + PyBALL-ready bottom drawer (v1.8)
+
+**Goal:** Make the Inspector a collapsible right-side drawer and make the BottomDrawer a swappable, PyBALL-ready tab set. (1) Replace the plain right-rail `InspectorDock` with a new `InspectorDrawer` that mirrors the shipped `BottomDrawer` UX horizontally — a chevron toggle that animates the dock's `maximumWidth` between a ~24px right-edge rail and the expanded Inspector, with collapse/expand state persisted in the `[Inspector]` INI group and the `inspectorDock` objectName preserved for WorkspaceManager presets. (2) Generalize `BottomDrawer`'s two hardcoded tabs into one `addDrawerTab_` registration path and add a Python/PyBALL tab slot entirely guarded by `#ifdef BALL_PYTHON_SUPPORT`, so the v2.1 PyBALL revival drops in with no further layout work. Logs + FileObserver stay the live tabs; Python/SIP is NOT enabled here (the flag is OFF in every build).
+**Depends on:** none (builds on the shipped BottomDrawer + InspectorDock; no other phase dependency).
+**Requirements:** DRAWER-01, DRAWER-02.
+**Success Criteria** (what must be TRUE):
+  1. The Inspector collapses to a ~24px right-edge rail and re-expands via an animated chevron toggle (DRAWER-01).
+  2. The Inspector collapse/expand state persists across restarts and WorkspaceManager still addresses the dock by `inspectorDock`; the custom rail works on macOS.
+  3. BottomDrawer registers its tabs through one generalized path; Logs + FileObserver stay live with the UFG-17 double-attach behavior intact (DRAWER-02).
+  4. A PyBALL tab slot is wired entirely inside `#ifdef BALL_PYTHON_SUPPORT`; with the flag OFF (the normal case) no `pyWidget`/`Python.h` code is compiled or linked and VIEW + BALLView build green.
+  5. A human UAT confirms both drawers collapse/expand + persist and the bottom drawer is Python-tab-free with the flag off.
+**Effort:** small–medium (mirror an existing class + a structural refactor + a guarded slot). **Risk note:** a NEW `InspectorDrawer` mirroring `BottomDrawer` is chosen over extracting a shared base, to avoid regressing the shipped BottomDrawer; future de-duplication into a `CollapsibleDrawer` base is deferred.
+**Plans:** 2 plans in 2 waves (sequenced — both touch `mainframe.C`/`bottomDrawer.*`, so same-wave file overlap is avoided):
+- [ ] 999.75-01-PLAN.md — Wave 1: InspectorDrawer (horizontal BottomDrawer mirror) + `[Inspector] expanded=` persistence + mainframe wiring; retire InspectorDock from the build (DRAWER-01)
+- [ ] 999.75-02-PLAN.md — Wave 2: generalize BottomDrawer tabs via `addDrawerTab_` + `#ifdef BALL_PYTHON_SUPPORT` PyBALL slot; combined visual UAT for both drawers, Python OFF (DRAWER-02)
+**UI hint**: yes
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
