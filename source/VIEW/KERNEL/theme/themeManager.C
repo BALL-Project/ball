@@ -54,13 +54,31 @@ namespace BALL
 			if (app == nullptr) return;
 			app_ = app;
 
+			// Phase 999.71 THEME-DARK-01 — pin to Light. BALLView ships a
+			// single neutral (light) theme; following the OS dark
+			// appearance leaves native combo-box popups rendering dark
+			// while the neutral theme's body text stays dark (black-on-
+			// black). main.C sets the Light color scheme right after the
+			// QApplication ctor; we re-assert it here so ThemeManager and
+			// main.C are coherent (pin Light, do NOT follow the system).
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+			if (QStyleHints* hints = QGuiApplication::styleHints())
+			{
+				if (hints->colorScheme() != Qt::ColorScheme::Light)
+				{
+					hints->setColorScheme(Qt::ColorScheme::Light);
+				}
+			}
+#endif
+
 			applyTheme();
 
-			// Q3 future-proofing: wire the OS color-scheme reactor even
-			// though the current handler is a no-op. If maintainer-Q3 is
-			// later reversed (re-introducing light/dark/follow-system),
-			// the dispatch path already exists — only the handler body
-			// changes.
+			// Wire the OS color-scheme reactor so that if anything (the OS,
+			// another component) flips the scheme away from Light at
+			// runtime, we re-pin it. The neutral theme is light-only — a
+			// real light/dark/follow-system mode is future work, at which
+			// point onSystemColorSchemeChanged() becomes the dispatch
+			// point for re-loading the appropriate variant.
 			if (!initialised_)
 			{
 				if (QStyleHints* hints = QGuiApplication::styleHints())
@@ -142,8 +160,24 @@ namespace BALL
 
 		void ThemeManager::onSystemColorSchemeChanged()
 		{
-			// No-op per maintainer-Q3 (single neutral theme only).
-			// See themeManager.h for the future-proofing rationale.
+			// Phase 999.71 THEME-DARK-01 — re-pin to Light. The neutral
+			// theme is light-only; if the OS (or any other component)
+			// flips the application color scheme to Dark/Unknown at
+			// runtime, snap it back to Light so the native combo-box
+			// popups never render dark-on-dark. Guarded so we don't
+			// recurse forever — setColorScheme() only re-emits when the
+			// value actually changes, and we no-op when it is already
+			// Light. A real follow-system dark mode is future work and
+			// would replace this body with a variant-reload.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+			if (QStyleHints* hints = QGuiApplication::styleHints())
+			{
+				if (hints->colorScheme() != Qt::ColorScheme::Light)
+				{
+					hints->setColorScheme(Qt::ColorScheme::Light);
+				}
+			}
+#endif
 		}
 
 		QString ThemeManager::loadStylesheet_()

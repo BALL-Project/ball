@@ -12,6 +12,8 @@
 #include <QtCore/QSettings>
 #include <QtCore/QTimer>
 #include <QtGui/QSurfaceFormat>
+#include <QtGui/QGuiApplication>
+#include <QtGui/QStyleHints>
 
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>
@@ -107,6 +109,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	QSurfaceFormat::setDefaultFormat(BALL::VIEW::GLRenderWindow::gl_format_);
 
 	QApplication application(argc, argv);
+
+	// === Phase 999.71 THEME-DARK-01: pin the application to the Light =====
+	// color scheme. BALLView ships a SINGLE NEUTRAL (light) theme — real
+	// dark mode was explicitly deferred (THEME.md / Phase 999.40,
+	// maintainer-Q3). But on macOS the native QComboBox popup renders
+	// natively and ignores QSS (documented in theme-neutral.qss): when the
+	// OS is in Dark appearance the system paints those popups with a dark
+	// chrome while the neutral theme's dark body text stays dark — yielding
+	// unreadable black-on-black dropdowns.
+	//
+	// Pinning the color scheme to Light forces every native control (combo
+	// popups, menus, message boxes) to render with light chrome regardless
+	// of the OS appearance, so the neutral theme renders exactly as designed
+	// on every platform. This must run BEFORE any widget is constructed so
+	// the first paint already uses the Light scheme. Qt::ColorScheme +
+	// QStyleHints::setColorScheme() are Qt 6.5+; guard the version so the
+	// app still builds against older Qt.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+	if (QStyleHints* style_hints = QGuiApplication::styleHints())
+	{
+		style_hints->setColorScheme(Qt::ColorScheme::Light);
+	}
+#endif
+	// === end Phase 999.71 THEME-DARK-01 ===================================
 
 	// === Phase 999.40 / 999.48: ThemeManager init =========================
 	// Apply the neutral QSS stylesheet immediately after the QApplication

@@ -246,6 +246,25 @@ QComboBox::drop-down {
     width: 16px;
 }
 
+/* Phase 999.71 THEME-DARK-01 — combo-box popup (defense in depth).
+ *
+ * The application is pinned to the Light color scheme in main.C /
+ * themeManager.C, which is the real fix for the dark-mode black-on-black
+ * dropdown defect: it forces the macOS NATIVE popup (which ignores QSS by
+ * design — see the file header) to render with light chrome. This rule is
+ * belt-and-braces for the NON-native case (Linux/Windows, or any build
+ * where the popup is a styled QAbstractItemView rather than the Cocoa
+ * native menu): make the popup list explicitly white-on-ink with a clear
+ * accent selection so it is readable regardless of OS appearance. */
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    color: #1a1c1f;
+    border: 1px solid #e1e3e8;
+    selection-background-color: #2a6fdb;
+    selection-color: #ffffff;
+    outline: 0;
+}
+
 QSlider::groove:horizontal {
     background: #e1e3e8;
     height: 4px;
