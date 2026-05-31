@@ -1342,23 +1342,37 @@ jobs:
       #     SignPath UI (intentional anti-supply-chain control), downloads the
       #     signed .exe, and re-uploads it over the unsigned artifact.
       #
-      # NOTE: the gate uses `secrets.SIGNPATH_API_TOKEN != ''` directly in the
-      # `if:` (the earlier scaffold gated on `env.SIGNPATH_API_TOKEN`, which was
-      # never defined at job level — so the gate could never turn ON even with
-      # the secret present; that latent bug is fixed here).
+      # NOTE: the `secrets` context is NOT available in `if:` conditions — using
+      # `secrets.X != ''` directly in an `if:` makes the WHOLE workflow invalid
+      # (GitHub emits a 0-job startup_failure on every push/tag). So we map the
+      # secret into a step `env:` (which IS legal), emit a boolean step output,
+      # and gate every downstream step on `steps.signpath-gate.outputs.enabled`.
       #
       # Maintainer setup (apply to SignPath, create project/policy, generate
       # token, add the repo secrets) is documented step-by-step in:
       #   .planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md
       # ---------------------------------------------------------------------
+      - name: Determine SignPath availability (Windows)
+        id: signpath-gate
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+        run: |
+          if ([string]::IsNullOrEmpty($env:SIGNPATH_API_TOKEN)) {
+            "enabled=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding ascii
+          } else {
+            "enabled=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding ascii
+          }
+
       - name: SignPath not configured — ship unsigned (Windows — warn + skip)
-        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN == ''
+        if: matrix.os == 'windows-x64' && steps.signpath-gate.outputs.enabled == 'false'
         shell: pwsh
         run: |
           Write-Host "::warning title=Windows installer is UNSIGNED::SIGNPATH_API_TOKEN is not set — SignPath Foundation enrollment is still pending (WINSIGN-01). Shipping the UNSIGNED NSIS installer; Windows SmartScreen will warn users on first run. To enable signing, follow .planning/phases/999.68-packaging-signing-license/SIGNPATH-SECRETS-RUNBOOK.md and add the SIGNPATH_API_TOKEN + SIGNPATH_ORG_ID repo secrets."
 
       - name: Sign installer via SignPath Foundation (Windows — gated on secret)
-        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
+        if: matrix.os == 'windows-x64' && steps.signpath-gate.outputs.enabled == 'true'
         id: signpath-sign
         uses: signpath/github-action-submit-signing-request@v1
         with:
@@ -1372,7 +1386,7 @@ jobs:
           output-artifact-directory: 'signed-installer'
 
       - name: Recompute SHA256 + re-upload signed installer (Windows — gated)
-        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
+        if: matrix.os == 'windows-x64' && steps.signpath-gate.outputs.enabled == 'true'
         shell: pwsh
         run: |
           $signed = Get-ChildItem -Path "signed-installer" -Filter "*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -1390,7 +1404,7 @@ jobs:
           }
 
       - name: Re-upload signed installer artifact (Windows — gated)
-        if: matrix.os == 'windows-x64' && secrets.SIGNPATH_API_TOKEN != ''
+        if: matrix.os == 'windows-x64' && steps.signpath-gate.outputs.enabled == 'true'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.nsis-build.outputs.installer_name }}
