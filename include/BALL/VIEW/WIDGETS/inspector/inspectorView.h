@@ -111,6 +111,25 @@ namespace BALL
 				void scheduleStateWrite();
 
 				/**
+				 * Phase 999.75 DRAWER-01 — whole-drawer collapse state.
+				 * Returns the persisted collapsed/expanded state of the host
+				 * InspectorDrawer (NOT a per-section expand state). Backed by
+				 * the [Inspector] expanded= INI key; defaults to true
+				 * (expanded). Read by InspectorDrawer's constructor to choose
+				 * its initial state.
+				 * @return true if the drawer should be expanded.
+				 */
+				bool isDrawerExpanded() const { return drawer_expanded_; }
+
+				/**
+				 * Phase 999.75 DRAWER-01 — persist the host InspectorDrawer's
+				 * collapse state. Stores into the [Inspector] expanded= INI key
+				 * (via the debounced writer, which no-ops while loading).
+				 * @param expanded the drawer's new expanded state.
+				 */
+				void setDrawerExpanded(bool expanded);
+
+				/**
 				 * Phase 999.44 Plan 03 — Selection tab population.
 				 * Construct (lazily on first call) the 3 Selection-tab
 				 * sections and bind them to @p main_control. After this
@@ -171,6 +190,10 @@ namespace BALL
 				InspectorBody* body_;
 				QTimer state_writer_;
 				bool loading_;  // suppress writes during loadState()
+
+				// Phase 999.75 DRAWER-01 — persisted host-drawer collapse
+				// state ([Inspector] expanded=). Default true (expanded).
+				bool drawer_expanded_;
 
 				// Phase 999.44 Plan 03 — Selection-tab section pointers.
 				// Created lazily in attachSelectionTab; nullptr until then.

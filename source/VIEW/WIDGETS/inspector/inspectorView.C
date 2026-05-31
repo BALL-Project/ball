@@ -67,6 +67,7 @@ namespace BALL
 				tabs_(nullptr),
 				body_(nullptr),
 				loading_(false),
+				drawer_expanded_(true),
 				selection_summary_(nullptr),
 				selection_properties_(nullptr),
 				selection_actions_(nullptr),
@@ -190,6 +191,11 @@ namespace BALL
 			                          QStringLiteral("Representation")).toString();
 			tabs_->setCurrentTabIndex(InspectorTabs::tabFromIniString(tabStr));
 
+			// Phase 999.75 DRAWER-01 — whole-drawer collapse state for the
+			// host InspectorDrawer. Defaults to true (expanded) when missing
+			// or corrupt.
+			drawer_expanded_ = s.value(QStringLiteral("expanded"), true).toBool();
+
 			// Per-section state is applied lazily as sections are added via
 			// addSection() — see the QSettings read in that method.
 
@@ -202,6 +208,14 @@ namespace BALL
 			if (loading_)
 				return;
 			state_writer_.start();
+		}
+
+		void InspectorView::setDrawerExpanded(bool expanded)
+		{
+			// Phase 999.75 DRAWER-01 — store the host drawer's collapse state
+			// and schedule a debounced write (no-ops while loading_).
+			drawer_expanded_ = expanded;
+			scheduleStateWrite();
 		}
 
 		void InspectorView::onTabChanged_(int index)
@@ -277,6 +291,10 @@ namespace BALL
 			s.beginGroup(QStringLiteral("Inspector"));
 			s.setValue(QStringLiteral("tab"),
 			           InspectorTabs::iniStringFromTab(tabs_->currentTabIndex()));
+
+			// Phase 999.75 DRAWER-01 — persist the host drawer's collapse
+			// state beside the tab key.
+			s.setValue(QStringLiteral("expanded"), drawer_expanded_);
 
 			// Iterate over all InspectorSection children of body_ and
 			// persist their expanded/collapsed state by their stateKey().
