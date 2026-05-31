@@ -37,9 +37,9 @@ namespace BALL
 			  view_(nullptr),
 			  rail_(nullptr),
 			  chevron_(nullptr),
-			  rail_label_(nullptr),
 			  width_animation_(nullptr),
-			  expanded_(true)
+			  expanded_(true),
+			  expanded_width_(kExpandedWidth)
 		{
 			// objectName is DELIBERATELY the legacy "inspectorDock" (not
 			// "inspectorDrawer"): WorkspaceManager presets address the
@@ -78,20 +78,43 @@ namespace BALL
 			width_animation_ = new QPropertyAnimation(this, "maximumWidth", this);
 			width_animation_->setDuration(kAnimationDurationMs);
 			width_animation_->setEasingCurve(QEasingCurve::OutCubic);
+			// Lock minimumWidth to the animated maximumWidth on every tick so
+			// the QMainWindow dock AREA is forced to follow the tween: a docked
+			// widget with min==max must be allocated exactly that width.
+			// Animating maximumWidth alone let the dock area stay pinned at the
+			// collapsed minimum, which is why a re-expand previously came back
+			// narrower than before.
+			connect(width_animation_, &QPropertyAnimation::valueChanged, this,
+			        [this](const QVariant& value) { setMinimumWidth(value.toInt()); });
 			connect(width_animation_, &QPropertyAnimation::finished, this, [this]() {
 				// After expanding, lift the maximumWidth cap so the user can
 				// drag-resize wider. After collapsing, pin both min and max to
 				// kCollapsedWidth so the dock stays the rail width.
 				if (expanded_)
 				{
+					// Relax the locked width so the user can drag-resize again,
+					// but keep the Inspector usable (>= kExpandedWidth, matching
+					// the old InspectorDock UFG-04 minimum). Then re-assert the
+					// restored width authoritatively now the cap is lifted —
+					// QMainWindow won't shrink it because expanded_width_ >=
+					// kExpandedWidth == the new minimum.
 					setMaximumWidth(QWIDGETSIZE_MAX);
+					setMinimumWidth(kExpandedWidth);
 					view_->setVisible(true);
+					if (QMainWindow* mw = qobject_cast<QMainWindow*>(parentWidget()))
+					{
+						mw->resizeDocks({this}, {expanded_width_}, Qt::Horizontal);
+					}
 				}
 				else
 				{
 					setMaximumWidth(kCollapsedWidth);
 					setMinimumWidth(kCollapsedWidth);
 					view_->setVisible(false);
+					if (QMainWindow* mw = qobject_cast<QMainWindow*>(parentWidget()))
+					{
+						mw->resizeDocks({this}, {kCollapsedWidth}, Qt::Horizontal);
+					}
 				}
 				Q_EMIT expandedChanged(expanded_);
 			});
@@ -135,20 +158,14 @@ namespace BALL
 			// persisted state is known.
 			chevron_->setIcon(VIEW::Icons::get("actions/chevron-right"));
 			chevron_->setFixedSize(20, 20);
+			// The chevron carries the Inspector identity (tooltip + accessible
+			// name) so the rail needs no extra text marker — an explicit "I"
+			// label below the chevron read as a stray glyph in the expanded
+			// title bar (999.75 UAT), so it was removed.
+			chevron_->setToolTip(tr("Inspector"));
+			chevron_->setAccessibleName(tr("Inspector"));
 			connect(chevron_, &QToolButton::clicked, this, &InspectorDrawer::toggle);
 			layout->addWidget(chevron_, 0, Qt::AlignHCenter);
-
-			// Vertical identity label so the collapsed rail is recognizable.
-			// A QLabel does not rotate text natively; the narrow rail width
-			// (kCollapsedWidth) keeps the visible identity to a chevron plus a
-			// compact "I" marker, which reads as the Inspector rail. The
-			// accessible name carries the full identity.
-			rail_label_ = new QLabel(QStringLiteral("I"), rail_);
-			rail_label_->setObjectName("inspectorDrawerLabel");
-			rail_label_->setAccessibleName(tr("Inspector"));
-			rail_label_->setToolTip(tr("Inspector"));
-			rail_label_->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-			layout->addWidget(rail_label_, 0, Qt::AlignHCenter);
 			layout->addStretch(1);
 		}
 
@@ -166,13 +183,20 @@ namespace BALL
 				view_->setVisible(true);
 				// Drop the minimumWidth floor so the animation can start from
 				// the collapsed rail. animateTo() raises maximumWidth to make
-				// room and nudges the parent QMainWindow's dock layout.
+				// room and nudges the parent QMainWindow's dock layout. Restore
+				// the width the user last saw (expanded_width_) rather than the
+				// fixed kExpandedWidth, so re-opening keeps the prior size.
 				setMinimumWidth(kCollapsedWidth);
-				animateTo(kExpandedWidth);
+				animateTo(expanded_width_);
 			}
 			else
 			{
 				// chevron-left (about to expand inward) when collapsed.
+				// Capture the current expanded width BEFORE shrinking so a
+				// later re-expand restores it (floor at kExpandedWidth so a
+				// stray sub-minimum value can't make the drawer shrink over
+				// repeated toggles).
+				expanded_width_ = std::max(width(), kExpandedWidth);
 				chevron_->setIcon(VIEW::Icons::get("actions/chevron-left"));
 				setMinimumWidth(kCollapsedWidth);
 				animateTo(kCollapsedWidth);
@@ -202,16 +226,13 @@ namespace BALL
 			width_animation_->setStartValue(currentWidth);
 			width_animation_->setEndValue(targetWidth);
 			width_animation_->start();
-
-			// Force the parent QMainWindow's dock-area layout to allocate the
-			// new column width. Animating maximumWidth on a QDockWidget alone
-			// is not enough — QMainWindow's dock layout caches the previous
-			// column geometry and will not re-grow it without an explicit
-			// resizeDocks() hint (Qt::Horizontal for a left/right dock).
-			if (QMainWindow* mw = qobject_cast<QMainWindow*>(parentWidget()))
-			{
-				mw->resizeDocks({this}, {targetWidth}, Qt::Horizontal);
-			}
+			// NOTE: the dock-area width is driven by the min==max lock wired in
+			// the constructor (each tick forces the QMainWindow allocation) plus
+			// the authoritative resizeDocks() in the animation's finished
+			// handler. A resizeDocks() issued HERE fired while the animation had
+			// momentarily reset maximumWidth to the collapsed start value, which
+			// clamped the target and left the drawer narrower on re-open — so it
+			// was removed.
 		}
 
 	} // namespace VIEW

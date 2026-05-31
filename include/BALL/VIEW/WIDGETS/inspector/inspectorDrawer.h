@@ -115,11 +115,15 @@ namespace BALL
 				// setTitleBarWidget so the rail works on all platforms.
 				QWidget* rail_;
 				QToolButton* chevron_;
-				QLabel* rail_label_;
-
 				QPropertyAnimation* width_animation_;
 
 				bool expanded_;
+
+				// Last expanded width in px, captured when collapsing so a later
+				// re-expand restores the SAME width the user last saw instead of
+				// snapping back to the fixed kExpandedWidth. Seeded to
+				// kExpandedWidth for the first expand.
+				int expanded_width_;
 		};
 
 	} // namespace VIEW
