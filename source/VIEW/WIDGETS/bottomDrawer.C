@@ -7,6 +7,17 @@
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
+// Phase 999.75 DRAWER-02 — PyBALL tab slot (v2.1 PyBALL revival).
+// BALL_PYTHON_SUPPORT is /* #undef */ in every current build's config.h
+// (SIP 4.9 is unavailable), so this slot is INERT in normal builds. The
+// macro reaches here transitively via bottomDrawer.h → BALL/COMMON/global.h
+// → BALL/CONFIG/config.h. Every PyWidget / pyWidget.h / Python reference
+// MUST stay inside this guard so no Python symbols compile or link when the
+// flag is off. Do NOT enable Python/SIP here — that is parked for v2.1.
+#ifdef BALL_PYTHON_SUPPORT
+# include <BALL/VIEW/WIDGETS/pyWidget.h>
+#endif
+
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
 #include <QtWidgets/QHBoxLayout>
@@ -154,6 +165,20 @@ namespace BALL
 			addDrawerTab_(tr("Files"),
 			              (file_observer_ != nullptr) ? file_observer_->widget() : nullptr,
 			              file_observer_);
+
+#ifdef BALL_PYTHON_SUPPORT
+			// Phase 999.75 DRAWER-02 — PyBALL tab (third tab). Layout-ready for
+			// the v2.1 PyBALL revival; ENTIRELY compile-time guarded so nothing
+			// Python is compiled or linked when BALL_PYTHON_SUPPORT is OFF (the
+			// normal case — SIP 4.9 is unavailable). PyWidget inherits
+			// DockWidget like LogView/FileObserver, so we register its inner
+			// widget() through the same addDrawerTab_ path and hide the outer
+			// dock (UFG-17). Constructed as a child of this drawer.
+			PyWidget* py_widget = new PyWidget(this);
+			addDrawerTab_(tr("Python"),
+			              (py_widget != nullptr) ? py_widget->widget() : nullptr,
+			              py_widget);
+#endif
 
 			connect(tab_bar_, &QTabBar::currentChanged, stack_, &QStackedWidget::setCurrentIndex);
 
