@@ -980,21 +980,44 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|Edit|Cut";
-			cut_id_ = insertMenuEntry(MainControl::EDIT, tr("Cu&t"), this, 
+			cut_id_ = insertMenuEntry(MainControl::EDIT, tr("Cu&t"), this,
 															  SLOT(cut()), description, QKeySequence::Cut,
 															  tr(""), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Edit|Copy";
-			copy_id_ = insertMenuEntry(MainControl::EDIT, tr("&Copy"), this, 
+			copy_id_ = insertMenuEntry(MainControl::EDIT, tr("&Copy"), this,
 																 SLOT(copy()), description, QKeySequence::Copy,
 																 tr(""), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Edit|Paste";
-			paste_id_ = insertMenuEntry(MainControl::EDIT, tr("&Paste"), this, 
+			paste_id_ = insertMenuEntry(MainControl::EDIT, tr("&Paste"), this,
 																  SLOT(paste()), description, QKeySequence::Paste,
 																  tr(""), UIOperationMode::MODE_ADVANCED);
 
-			main_control.insertDeleteEntry();
+			// BUG-622 (#622): scope Cut/Copy/Paste to this MolecularControl's focus
+			// subtree. Created via insertMenuEntry the actions live on the menu and
+			// default to Qt::WindowShortcut, so Ctrl+C/V/X fired window-globally and
+			// stole those keys from text fields and the embedded web view. Setting
+			// Qt::WidgetWithChildrenShortcut and adding each action to this widget
+			// makes them resolve only when MolecularControl (or a child) has focus.
+			if (cut_id_ != 0)
+			{
+				cut_id_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+				addAction(cut_id_);
+			}
+			if (copy_id_ != 0)
+			{
+				copy_id_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+				addAction(copy_id_);
+			}
+			if (paste_id_ != 0)
+			{
+				paste_id_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+				addAction(paste_id_);
+			}
+
+			// BUG-622 (#622): own the Delete shortcut for this control's focus subtree.
+			main_control.insertDeleteEntry(this);
 			main_control.insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Edit|Clear_Clipboard";

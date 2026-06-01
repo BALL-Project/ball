@@ -1744,13 +1744,34 @@ namespace BALL
 			}
 		}
 
-		void MainControl::insertDeleteEntry()
+		void MainControl::insertDeleteEntry(QWidget* owner)
 		{
-			if (delete_action_ == 0) 
+			if (delete_action_ == 0)
 			{
-				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this, 
+				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this,
 												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete,
-												 UIOperationMode::MODE_ADVANCED);	
+												 UIOperationMode::MODE_ADVANCED);
+
+				// BUG-622 (#622): scope the destructive Delete shortcut so it only
+				// fires when a structure-owning widget (a GenericControl such as the
+				// molecular control, or the scene) has keyboard focus. Without this
+				// the action defaults to Qt::WindowShortcut and Del fires
+				// window-globally — deleting selected structures even while a text
+				// field or the embedded web view is focused, and swallowing the
+				// Delete key from those inputs.
+				if (delete_action_ != 0)
+				{
+					delete_action_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+				}
+			}
+
+			// BUG-622 (#622): register the calling widget (and its child subtree) as a
+			// focus owner for the Delete shortcut. Each GenericControl that can delete
+			// items adds the (shared) action to itself, so Del resolves only when that
+			// control — or a child of it — holds focus.
+			if (delete_action_ != 0 && owner != 0)
+			{
+				owner->addAction(delete_action_);
 			}
 		}
 
@@ -2010,8 +2031,27 @@ namespace BALL
 			String s = vector3ToString(scene->getTurnPoint());
 			out.insertValue("BALLVIEW_PROJECT", "TurnPoint", s);
 		}
-			
-		writePreferences(out);
+
+		// BUG-621 (#621): do NOT embed the user's GLOBAL preference set into project
+		// files. Previously writePreferences(out) baked the entire user INI (font,
+		// working dir, network/PDB-download settings, every ModularWidget's prefs)
+		// into the project, which loadBALLViewProjectFile then applied over the
+		// user's live settings on every open — the PresentaBALL "every open reloads
+		// settings" symptom. Global preferences now live solely in the user's own INI.
+		//
+		// BUT the SCENE's visual state (background color, fog, lighting, clipping,
+		// projection — everything Scene::writePreferences emits) is genuine PROJECT
+		// state: a project should reopen looking as it was designed, the same way its
+		// camera/turn point and representations do (user choice, 999.73-04 UAT). So we
+		// write ONLY the Scene widget's preferences into the project — not the whole-
+		// app prefs blob — and the load side restores only those. Global prefs stay
+		// protected; scene visuals travel with the project. Older project files that
+		// still carry a full [preferences] block are handled by the load side reading
+		// back only the Scene section.
+		if (scene != 0)
+		{
+			scene->writePreferences(out);
+		}
 
 		INIFile::LineIterator lit = out.getLine(0);
 		File result;
@@ -2110,8 +2150,42 @@ namespace BALL
 			}
 		}
 
-		fetchPreferences(in);
-		applyPreferences();
+		// BUG-621 (#621): a project file embeds a full copy of the user's BALLView
+		// INI (see saveBALLViewProjectFile, where writePreferences used to be
+		// called). Previously this restore ran fetchPreferences(in) + applyPreferences()
+		// here, overwriting the user's live settings (working dir, font, the
+		// preferences dialog, the PDB download URL, and every ModularWidget's prefs)
+		// with the project's — often stale — copy. That is exactly the PresentaBALL
+		// "every project load reloads settings" symptom.
+		//
+		// A project file legitimately owns only PROJECT STATE — its representations,
+		// scene turn point/camera, and serialized systems — all of which are restored
+		// below from the BALLVIEW_PROJECT section and the system stream, independently
+		// of the user preferences. So we no longer touch user preferences on load:
+		// the user's settings live solely in their own INI (preferences_file_, fetched
+		// at startup and written at exit) and are never clobbered by opening a project.
+		// applyPreferences() here only existed to push the just-fetched project prefs,
+		// so the whole-app restore is removed; restoreRepresentations below re-renders
+		// the restored project state on its own.
+		//
+		// EXCEPTION (999.73-04 UAT, user choice): restore ONLY the Scene widget's
+		// preferences — the scene-visual state (background color, fog, lighting,
+		// clipping, projection) that saveBALLViewProjectFile writes via
+		// scene->writePreferences(out). This is project look, not global settings, so
+		// it should travel with the project like the camera does. We fetch + apply
+		// just the Scene (never MainControl's global prefs or other preference pages),
+		// so a project reopens looking as designed while font/language/PDB-URL/paths
+		// stay the user's. Old projects that embedded a full prefs blob still carry a
+		// Scene section, so their background travels too; their other (global) sections
+		// are simply ignored here.
+		{
+			Scene* scene_prefs = Scene::getInstance(0);
+			if (scene_prefs != 0)
+			{
+				scene_prefs->fetchPreferences(in);
+				scene_prefs->applyPreferences();
+			}
+		}
 
 		// Phase 999.67 Plan 03: the suppress-during-load guard is re-homed off
 		// DisplayProperties onto the non-dialog RepresentationCreator. A project
