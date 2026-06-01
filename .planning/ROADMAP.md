@@ -2830,7 +2830,10 @@ Plans:
   2. A progress bar is shown during the continuous (simulation) loop, reflecting loop progress (#487).
   3. The continuous loop can auto-stop when a user-specified quality criterion is met (#486).
 **Effort:** small–medium (3 additive features).
-**Plans:** TBD
+**Plans:** 3 plans in 2 waves (FEATPLOT-01 is independent and parallel; FEATLOOP-01+02 share the same loop files so they are combined into one impl plan, then gated by a GUI UAT):
+- [ ] 999.74-01-PLAN.md — Wave 1: PropertyPlotter axis/value limits via -p1_min/-p1_max/-p2_min/-p2_max (FEATPLOT-01, #524) — autonomous CLI
+- [ ] 999.74-02-PLAN.md — Wave 1: status-bar progress bar + quality-criterion auto-stop in the MD/minimizer run loops (FEATLOOP-01 #487, FEATLOOP-02 #486) — autonomous build
+- [ ] 999.74-03-PLAN.md — Wave 2: human GUI UAT confirming the progress bar advances and the loop auto-stops (FEATLOOP-01/02)
 **UI hint**: yes
 
 ### Phase 999.75: Collapsible drawers — Inspector right-drawer + PyBALL-ready bottom drawer (v1.8)
