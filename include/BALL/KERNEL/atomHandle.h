@@ -29,6 +29,10 @@
 # include <BALL/KERNEL/moleculeStore.h>
 #endif
 
+#ifndef BALL_KERNEL_PTE_H
+# include <BALL/KERNEL/PTE.h>           // H3a.3b: getElement/setElement use the PTE table
+#endif
+
 #include <cstdint>
 #include <vector>
 #include <functional>
@@ -131,6 +135,11 @@ namespace BALL
 		void           setName(const String& s)      { store_->set_name(idx_, s); }
 		String         getTypeName() const           { return store_->type_name(idx_); }
 		void           setTypeName(const String& s)  { store_->set_type_name(idx_, s); }
+
+		// Element via PTE (matches v0 Atom::getElement/setElement: store stores
+		// the uint8 atomic number; PTE resolves to the static Element ref).
+		const Element& getElement() const            { return PTE[(Position)store_->element_index(idx_)]; }
+		void           setElement(const Element& e)  { store_->element_index(idx_) = static_cast<std::uint8_t>(e.getAtomicNumber()); }
 
 		// Selection (per-atom bit; container subtree counters are mirrored by
 		// the v0 select/deselect path during dual existence).

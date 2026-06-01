@@ -216,6 +216,13 @@ CHECK(AtomHandle shim - scalar forwarding + selection + bonds + stable-id key)
 	h0.setName("CA");       TEST_EQUAL(h0.getName(), String("CA"))
 	h0.setTypeName("C.3");  TEST_EQUAL(h0.getTypeName(), String("C.3"))
 
+	// element via PTE (atomic number column)
+	h0.setElement(PTE[Element::CARBON]);
+	TEST_EQUAL(h0.getElement().getAtomicNumber(), 6)
+	TEST_EQUAL(h0.getElement().getSymbol(), String("C"))
+	h0.setElement(PTE[Element::NITROGEN]);
+	TEST_EQUAL(h0.getElement().getAtomicNumber(), 7)
+
 	// selection bit
 	TEST_EQUAL(h0.isSelected(), false)
 	h0.select();   TEST_EQUAL(h0.isSelected(), true)
