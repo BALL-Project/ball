@@ -282,7 +282,7 @@ collision with prior PKG/DOCS/FEAT IDs.
 
 ### Documentation (Phase 999.56)
 - [ ] **TUT-01**: The PDF tutorial content / screenshots / URLs / build-flow are refreshed to the v1.7.x stack (#560).
-- [ ] **TUT-02**: The "Restore Defaults" scope (does not reset font / language / style) is documented (#523).
+- [x] **TUT-02**: The "Restore Defaults" scope (does not reset font / language / style) is documented (#523).
 
 ### Inspector cosmetic (v1.7.5 carry-in)
 - [ ] **INSPCLIP-01**: Right-edge Inspector controls (per-section reset glyphs, value spinners, unit labels) are not clipped when an Inspector tab scrolls (the v1.7.4 known issue).

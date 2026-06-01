@@ -30,7 +30,20 @@ namespace BALL
 		{
 			setupUi(this);
 			setObjectName(name);
-			
+
+			// TUT-02 (#523): document the Restore Defaults scope at the point of
+			// confusion. The button resets only the currently-open page's
+			// registered values; font/language/style are intentionally outside
+			// the reset path (mainControlPreferences unregisters style_box_ and
+			// languageComboBox_, and the font is held separately), so users who
+			// expect those to revert are surprised. Spell out the scope here.
+			// The button may be absent on some platform layouts — null-guard it.
+			if (QPushButton* restore_button = buttonBox->button(QDialogButtonBox::RestoreDefaults))
+			{
+				restore_button->setToolTip(tr("Resets this page's settings to their defaults. "
+				                              "Font, language, and interface style are not changed."));
+			}
+
 			// signals and slots connections
 			connect( entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
 			//for some reason the ok_button and the apply button is connected in VIEW/KERNEL/mainControl.C
