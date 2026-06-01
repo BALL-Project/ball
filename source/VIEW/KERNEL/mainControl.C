@@ -2031,8 +2031,16 @@ namespace BALL
 			String s = vector3ToString(scene->getTurnPoint());
 			out.insertValue("BALLVIEW_PROJECT", "TurnPoint", s);
 		}
-			
-		writePreferences(out);
+
+		// BUG-621 (#621): do NOT embed the user's preference set into project files.
+		// Previously writePreferences(out) baked the entire user INI (font, working
+		// dir, network/PDB-download settings, every ModularWidget's prefs) into the
+		// project, which loadBALLViewProjectFile then applied over the user's live
+		// settings on every open. Project files now carry only project STATE — the
+		// BALLVIEW_PROJECT section (representations, turn point) plus the serialized
+		// systems below. This pairs with the load-side change: load no longer reads
+		// embedded prefs, so older project files that still contain a [preferences]
+		// block are harmless.
 
 		INIFile::LineIterator lit = out.getLine(0);
 		File result;
@@ -2131,8 +2139,23 @@ namespace BALL
 			}
 		}
 
-		fetchPreferences(in);
-		applyPreferences();
+		// BUG-621 (#621): a project file embeds a full copy of the user's BALLView
+		// INI (see saveBALLViewProjectFile, where writePreferences used to be
+		// called). Previously this restore ran fetchPreferences(in) + applyPreferences()
+		// here, overwriting the user's live settings (working dir, font, the
+		// preferences dialog, the PDB download URL, and every ModularWidget's prefs)
+		// with the project's — often stale — copy. That is exactly the PresentaBALL
+		// "every project load reloads settings" symptom.
+		//
+		// A project file legitimately owns only PROJECT STATE — its representations,
+		// scene turn point/camera, and serialized systems — all of which are restored
+		// below from the BALLVIEW_PROJECT section and the system stream, independently
+		// of the user preferences. So we no longer touch user preferences on load:
+		// the user's settings live solely in their own INI (preferences_file_, fetched
+		// at startup and written at exit) and are never clobbered by opening a project.
+		// applyPreferences() here only existed to push the just-fetched project prefs,
+		// so it is removed too; restoreRepresentations below re-renders the restored
+		// project state on its own.
 
 		// Phase 999.67 Plan 03: the suppress-during-load guard is re-homed off
 		// DisplayProperties onto the non-dialog RepresentationCreator. A project
