@@ -17,6 +17,17 @@ int main(int argc, char* argv[])
 	parpars.registerMandatoryInputFile("i", "input file");
 	parpars.registerMandatoryStringParameter("p1", "name of property 1");
 	parpars.registerOptionalStringParameter("p2", "name of property 2");
+	// Axis/value limits (FEATPLOT-01, #524). These are numeric, but we register them
+	// as optional *string* parameters with an empty default on purpose: a double
+	// parameter would stringify its 0.0 default into the parameter map (see
+	// CommandlineParser::checkAndRegisterParameter), making 0.0 indistinguishable
+	// from "unset". An empty string default keeps the parameter out of the map until
+	// the user supplies it, so the NOT_FOUND sentinel reliably means "not given" —
+	// and 0.0 remains a legal, honored limit. We parse the value with toDouble().
+	parpars.registerOptionalStringParameter("p1_min", "lower limit for the property 1 axis");
+	parpars.registerOptionalStringParameter("p1_max", "upper limit for the property 1 axis");
+	parpars.registerOptionalStringParameter("p2_min", "lower limit for the property 2 axis");
+	parpars.registerOptionalStringParameter("p2_max", "upper limit for the property 2 axis");
 	parpars.registerFlag("quiet", "be quiet, i.e. do not print progress information");
 	parpars.registerOptionalOutputFile("o", "output png-/eps-file");
 	String man = "PropertyPlotter can be used to generate distribution- or scatter-plots of data contained in molecule property-tags.\n\nIn case you want to create a scatter-plot, specify the name of both property-tags to be used with '-p1' and '-p2'. If you want to generate a distribution plot, just specify '-p1'.\nThe output graphic will created by use of gnuplot, so make sure to have it installed and in your PATH environment variable.\n\nThe output of this tool is a plot in form of an eps or png-file (as chosen).";
@@ -37,6 +48,21 @@ int main(int argc, char* argv[])
 	bool use_prop2 = (propname2!=nf);
 	bool quiet = (parpars.get("quiet")!=nf);
 
+	// User-supplied axis/value limits (FEATPLOT-01, #524). Detect presence via the
+	// NOT_FOUND sentinel rather than the 0.0 default, because 0.0 is a legal limit.
+	String p1_min_str = parpars.get("p1_min");
+	String p1_max_str = parpars.get("p1_max");
+	String p2_min_str = parpars.get("p2_min");
+	String p2_max_str = parpars.get("p2_max");
+	bool has_p1_min = (p1_min_str!=nf);
+	bool has_p1_max = (p1_max_str!=nf);
+	bool has_p2_min = (p2_min_str!=nf);
+	bool has_p2_max = (p2_max_str!=nf);
+	double p1_min_val = has_p1_min ? p1_min_str.toDouble() : 0.0;
+	double p1_max_val = has_p1_max ? p1_max_str.toDouble() : 0.0;
+	double p2_min_val = has_p2_min ? p2_min_str.toDouble() : 0.0;
+	double p2_max_val = has_p2_max ? p2_max_str.toDouble() : 0.0;
+
 	Size missing_prop1 = 0;
 	Size missing_prop2 = 0;
 
@@ -55,15 +81,31 @@ int main(int argc, char* argv[])
 
 		if (mol->hasProperty(propname1))
 		{
+			double prop1_value = ((String)mol->getProperty(propname1).toString()).toDouble();
+
+			// Drop points whose prop1 falls outside the requested limits (FEATPLOT-01).
+			if ((has_p1_min && prop1_value < p1_min_val) || (has_p1_max && prop1_value > p1_max_val))
+			{
+				continue;
+			}
+
 			if (!use_prop2)
 			{
-				properties.insert(make_pair(((String)mol->getProperty(propname1).toString()).toDouble(), 0));
+				properties.insert(make_pair(prop1_value, 0));
 			}
 			else
 			{
 				if (mol->hasProperty(propname2))
 				{
-					properties.insert(make_pair(((String)mol->getProperty(propname1).toString()).toDouble(), ((String)mol->getProperty(propname2).toString()).toDouble()));
+					double prop2_value = ((String)mol->getProperty(propname2).toString()).toDouble();
+
+					// In scatter mode the prop2 limits clamp the y axis as well.
+					if ((has_p2_min && prop2_value < p2_min_val) || (has_p2_max && prop2_value > p2_max_val))
+					{
+						continue;
+					}
+
+					properties.insert(make_pair(prop1_value, prop2_value));
 				}
 				else
 				{
@@ -90,6 +132,12 @@ int main(int argc, char* argv[])
 			if (it->first < min_p1) min_p1 = it->first;
 			if (it->first > max_p1) max_p1 = it->first;
 		}
+
+		// When the user requested explicit p1 limits, span the 100 histogram buckets
+		// over exactly that domain instead of the scanned data extremes (FEATPLOT-01).
+		if (has_p1_min) min_p1 = p1_min_val;
+		if (has_p1_max) max_p1 = p1_max_val;
+
 		double stepsize_p1 = (max_p1-min_p1+1)/100;
 
 		vector<Size> no_p1(100, 0);
@@ -157,6 +205,20 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	// Emit explicit axis ranges only when the user supplied a limit. The values are
+	// written as numeric doubles formatted by the stream (never as raw user strings),
+	// so no shell/gnuplot injection is possible (threat T-999.74-01). An unset side
+	// uses gnuplot's '*' autorange token. Nothing is emitted when no limit is set,
+	// keeping default output byte-identical (FEATPLOT-01, #524).
+	if (has_p1_min || has_p1_max)
+	{
+		plot<<"set xrange [";
+		if (has_p1_min) plot<<p1_min_val; else plot<<"*";
+		plot<<":";
+		if (has_p1_max) plot<<p1_max_val; else plot<<"*";
+		plot<<"]"<<endl;
+	}
+
 	if (!use_prop2)
 	{
 		plot<<"set ylabel \"no. of molecules\""<<endl;
@@ -165,6 +227,15 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
+		// In scatter mode the prop2 limits clamp the y axis.
+		if (has_p2_min || has_p2_max)
+		{
+			plot<<"set yrange [";
+			if (has_p2_min) plot<<p2_min_val; else plot<<"*";
+			plot<<":";
+			if (has_p2_max) plot<<p2_max_val; else plot<<"*";
+			plot<<"]"<<endl;
+		}
 		plot<<"set ylabel \""<<propname2<<"\""<<endl;
 		plot << "plot \"" << filename1 << "\" linestyle 25"<<endl;
 	}
