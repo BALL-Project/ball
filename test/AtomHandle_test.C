@@ -150,6 +150,27 @@ CHECK(StructureQuery::atoms() preorder == v0 Composite AtomIterator preorder)
 	}
 	TEST_EQUAL(all_valid, true)
 	TEST_EQUAL(all_bridge, true)
+
+	// H3a.3b.2: hierarchy nav from an atom up the role-walk. Each atom must
+	// land in the same Molecule (the Protein), Chain, Residue (its own), and
+	// the SS-layered atom (a4) additionally has a SECONDARY_STRUCTURE ancestor.
+	MoleculeHandle p_mol = ha[0].getMolecule();
+	TEST_EQUAL((bool)p_mol, true)
+	for (Size i = 0; i < ha.size(); ++i)
+	{
+		TEST_EQUAL(ha[i].getMolecule() == p_mol, true)   // all atoms -> same Protein
+		TEST_EQUAL((bool)ha[i].getChain(), true)         // every atom has a chain
+		TEST_EQUAL((bool)ha[i].getResidue(), true)       // every atom has a residue
+		TEST_EQUAL((bool)ha[i].getFragment(), true)      // immediate fragment ancestor
+	}
+	// a4 sits under chain -> SS(H1) -> r3 -> a4; only a4 has a SS ancestor.
+	int ss_count = 0;
+	for (Size i = 0; i < ha.size(); ++i) if (ha[i].getSecondaryStructure()) ++ss_count;
+	TEST_EQUAL(ss_count, 1)
+
+	// getParent returns the immediate container row (a residue in this tree).
+	TEST_EQUAL((bool)ha[0].getParent(), true)
+	TEST_EQUAL(ha[0].getParent().getKind() == ContainerKind::RESIDUE, true)
 RESULT
 
 CHECK(StructureQuery::apply() preorder visits all containers + atoms)

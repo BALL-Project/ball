@@ -33,6 +33,10 @@
 # include <BALL/KERNEL/PTE.h>           // H3a.3b: getElement/setElement use the PTE table
 #endif
 
+#ifndef BALL_KERNEL_CONTAINERHANDLE_H
+# include <BALL/KERNEL/containerHandle.h>  // H3a.3b.2: nav returns ContainerHandle/*Handle
+#endif
+
 #include <cstdint>
 #include <vector>
 #include <functional>
@@ -153,6 +157,86 @@ namespace BALL
 		Size countBonds() const { return static_cast<Size>(store_->bond_degree(idx_)); }
 		BondHandle getBond(Size i) const;
 		std::vector<BondHandle> bonds() const;
+
+		// --- v2.2 H3a.3b.2 (D-H3.2): hierarchy nav — walk up the atom's
+		// container-row parent chain filtering by role. Mirrors v0
+		// Atom::getParent / getResidue / getChain / getMolecule / getFragment /
+		// getSecondaryStructure. Each returns a null handle if no ancestor of
+		// that role exists. The walk uses ContainerHandleBase's public parent
+		// API, so the atom -> container-row entry is the only D66a-clean store
+		// accessor needed (atom_parent_container_idx, defined above).
+		ContainerHandleBase getParent() const
+		{
+			if (!isValid()) return ContainerHandleBase();
+			std::uint32_t p = store_->atom_parent_container_idx(idx_);
+			if (p == MoleculeStore::CONTAINER_NONE) return ContainerHandleBase();
+			return ContainerHandleBase(*store_, p);
+		}
+
+		/// Immediate fragment-kind ancestor (the v0 Atom::getFragment target).
+		FragmentHandle getFragment() const
+		{
+			ContainerHandleBase p = getParent();
+			while (p)
+			{
+				FragmentHandle f = p.as<FragmentHandle>();
+				if (f) return f;
+				p = p.getParent();
+			}
+			return FragmentHandle();
+		}
+
+		/// First RESIDUE-role fragment ancestor (v0 Atom::getResidue).
+		FragmentHandle getResidue() const
+		{
+			ContainerHandleBase p = getParent();
+			while (p)
+			{
+				FragmentHandle f = p.as<FragmentHandle>();
+				if (f && f.getFragmentRole() == FragmentRole::RESIDUE) return f;
+				p = p.getParent();
+			}
+			return FragmentHandle();
+		}
+
+		/// First CHAIN-role fragment ancestor (v0 Atom::getChain).
+		FragmentHandle getChain() const
+		{
+			ContainerHandleBase p = getParent();
+			while (p)
+			{
+				FragmentHandle f = p.as<FragmentHandle>();
+				if (f && f.getFragmentRole() == FragmentRole::CHAIN) return f;
+				p = p.getParent();
+			}
+			return FragmentHandle();
+		}
+
+		/// First SECONDARY_STRUCTURE-role fragment ancestor (v0 Atom::getSecondaryStructure).
+		FragmentHandle getSecondaryStructure() const
+		{
+			ContainerHandleBase p = getParent();
+			while (p)
+			{
+				FragmentHandle f = p.as<FragmentHandle>();
+				if (f && f.getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE) return f;
+				p = p.getParent();
+			}
+			return FragmentHandle();
+		}
+
+		/// Top-level molecule ancestor (v0 Atom::getMolecule).
+		MoleculeHandle getMolecule() const
+		{
+			ContainerHandleBase p = getParent();
+			while (p)
+			{
+				MoleculeHandle m = p.as<MoleculeHandle>();
+				if (m) return m;
+				p = p.getParent();
+			}
+			return MoleculeHandle();
+		}
 
 		/// Identity equality (same store, slot, and captured stable id).
 		bool operator == (const AtomHandle& o) const

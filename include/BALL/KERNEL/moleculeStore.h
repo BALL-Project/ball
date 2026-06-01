@@ -465,6 +465,15 @@ namespace BALL
 		ResidueKind        container_residue_kind_(std::uint32_t idx) const;
 		SSKind             container_ss_kind_(std::uint32_t idx) const;
 		std::uint32_t      container_parent_(std::uint32_t idx) const;
+
+		// v2.2 H3a.3b.2 (D-H3.2): the immediate container-row parent of an
+		// atom slot, or CONTAINER_NONE if the atom has no container parent.
+		// AtomHandle hierarchy nav (getParent/getResidue/getChain/getMolecule/
+		// ...) walks up from here through ContainerHandleBase's parent chain
+		// filtering by role -- so the handle headers stay encapsulated against
+		// the private ContainerTable type (D66a / D31b boundary).
+		std::uint32_t      atom_parent_container_idx(Index i) const;
+
 		std::size_t        container_child_count_(std::uint32_t idx) const;
 		ContainerChildRef  container_child_(std::uint32_t idx, std::size_t i) const;
 		std::uint32_t      container_selection_count_(std::uint32_t idx) const;

@@ -744,6 +744,16 @@ std::uint32_t MoleculeStore::container_parent_(std::uint32_t idx) const
 	return t.row(idx).parent_container_idx;  // == CONTAINER_NONE when root/detached
 }
 
+// v2.2 H3a.3b.2 (D-H3.2): immediate container-row parent of an atom slot, or
+// CONTAINER_NONE if the atom has no container parent (orphan, freed, or never
+// adopted). Delegates to ContainerTable::atom_parent (the per-atom side map);
+// keeps the private ContainerTable type out of the handle headers.
+std::uint32_t MoleculeStore::atom_parent_container_idx(Index i) const
+{
+	if (i >= back_ptr_.size()) return CONTAINER_NONE;
+	return side_tables_->container_table_.atom_parent(i);   // ContainerTable::NONE == CONTAINER_NONE
+}
+
 std::size_t MoleculeStore::container_child_count_(std::uint32_t idx) const
 {
 	const ContainerTable& t = side_tables_->container_table_;
