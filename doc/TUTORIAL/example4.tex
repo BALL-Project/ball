@@ -9,15 +9,15 @@ class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
   PDBFile
-  infile("http://www.ball-project.org/Downloads/Examples/pdb4pti.ent");
+  infile("https://files.rcsb.org/download/4PTI.pdb");
   System S;
   infile >> S;
   infile.close();
 \end{lstlisting}
 
 \noindent
-This command retrieves the file {\tt pdb4pti.ent} from its location at the BALL
-project site using the HTTP protocol and reads the contents of that file into a
+This command retrieves the PDB entry {\tt 4PTI} directly from the RCSB Protein
+Data Bank using the HTTP protocol and reads the contents of that file into a
 \class{System}. The retrieval and the expansion of the URL into something
 meaningful is performed by the classes \class{TransformationManager} and
 \class{TCPTransfer}. Any filename is first handed to the static instance of
