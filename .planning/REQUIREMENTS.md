@@ -303,7 +303,7 @@ collision with prior PKG/DOCS/FEAT IDs.
 - [ ] **BUG-621**: Supplied project files no longer override user settings (#621).
 
 ### Small features
-- [ ] **FEATPLOT-01**: PropertyPlotter supports axis/value limits (#524).
+- [x] **FEATPLOT-01**: PropertyPlotter supports axis/value limits (#524).
 - [ ] **FEATLOOP-01**: A progress bar is shown during the continuous (simulation) loop (#487).
 - [ ] **FEATLOOP-02**: The continuous loop can auto-stop when a quality criterion is met (#486).
 
