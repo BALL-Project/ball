@@ -1744,13 +1744,34 @@ namespace BALL
 			}
 		}
 
-		void MainControl::insertDeleteEntry()
+		void MainControl::insertDeleteEntry(QWidget* owner)
 		{
-			if (delete_action_ == 0) 
+			if (delete_action_ == 0)
 			{
-				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this, 
+				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this,
 												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete,
-												 UIOperationMode::MODE_ADVANCED);	
+												 UIOperationMode::MODE_ADVANCED);
+
+				// BUG-622 (#622): scope the destructive Delete shortcut so it only
+				// fires when a structure-owning widget (a GenericControl such as the
+				// molecular control, or the scene) has keyboard focus. Without this
+				// the action defaults to Qt::WindowShortcut and Del fires
+				// window-globally — deleting selected structures even while a text
+				// field or the embedded web view is focused, and swallowing the
+				// Delete key from those inputs.
+				if (delete_action_ != 0)
+				{
+					delete_action_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+				}
+			}
+
+			// BUG-622 (#622): register the calling widget (and its child subtree) as a
+			// focus owner for the Delete shortcut. Each GenericControl that can delete
+			// items adds the (shared) action to itself, so Del resolves only when that
+			// control — or a child of it — holds focus.
+			if (delete_action_ != 0 && owner != 0)
+			{
+				owner->addAction(delete_action_);
 			}
 		}
 

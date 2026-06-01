@@ -87,9 +87,12 @@ namespace BALL
 
 		void GenericControl::initializeWidget(MainControl& main_control)
 		{
-			main_control.insertDeleteEntry();
+			// BUG-622 (#622): pass this control as a focus owner so the Delete
+			// shortcut (Qt::WidgetWithChildrenShortcut) resolves only when this
+			// control — which owns the selectable/deletable items — has focus.
+			main_control.insertDeleteEntry(this);
 			DockWidget::initializeWidget(main_control);
-		} 
+		}
 
 		QTreeWidgetItem* GenericControl::addRow(const QStringList& entries)
 		{

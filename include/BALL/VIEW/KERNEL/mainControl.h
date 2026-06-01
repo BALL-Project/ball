@@ -582,8 +582,15 @@ namespace BALL
 	
 			/** Insert the delete entry for GenericControls.
 					Called by all GenericControls.
+
+					BUG-622 (#622): the optional \p owner widget is registered as a
+					focus owner for the Delete shortcut. The Delete QAction uses
+					Qt::WidgetWithChildrenShortcut, so Del only deletes selected
+					structures when one of the registered GenericControls (or the
+					scene) has keyboard focus — it no longer fires window-globally and
+					steals the Delete key from text fields or the embedded web view.
 			*/
-			void insertDeleteEntry();
+			void insertDeleteEntry(QWidget* owner = 0);
 
 			/// Get the ID of the last highlighted menu entry
 			QAction* getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
