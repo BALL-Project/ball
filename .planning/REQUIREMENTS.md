@@ -299,8 +299,8 @@ collision with prior PKG/DOCS/FEAT IDs.
 - [x] **BUG-627**: The `Directory` class behaves consistently on Windows (#627). *Fixed in 999.73 — getFirstEntry/getNextEntry skip `.`/`..` to match countItems(); guard unified to BALL_OS_WINDOWS.*
 
 ### UX / settings
-- [ ] **BUG-622**: BALLView keyboard shortcuts are scoped appropriately, not handled globally (#622).
-- [ ] **BUG-621**: Supplied project files no longer override user settings (#621).
+- [x] **BUG-622**: BALLView keyboard shortcuts are scoped appropriately, not handled globally (#622).
+- [x] **BUG-621**: Supplied project files no longer override user settings (#621).
 
 ### Small features
 - [x] **FEATPLOT-01**: PropertyPlotter supports axis/value limits (#524).
