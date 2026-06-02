@@ -171,6 +171,45 @@ CHECK(StructureQuery::atoms() preorder == v0 Composite AtomIterator preorder)
 	// getParent returns the immediate container row (a residue in this tree).
 	TEST_EQUAL((bool)ha[0].getParent(), true)
 	TEST_EQUAL(ha[0].getParent().getKind() == ContainerKind::RESIDUE, true)
+
+	// H3a.3b.3: property shim (forwards to the v0 Atom / PropertyManager surface).
+	AtomHandle ah = ha[0];
+	TEST_EQUAL(ah.hasProperty("TEST_FLOAT"), false)
+	ah.setProperty("TEST_FLOAT", 1.5f);
+	ah.setProperty("TEST_STR",   String("hello"));
+	ah.setProperty("TEST_BOOL",  true);
+	ah.setProperty("TEST_FLAG");                     // unset / name-only
+	TEST_EQUAL(ah.hasProperty("TEST_FLOAT"), true)
+	TEST_EQUAL(ah.hasProperty("TEST_STR"),   true)
+	TEST_EQUAL(ah.hasProperty("TEST_BOOL"),  true)
+	TEST_EQUAL(ah.hasProperty("TEST_FLAG"),  true)
+	TEST_EQUAL(ah.hasProperty("MISSING"),    false)
+	TEST_EQUAL(ah.countNamedProperties() >= 4, true)
+
+	std::vector<String> names = ah.propertyNames();
+	bool saw_float = false, saw_str = false;
+	for (Size i = 0; i < names.size(); ++i) {
+		if (names[i] == "TEST_FLOAT") saw_float = true;
+		if (names[i] == "TEST_STR")   saw_str   = true;
+	}
+	TEST_EQUAL(saw_float, true)
+	TEST_EQUAL(saw_str,   true)
+
+	// eachProperty visitor with the value-semantic const NamedProperty&.
+	int visited = 0;
+	ah.eachProperty([&](const NamedProperty&){ ++visited; });
+	TEST_EQUAL(visited, (int)ah.countNamedProperties())
+
+	ah.clearProperty("TEST_FLOAT");
+	TEST_EQUAL(ah.hasProperty("TEST_FLOAT"), false)
+
+	// Property bit (flag) surface.
+	const Property FLAG = 7;        // arbitrary bit
+	TEST_EQUAL(ah.hasProperty(FLAG), false)
+	ah.setProperty(FLAG);
+	TEST_EQUAL(ah.hasProperty(FLAG), true)
+	ah.clearProperty(FLAG);
+	TEST_EQUAL(ah.hasProperty(FLAG), false)
 RESULT
 
 CHECK(StructureQuery::apply() preorder visits all containers + atoms)

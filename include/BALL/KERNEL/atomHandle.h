@@ -37,6 +37,14 @@
 # include <BALL/KERNEL/containerHandle.h>  // H3a.3b.2: nav returns ContainerHandle/*Handle
 #endif
 
+#ifndef BALL_CONCEPT_PROPERTY_H
+# include <BALL/CONCEPT/property.h>        // H3a.3b.3: NamedProperty + PropertyManager surface
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>             // H3a.3b.3: property shim forwards to v0 Atom
+#endif
+
 #include <cstdint>
 #include <vector>
 #include <functional>
@@ -236,6 +244,59 @@ namespace BALL
 				p = p.getParent();
 			}
 			return MoleculeHandle();
+		}
+
+		// --- v2.2 H3a.3b.3 (D-H3.2): property shim — forwards to the v0 Atom
+		// (PropertyManager surface), which since HCP-1P routes through the
+		// store property columns + sparse bag. At H4 when v0 Atom is deleted,
+		// these rewire to call the store directly. The broken mutable-ref
+		// surface (`NamedProperty& getNamedProperty(i)`, `BitVector& getBitVector()`,
+		// `NamedPropertyIterator`) is replaced by value-semantic accessors +
+		// the eachProperty visitor (per D52.5). All methods silently no-op on
+		// an invalid handle. ---
+		bool hasProperty(const String& n) const                   { Atom* a = getAtom(); return a ? a->hasProperty(n) : false; }
+		bool hasProperty(Property p) const       { Atom* a = getAtom(); return a ? a->hasProperty(p) : false; }
+		void setProperty(const String& n)                         { if (Atom* a = getAtom()) a->setProperty(n); }
+		void setProperty(const String& n, bool v)                 { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(const String& n, int v)                  { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(const String& n, unsigned int v)         { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(const String& n, float v)                { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(const String& n, double v)               { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(const String& n, const String& v)        { if (Atom* a = getAtom()) a->setProperty(n, v); }
+		void setProperty(Property p)             { if (Atom* a = getAtom()) a->setProperty(p); }
+		void clearProperty(const String& n)                       { if (Atom* a = getAtom()) a->clearProperty(n); }
+		void clearProperty(Property p)           { if (Atom* a = getAtom()) a->clearProperty(p); }
+		Size countNamedProperties() const                         { Atom* a = getAtom(); return a ? a->countNamedProperties() : 0; }
+		Size countProperties() const                              { Atom* a = getAtom(); return a ? a->countProperties() : 0; }
+
+		/** Names of all NamedProperties on this atom (by value, safe across
+				mutation). Replaces the broken `NamedPropertyIterator` /
+				`beginNamedProperty()` surface (D52.5).
+		*/
+		std::vector<String> propertyNames() const
+		{
+			std::vector<String> out;
+			Atom* a = getAtom();
+			if (!a) return out;
+			Size n = a->countNamedProperties();
+			out.reserve(n);
+			for (Size i = 0; i < n; ++i)
+				out.push_back(String(a->getNamedProperty(i).getName()));
+			return out;
+		}
+
+		/** Visit each NamedProperty on this atom as `const NamedProperty&`.
+				Replaces the broken `NamedProperty& getNamedProperty(i)` surface
+				(D52.5). The visitor must accept `const NamedProperty&`.
+		*/
+		template <typename Visitor>
+		void eachProperty(Visitor&& visit) const
+		{
+			Atom* a = getAtom();
+			if (!a) return;
+			Size n = a->countNamedProperties();
+			for (Size i = 0; i < n; ++i)
+				visit(static_cast<const NamedProperty&>(a->getNamedProperty(i)));
 		}
 
 		/// Identity equality (same store, slot, and captured stable id).
