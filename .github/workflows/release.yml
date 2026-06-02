@@ -31,6 +31,11 @@ on:
         required: false
         type: boolean
         default: true
+      signing_policy:
+        description: "SignPath signing-policy slug (test-signing to validate the pipeline; release-signing to ship)"
+        required: false
+        type: string
+        default: "release-signing"
   push:
     tags:
       - "v*.*.*"
@@ -1378,9 +1383,9 @@ jobs:
         with:
           api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
           organization-id: ${{ secrets.SIGNPATH_ORG_ID }}
-          project-slug: 'ballview'
-          signing-policy-slug: 'release-signing'
-          artifact-configuration-slug: 'installer'
+          project-slug: 'ball'
+          signing-policy-slug: ${{ inputs.signing_policy || 'release-signing' }}
+          artifact-configuration-slug: 'initial'
           github-artifact-id: ${{ steps.upload-unsigned-installer.outputs.artifact-id }}
           wait-for-completion: true
           output-artifact-directory: 'signed-installer'

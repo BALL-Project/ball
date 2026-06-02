@@ -66,6 +66,16 @@ signing.
 
 ## 2. Create the project, artifact configuration, and signing policy
 
+> **ACTUAL SLUGS (verified 2026-06-02, org "Bioichemical Algorithms Library"):**
+> project = **`ball`**, artifact-configuration = **`initial`**, test policy =
+> **`test-signing`** (bound to "Test certificate 2026", software keystore, VALID),
+> release policy = **`release-signing`** (bound to "Release certificate 2026", HSM —
+> **CSR PENDING**, not usable until VALID). release.yml is aligned to these:
+> `project-slug: 'ball'`, `artifact-configuration-slug: 'initial'`, and
+> `signing-policy-slug` is a `workflow_dispatch` input defaulting to `release-signing`
+> (pass `test-signing` to validate the pipeline against the test cert). The section
+> below is the original generic guidance.
+
 Once the SignPath organization exists, in the SignPath web console:
 
 1. **Create a project** with slug **`ballview`**.
