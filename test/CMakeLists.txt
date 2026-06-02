@@ -258,6 +258,15 @@ FOREACH(group ${BALL_TESTS})
 	ENDFOREACH()
 ENDFOREACH()
 
+# v2.2 H3a.5 (D-H3.8): handle-key-leak check gate. Pure CMake-script test
+# (no compiled binary); flags any file that opts into the handle API AND
+# still stores raw Atom*/Bond* as a container key.
+ADD_TEST(NAME HandleKeyLeakGate_test
+	COMMAND ${CMAKE_COMMAND}
+		-DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+		-P ${CMAKE_SOURCE_DIR}/test/HandleKeyLeakGate.cmake)
+LIST(APPEND ALL_TESTS HandleKeyLeakGate_test)
+
 # Set the timeout of some tests to 2h
 # This is needed for the memcheck running on the CI server
 # which takes _very_ long
