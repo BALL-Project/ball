@@ -77,6 +77,18 @@ CHECK(BondHandle bind + endpoints + order/type)
 	// a non-endpoint atom -> null partner.
 	MoleculeStore::Index a2 = store.allocate_atom();
 	TEST_EQUAL((bool)bh.getPartner(AtomHandle(store, a2)), false)
+
+	// H3a-CR fix (item 2): getPartner must reject stale + cross-store atom
+	// handles even when the bare slot index happens to match an endpoint.
+	AtomHandle stale_h(store, a0);
+	store.release_atom(a0);                              // stale_h now invalid
+	TEST_EQUAL(stale_h.isValid(), false)
+	TEST_EQUAL((bool)bh.getPartner(stale_h), false)      // stale -> rejected
+
+	MoleculeStore store2;
+	MoleculeStore::Index a0_other = store2.allocate_atom();
+	AtomHandle cross(store2, a0_other);                  // different store
+	TEST_EQUAL((bool)bh.getPartner(cross), false)        // cross-store -> rejected
 RESULT
 
 CHECK(BondHandle isValid()/getBond() ABA-safe across remove + re-add)

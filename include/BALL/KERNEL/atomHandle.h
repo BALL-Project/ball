@@ -153,11 +153,36 @@ namespace BALL
 		const Element& getElement() const            { return PTE[(Position)store_->element_index(idx_)]; }
 		void           setElement(const Element& e)  { store_->element_index(idx_) = static_cast<std::uint8_t>(e.getAtomicNumber()); }
 
-		// Selection (per-atom bit; container subtree counters are mirrored by
-		// the v0 select/deselect path during dual existence).
+		// Selection. isSelected reads the per-atom bit from the store column
+		// (the single source of truth). select()/deselect() forward through
+		// the v0 Atom (H3a-CR fix item 3): writing the column directly would
+		// bypass the v0 Selectable cascade that bumps container_selection_
+		// count_ subtree counters + selection_generation_ + any v0
+		// Selectable observers. The v0 path mirrors back into the SAME store
+		// column, so isSelected stays consistent. At H4 these rewire to a
+		// store mutator that updates every observer atomically.
 		bool isSelected() const { return store_->selected(idx_); }
-		void select()           { store_->set_selected(idx_, true); }
-		void deselect()         { store_->set_selected(idx_, false); }
+		void select()
+		{
+			// Forward through v0 Atom for the full Selectable cascade
+			// (container_selection_count_ subtree counters + v0
+			// observers), AND mirror into the store selection column so
+			// AtomHandle::isSelected / store consumers stay consistent.
+			// Both paths share the same observable truth.
+			if (Atom* a = getAtom())
+			{
+				a->select();
+				store_->set_selected(idx_, true);
+			}
+		}
+		void deselect()
+		{
+			if (Atom* a = getAtom())
+			{
+				a->deselect();
+				store_->set_selected(idx_, false);
+			}
+		}
 
 		// Bonds (D-H3.3): degree via the store CSR; the BondHandle-yielding
 		// getBond(i) / bonds() are defined out-of-line in bondHandle.h (which
@@ -306,10 +331,12 @@ namespace BALL
 		}
 		bool operator != (const AtomHandle& o) const { return !(*this == o); }
 
-		/// Stable-id key ordering (D-H3.8): deterministic across runs.
+		/// Stable-id key ordering (D-H3.8): deterministic across runs. Uses
+		/// `std::less<MoleculeStore*>` for the cross-store comparison so
+		/// ordering between unrelated stores is defined (H3a-CR fix item 9).
 		bool operator < (const AtomHandle& o) const
 		{
-			if (store_ != o.store_) return store_ < o.store_;
+			if (store_ != o.store_) return std::less<MoleculeStore*>()(store_, o.store_);
 			return stable_id_ < o.stable_id_;
 		}
 

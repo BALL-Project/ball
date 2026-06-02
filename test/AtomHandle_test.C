@@ -172,6 +172,20 @@ CHECK(StructureQuery::atoms() preorder == v0 Composite AtomIterator preorder)
 	TEST_EQUAL((bool)ha[0].getParent(), true)
 	TEST_EQUAL(ha[0].getParent().getKind() == ContainerKind::RESIDUE, true)
 
+	// H3a-CR fix (item 3): select()/deselect() forward through the v0 Atom so
+	// the v0 selection cascade (container_selection_count_ counters +
+	// selection_generation_ + the v0 Atom's own isSelected) stays in sync
+	// with the store column. Round-trip: v0 + handle observers agree.
+	AtomHandle sel = ha[0];
+	TEST_EQUAL(sel.isSelected(), false)
+	TEST_EQUAL(sel.getAtom()->isSelected(), false)
+	sel.select();
+	TEST_EQUAL(sel.isSelected(), true)
+	TEST_EQUAL(sel.getAtom()->isSelected(), true)
+	sel.deselect();
+	TEST_EQUAL(sel.isSelected(), false)
+	TEST_EQUAL(sel.getAtom()->isSelected(), false)
+
 	// H3a.3b.3: property shim (forwards to the v0 Atom / PropertyManager surface).
 	AtomHandle ah = ha[0];
 	TEST_EQUAL(ah.hasProperty("TEST_FLOAT"), false)
@@ -283,10 +297,10 @@ CHECK(AtomHandle shim - scalar forwarding + selection + bonds + stable-id key)
 	h0.setElement(PTE[Element::NITROGEN]);
 	TEST_EQUAL(h0.getElement().getAtomicNumber(), 7)
 
-	// selection bit
+	// selection bit (read-only here: a bare-store atom has no v0 backing, so
+	// select()/deselect() — which forward through getAtom() — no-op without a
+	// v0 Atom. The System-based CHECK below exercises the full select cascade.)
 	TEST_EQUAL(h0.isSelected(), false)
-	h0.select();   TEST_EQUAL(h0.isSelected(), true)
-	h0.deselect(); TEST_EQUAL(h0.isSelected(), false)
 
 	// bonds via the store CSR (getBond -> BondHandle, bonds() range)
 	TEST_EQUAL(h0.countBonds(), 0)

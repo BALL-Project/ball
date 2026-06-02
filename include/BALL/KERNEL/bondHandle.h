@@ -93,7 +93,12 @@ namespace BALL
 		*/
 		AtomHandle getPartner(const AtomHandle& a) const
 		{
-			if (!isValid() || !a) return AtomHandle();
+			// H3a-CR fix (item 2): require `a` to be VALID and belong to the
+			// SAME store; otherwise a stale, freed, or cross-store handle that
+			// happens to share an endpoint's store-idx could be accepted as a
+			// match and return an atom from this bond's store.
+			if (!isValid() || !a.isValid() || a.getStore() != store_)
+				return AtomHandle();
 			const BondRecord& r = store_->bond(idx_);
 			if (a.getStoreIndex() == r.a) return AtomHandle(*store_, r.b);
 			if (a.getStoreIndex() == r.b) return AtomHandle(*store_, r.a);
@@ -119,10 +124,12 @@ namespace BALL
 		{ return store_ == o.store_ && idx_ == o.idx_ && stable_id_ == o.stable_id_; }
 		bool operator != (const BondHandle& o) const { return !(*this == o); }
 
-		/// Stable-id key ordering (D-H3.8): deterministic across runs.
+		/// Stable-id key ordering (D-H3.8): deterministic across runs. Uses
+		/// `std::less<MoleculeStore*>` for the cross-store comparison so
+		/// ordering between unrelated stores is defined (H3a-CR fix item 9).
 		bool operator < (const BondHandle& o) const
 		{
-			if (store_ != o.store_) return store_ < o.store_;
+			if (store_ != o.store_) return std::less<MoleculeStore*>()(store_, o.store_);
 			return stable_id_ < o.stable_id_;
 		}
 
