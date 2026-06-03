@@ -145,6 +145,28 @@ namespace BALL
 		return out;
 	}
 
+	// --- v2.2 H3a.3b (D-H3.6 / D-H3.12-R3): pdbAtomHandles -- forward-stable
+	// analog of v0 extractors.h::PDBAtoms(c) / PDBAtoms(c, expr). Filters
+	// atomHandles by isPDBOrigin() (origin_flags bit 0). Returns AtomHandles,
+	// NOT PDBAtom*. Consumers fetch PDB attributes via the v0 bridge
+	// (h.getAtom() -> dynamic_cast<PDBAtom*> pre-H4); post-H4 a future
+	// AtomHandle column shim takes over (HCP-3 territory).
+	inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer& fragment)
+	{
+		return atomHandlesIf(fragment,
+			[](const AtomHandle& h) { return h.isPDBOrigin(); });
+	}
+
+	inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer& fragment,
+	                                               const String& expression)
+	{
+		std::vector<AtomHandle> all = atomHandles(fragment, expression);
+		std::vector<AtomHandle> out;
+		for (Size i = 0; i < all.size(); ++i)
+			if (all[i].isPDBOrigin()) out.push_back(all[i]);
+		return out;
+	}
+
 	/** CompiledExpression overload: amortizes parse over the whole subtree
 			via the store-wide bitmap evaluator (one O(N_store) pass), then
 			intersects with the subtree atoms. Much cheaper than `evaluate_one`

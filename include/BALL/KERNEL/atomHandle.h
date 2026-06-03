@@ -162,6 +162,19 @@ namespace BALL
 		// column, so isSelected stays consistent. At H4 these rewire to a
 		// store mutator that updates every observer atomically.
 		bool isSelected() const { return store_->selected(idx_); }
+
+		// --- v2.2 H3a.3b (D-H3.12-R3): class-of-origin reader. Bit 0 = PDB
+		// origin (D-H3.6). The slot's origin_flags_ column is written
+		// atomically at allocate-time via the AtomCtor::Origin tagged ctor
+		// chain (PDBAtom passes 0x01), and adopted across System migration
+		// via the snapshot+flagged-allocate path. Read-only; there is no
+		// public writer (post-H4 the PDB factory will use the tagged
+		// allocate_atom directly, not a markPDBOrigin handle mutator).
+		bool isPDBOrigin() const
+		{
+			return isValid() && (store_->origin_flags(idx_) & 0x01u) != 0u;
+		}
+
 		void select()
 		{
 			// Forward through v0 Atom for the full Selectable cascade
