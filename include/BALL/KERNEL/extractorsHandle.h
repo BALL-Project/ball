@@ -29,6 +29,10 @@
 # include <BALL/KERNEL/atomContainer.h>   // v0 -> handle bridge
 #endif
 
+#ifndef BALL_KERNEL_EXPRESSION_H
+# include <BALL/KERNEL/expression.h>      // H3b.2: predicate-filtered atomHandles
+#endif
+
 #include <vector>
 #include <unordered_set>
 
@@ -61,6 +65,45 @@ namespace BALL
 		ContainerHandleBase root = asContainerHandle(fragment);
 		if (!root) return std::vector<AtomHandle>();
 		return StructureQuery::atoms(root);
+	}
+
+	/** Predicate-filtered handle analog of
+			`extractors.h::atoms(const AtomContainer&, const String&)`: returns the
+			subtree's `AtomHandle`s matching the BALL `Expression`. Bridges through
+			the v0 `Atom` via `getAtom()` (`Expression::operator()(const Atom&)`),
+			so atoms with no v0 backing are skipped. Empty expression matches all
+			atoms (same behavior as the v0 extractor).
+	*/
+	inline std::vector<AtomHandle> atomHandles(const AtomContainer& fragment,
+	                                           const String& expression)
+	{
+		std::vector<AtomHandle> all = atomHandles(fragment);
+		if (expression == "" || all.empty()) return all;
+		std::vector<AtomHandle> out;
+		Expression match(expression);
+		for (Size i = 0; i < all.size(); ++i)
+		{
+			Atom* a = all[i].getAtom();
+			if (a != 0 && match(*a)) out.push_back(all[i]);
+		}
+		return out;
+	}
+
+	/** Generic predicate-filtered handle extraction. `predicate` is any callable
+			invocable as `bool predicate(const AtomHandle&)` — visited in v0-
+			`Composite`-preorder. Useful for adapting `UnaryPredicate<AtomHandle>`
+			subclasses or lambdas; lets H3b consumers migrate predicate-using code
+			off `dynamic_cast`/`Atom*` while the v0 extractor stays.
+	*/
+	template <typename Predicate>
+	inline std::vector<AtomHandle> atomHandlesIf(const AtomContainer& fragment,
+	                                             Predicate&& predicate)
+	{
+		std::vector<AtomHandle> all = atomHandles(fragment);
+		std::vector<AtomHandle> out;
+		for (Size i = 0; i < all.size(); ++i)
+			if (predicate(all[i])) out.push_back(all[i]);
+		return out;
 	}
 
 	/** Handle analog of `extractors.h::bonds(const AtomContainer&, bool)` —

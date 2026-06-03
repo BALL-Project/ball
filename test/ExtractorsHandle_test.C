@@ -72,4 +72,52 @@ CHECK(atomHandles + bondHandles round-trip vs v0)
 RESULT
 
 /////////////////////////////////////////////////////////////
+// H3b.2: predicate-filtered atomHandles
+/////////////////////////////////////////////////////////////
+
+CHECK(atomHandles with Expression filter (carbons in named-atom set))
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA"); r1.setID("ALA");
+	PDBAtom a1; a1.setName("N");  a1.setElement(PTE[Element::NITROGEN]);
+	PDBAtom a2; a2.setName("CA"); a2.setElement(PTE[Element::CARBON]);
+	PDBAtom a3; a3.setName("C");  a3.setElement(PTE[Element::CARBON]);
+	PDBAtom a4; a4.setName("O");  a4.setElement(PTE[Element::OXYGEN]);
+	r1.insert(a1); r1.insert(a2); r1.insert(a3); r1.insert(a4);
+	ch.insert(r1);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	// empty expression -> all atoms
+	std::vector<AtomHandle> all = atomHandles(prot, "");
+	TEST_EQUAL(all.size(), 4)
+
+	// element predicate via Expression -> only the 2 carbons
+	std::vector<AtomHandle> carbons = atomHandles(prot, "element(C)");
+	TEST_EQUAL(carbons.size(), 2)
+	for (Size i = 0; i < carbons.size(); ++i)
+		TEST_EQUAL(carbons[i].getElement().getAtomicNumber(), 6)
+RESULT
+
+CHECK(atomHandlesIf with a generic callable predicate)
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA");
+	PDBAtom a1; a1.setName("N");  a1.setElement(PTE[Element::NITROGEN]);
+	PDBAtom a2; a2.setName("CA"); a2.setElement(PTE[Element::CARBON]);
+	PDBAtom a3; a3.setName("C");  a3.setElement(PTE[Element::CARBON]);
+	r1.insert(a1); r1.insert(a2); r1.insert(a3);
+	ch.insert(r1);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	// lambda predicate over AtomHandle directly (handle-by-value, no v0 ptr)
+	std::vector<AtomHandle> matches = atomHandlesIf(prot,
+		[](const AtomHandle& h){ return h.getElement().getAtomicNumber() == 6; });
+	TEST_EQUAL(matches.size(), 2)
+RESULT
+
+/////////////////////////////////////////////////////////////
 END_TEST
