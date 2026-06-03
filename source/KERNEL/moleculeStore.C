@@ -961,15 +961,25 @@ std::recursive_mutex& MoleculeStore::orphanMutex()
 // Round 4 MEDIUM-8 window.
 MoleculeStore::Index MoleculeStore::allocate_atom(Atom* back_ptr)
 {
-	return allocate_atom_with_back_ptr_(back_ptr);
+	return allocate_atom_with_back_ptr_(back_ptr, /*origin_flags=*/0);
 }
 
 MoleculeStore::Index MoleculeStore::allocate_atom()
 {
-	return allocate_atom_with_back_ptr_(nullptr);
+	return allocate_atom_with_back_ptr_(nullptr, /*origin_flags=*/0);
 }
 
-MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
+// v2.2 H3a.3b (D-H3.10-R5): flagged overload. The origin_flags byte
+// lands in the same write-after-back_ptr critical section that
+// allocate_atom_with_back_ptr_ already executes, so a concurrent reader
+// sees the consistent (back_ptr, origin_flags) pair or the freed sentinel
+// -- never (back_ptr=set, origin_flags=0) tearing.
+MoleculeStore::Index MoleculeStore::allocate_atom(Atom* back_ptr, std::uint8_t origin_flags)
+{
+	return allocate_atom_with_back_ptr_(back_ptr, origin_flags);
+}
+
+MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr, std::uint8_t origin_flags)
 {
 	// 2026-05-18 (R13.4 fix): allocate the stable_id FIRST. If
 	// next_stable_id_alloc_() throws on UINT64_MAX overflow, no
@@ -997,6 +1007,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 		formal_charges_[idx]  = 0;
 		element_indices_[idx] = 0;
 		selection_[idx]       = 0;
+		origin_flags_[idx]    = origin_flags;  // H3a.3b: atomic with back_ptr write above
 		name_offsets_[idx]    = 0;
 		type_name_offsets_[idx] = 0;  // HCP-1P.A: born default type-name "" (offset 0)
 		name_strings_[idx].clear();
@@ -1027,6 +1038,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 	formal_charges_.emplace_back(0);
 	element_indices_.emplace_back(0);
 	selection_.emplace_back(0);
+	origin_flags_.emplace_back(origin_flags);  // H3a.3b: atomic with back_ptr below
 	name_offsets_.emplace_back(0);          // 0 = empty (string_pool_[0] = '\0')
 	type_name_offsets_.emplace_back(0);     // HCP-1P.A: born default type-name "" (offset 0)
 	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
@@ -1074,6 +1086,7 @@ void MoleculeStore::release_atom(Index i)
 	formal_charges_[i]  = 0;
 	element_indices_[i] = 0;
 	selection_[i]       = 0;
+	origin_flags_[i]    = 0;     // H3a.3b: clear class-of-origin on release (slot recycle starts clean)
 	name_offsets_[i]    = 0;
 	type_name_offsets_[i] = 0;
 	name_strings_[i].clear();
@@ -1101,6 +1114,7 @@ void MoleculeStore::reserve(std::size_t n)
 	formal_charges_.reserve(n);
 	element_indices_.reserve(n);
 	selection_.reserve(n);
+	origin_flags_.reserve(n);                // v2.2 H3a.3b
 	name_offsets_.reserve(n);
 	type_name_offsets_.reserve(n);
 	name_strings_.reserve(n);
@@ -1130,6 +1144,7 @@ void MoleculeStore::clear()
 	formal_charges_.clear();
 	element_indices_.clear();
 	selection_.clear();
+	origin_flags_.clear();                   // v2.2 H3a.3b
 	name_offsets_.clear();
 	type_name_offsets_.clear();
 	name_strings_.clear();
@@ -1183,6 +1198,7 @@ void MoleculeStore::compact()
 	formal_charges_.shrink_to_fit();
 	element_indices_.shrink_to_fit();
 	selection_.shrink_to_fit();
+	origin_flags_.shrink_to_fit();           // v2.2 H3a.3b
 	name_offsets_.shrink_to_fit();
 	type_name_offsets_.shrink_to_fit();
 	name_strings_.shrink_to_fit();

@@ -249,6 +249,17 @@ namespace BALL
 		Index allocate_atom();
 		Index allocate_atom(Atom* back_ptr);
 
+		// v2.2 H3a.3b (D-H3.10-R5): flagged overload. Atomically writes
+		// back_ptr_ AND origin_flags_ under the same orphan_mutex_ critical
+		// section, so no observer can see (back_ptr=PDBAtom, origin_flags=0).
+		// `origin_flags` packs class-of-origin bits: bit 0 = PDB origin
+		// (D-H3.6). Bits 1..7 reserved for future origin classes.
+		Index allocate_atom(Atom* back_ptr, std::uint8_t origin_flags);
+
+		// v2.2 H3a.3b (D-H3.10-R5): origin-flags reader. byte-per-slot,
+		// parallel to selection_/is_freed_. Bit 0 = PDB origin (D-H3.6).
+		std::uint8_t origin_flags(Index i) const { return origin_flags_[i]; }
+
 		// Release a slot back to the free-list. Called from ~Atom (K0.3c.1).
 		// Clears back_ptr_[i] = nullptr (the "freed" sentinel) and pushes
 		// i onto free_list_ for reuse. Does NOT compact the columns.
@@ -587,7 +598,7 @@ namespace BALL
 		// forward to this helper. Writes back_ptr_ BEFORE marking the slot
 		// live so a concurrent reader never sees the (is_freed==false,
 		// back_ptr==nullptr) tear.
-		Index allocate_atom_with_back_ptr_(Atom* back_ptr);
+		Index allocate_atom_with_back_ptr_(Atom* back_ptr, std::uint8_t origin_flags = 0);
 
 		void bump_generation_if_reallocated_(std::size_t old_cap);
 
@@ -601,6 +612,7 @@ namespace BALL
 		std::vector<short>        formal_charges_;
 		std::vector<std::uint8_t> element_indices_;
 		std::vector<std::uint8_t> selection_;
+		std::vector<std::uint8_t> origin_flags_;   // v2.2 H3a.3b (D-H3.10-R5): byte-per-slot class-of-origin bits (bit 0 = PDB)
 		std::vector<std::uint32_t> name_offsets_;
 		std::vector<std::uint32_t> type_name_offsets_;
 		// K0.3b.LATER.5+6: live String columns. Sole authority for
