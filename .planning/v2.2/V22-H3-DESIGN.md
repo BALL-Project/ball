@@ -1098,3 +1098,85 @@ land in the design doc -- only as actual commits after R4 GO:
     `pdbAtomHandles(c, expression)`.
 14. New `PDBAtomOriginParity_test` with the 13 CHECK blocks (D-H3.15-R3).
 15. HierarchyParity_test sweep extension.
+
+## H3a.3b-DR4 review (Codex)
+
+Verdict: **GO-WITH-FIXES**. Three small actionable items + one optional.
+
+## H3a.3b-R5 — DR4 fixes applied (DESIGN LOCKED)
+
+### Fix 1 — Detailed tagged Atom ctor: fully non-defaulted signature
+
+The existing detailed `Atom(Element&, const String& name, const String&
+type_name = ..., ...)` ctor has DEFAULTED params from `type_name` on. A
+tagged variant cannot just append `AtomCtor::Origin` (non-defaulted after
+defaulted = ill-formed). Specify the tagged detailed overload with
+EVERY param non-defaulted:
+
+```cpp
+Atom(Element& element,
+     const String& name,
+     const String& type_name,
+     Type atom_type,
+     const Vector3& position,
+     const Vector3& velocity,
+     const Vector3& force,
+     float charge,
+     float radius,
+     AtomCtor::Origin origin);   // non-defaulted tail
+```
+
+PDBAtom's detailed ctor passes every value explicitly (no defaults) to
+this overload.
+
+### Fix 2 — origin_hint_ initialization explicit per ctor
+
+All 6 Atom ctors (3 existing + 3 tagged) initialize `origin_hint_`:
+- Existing 3 ctors: `origin_hint_(0)` in member-initializer list BEFORE
+  `bindToStore_()` runs.
+- Tagged 3 ctors: `origin_hint_(origin.bits)` in member-initializer list
+  BEFORE `bindToStore_(store, origin.bits)`.
+
+This is explicit (not implied) because R4 changed the surface; restate.
+
+### Fix 3 — D-H3.16-R5 implementation step reorder
+
+Reorder so every intermediate commit builds + tests green:
+
+1. **MoleculeStore**: add `origin_flags_` column + `origin_flags(Index)`
+   accessor + `allocate_atom(Atom*, std::uint8_t)` new overload (atomic
+   write under orphan_mutex_; existing 2-arg overloads forward with
+   flags=0) + `release_atom` zeroes column. NO callers in this commit.
+2. **Atom layout**: add `std::uint8_t origin_hint_;` immediately after
+   `number_of_bonds_` (atom.h:981) + initialize to 0 in EACH existing
+   ctor + `static_assert(sizeof(Atom) <= 512)` retained (Sizeof_test
+   guard).
+3. **Atom::bindToStore_** new overload taking hint; existing 1-arg path
+   forwards with hint = origin_hint_. **Atom::ensureStoreBinding_** reads
+   `origin_hint_` and forwards to bindToStore_.
+4. **AtomCtor::Origin** tag struct + 3 NEW tagged Atom ctor overloads.
+   Each initializes `origin_hint_(origin.bits)`.
+5. **PDBAtom**: 4 ctors retargeted to the tagged Atom variants.
+6. **System::adopt** + **adoptSubtreeInto_**: snapshot
+   `src->origin_flags(src_idx)` + pass to `dst->allocate_atom(&atom,
+   origin)`.
+7. **JSON writer** (moleculeStoreJson.C:127): add origin_flags column.
+   **JSON reader** (line 301): treat missing column as all-zeros (no
+   minor-version bump needed — backward compat by absence is cleaner).
+8. **systemJson.C** (line 408): pass origin_flags via flagged
+   allocate_atom on load.
+9. **AtomHandle::isPDBOrigin()** read-only accessor.
+10. **extractorsHandle.h pdbAtomHandles(c)** + Expression overload.
+11. **PDBAtomOriginParity_test** (13 CHECKs).
+12. **HierarchyParity_test** sweep extension.
+
+### Fix 4 (non-blocking) — Rollback semantics
+
+Rollback is additive-only and trivial: revert PDBAtom ctor retargeting,
+remove tagged Atom overloads + AtomCtor::Origin, remove `origin_hint_`
+member, remove `origin_flags_` column + accessors + JSON column +
+isPDBOrigin + pdbAtomHandles + tests. Each step is a clean
+`git revert -n <sha>` of the corresponding commit. No data loss because
+origin_flags is never read by anything outside the H3a.3b surface.
+
+**DESIGN LOCKED at R5.** Implementation per D-H3.16-R5 begins next.
