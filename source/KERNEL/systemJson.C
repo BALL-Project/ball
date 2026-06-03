@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PDBAtom.h>       // v2.2 H3a.3b: load PDBAtom-origin atoms as PDBAtom (D-H3.14-R3)
 #include <BALL/KERNEL/bond.h>          // v2.1 P4.2: createBond + Bond setters
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/moleculeStoreJson.h>
@@ -260,6 +261,25 @@ void loadSystemJSON(System& sys, std::istream& is)
 			is_freed_in_doc[i] = (freed_i != 0);
 		}
 
+		// v2.2 H3a.3b (D-H3.14-R3): read origin_flags column if present.
+		// Backward-compat with pre-H3a.3b docs (no column -> all zeros).
+		// Per-atom value drives whether we instantiate `new Atom` vs
+		// `new PDBAtom` below, so the loaded System round-trips the
+		// PDB-origin set rather than collapsing every atom to plain Atom.
+		const bool has_origin = a.contains("origin_flags");
+		std::vector<std::uint8_t> origin_in_doc(n, 0);
+		if (has_origin)
+		{
+			require_(a["origin_flags"].is_array(),   "origin_flags must be array");
+			require_(a["origin_flags"].size() == n,  "origin_flags length != size");
+			for (std::size_t i = 0; i < n; ++i)
+			{
+				const int ov = a["origin_flags"][i].get<int>();
+				require_(ov >= 0 && ov <= 255, "origin_flags out of [0,255]");
+				origin_in_doc[i] = static_cast<std::uint8_t>(ov);
+			}
+		}
+
 		// Phase 1 — walk molecule atom_indices, recording placement.
 		std::vector<bool> claimed_by_molecule(n, false);
 		const json& mols = doc["molecules"];
@@ -408,7 +428,17 @@ void loadSystemJSON(System& sys, std::istream& is)
 		for (std::size_t i = 0; i < n; ++i)
 		{
 			if (!is_freed_in_doc[i])
-				atom_by_save_idx[i] = new Atom;
+			{
+				// v2.2 H3a.3b: if the saved origin_flags bit 0 is set, the
+				// slot was a PDBAtom -- instantiate the matching v0 class
+				// so dual-existence parity (isKindOf<PDBAtom>(back_ptr) ==
+				// origin_flags & 0x01) holds after the load. Plain Atom
+				// otherwise.
+				if ((origin_in_doc[i] & 0x01u) != 0u)
+					atom_by_save_idx[i] = new PDBAtom;
+				else
+					atom_by_save_idx[i] = new Atom;
+			}
 		}
 		auto t_after_alloc = LoadProfile::now();
 		prof.alloc_ms = LoadProfile::ms(t_after_validate, t_after_alloc);
