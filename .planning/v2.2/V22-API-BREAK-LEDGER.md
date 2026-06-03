@@ -221,6 +221,32 @@ adding the genuinely-used includes directly. No public symbol changed.
 
 ---
 
+## Class L — HCP-2 `ContainerKind` enum shrink (planned, not yet landed)
+
+At the HCP-2 commit that collapses the typed kernel hierarchy, `enum class
+ContainerKind` (in `include/BALL/KERNEL/containerKind.h`) drops to two
+values: `{NONE, MOLECULE, FRAGMENT}`. The obsolete arms (`PROTEIN`,
+`NUCLEIC_ACID`, `CHAIN`, `RESIDUE`, `SECONDARY_STRUCTURE`, `NUCLEOTIDE`)
+disappear from the enum.
+
+Sites that name these enum constants STOP COMPILING and must be
+hand-edited in the same commit. Inventory (search: `ContainerKind::(PROTEIN|NUCLEIC_ACID|CHAIN|RESIDUE|SECONDARY_STRUCTURE|NUCLEOTIDE)`):
+
+- `include/BALL/KERNEL/containerHandle.h` — `BALL_DECLARE_LEGACY_HANDLE`
+  invocations for `ProteinHandle`, `NucleicAcidHandle`, etc. These typed
+  aliases collapse to `MoleculeHandle` post-shrink and the macro arms
+  vanish with them.
+- `include/BALL/KERNEL/extractorsHandle.h` — `detail::isMoleculeKind_` /
+  `detail::isFragmentKind_` predicate group sets (H3b.4 / H3b-CR).
+  Post-shrink each reduces to a single `==` check.
+- `source/KERNEL/system.C::kindOfContainer_` — v0 dispatch table.
+
+Treated as Class L (planned mechanical edits, not silent breakage):
+deliberately INTENDED hard-fails at the shrink commit so every caller is
+caught and updated in one go, not over time. Codex H3b close-review FLAW 2.
+
+---
+
 ## Sign-off log
 
 | Commit | Break classes landed | Codex round | Verdict |

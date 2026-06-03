@@ -150,6 +150,26 @@ namespace BALL
 			return out;
 		}
 
+		namespace detail
+		{
+			// H3b-CR NIT 7: visitor-shaped recursion, single result vector --
+			// avoids the per-node temporary-vector allocation cascade the
+			// earlier H3b.4 cut had.
+			inline void visitContainersByKind_(const ContainerHandleBase& root,
+			                                    ContainerKind kind,
+			                                    std::vector<ContainerHandleBase>& out)
+			{
+				std::size_t n = root.countChildren();
+				for (std::size_t i = 0; i < n; ++i)
+				{
+					ContainerHandleBase c = root.getChildContainer(i);
+					if (!c) continue;
+					if (c.getKind() == kind) out.push_back(c);
+					visitContainersByKind_(c, kind, out);
+				}
+			}
+		}
+
 		/** All containers of kind `kind` in `root`'s subtree, in preorder, as
 				`ContainerHandleBase`. Parallel to `fragmentsByRole` but at the
 				ContainerKind layer (D45/D60). Useful for walking MOLECULE-level
@@ -161,16 +181,7 @@ namespace BALL
 		                                                          ContainerKind kind)
 		{
 			std::vector<ContainerHandleBase> out;
-			std::size_t n = root.countChildren();
-			for (std::size_t i = 0; i < n; ++i)
-			{
-				ContainerHandleBase c = root.getChildContainer(i);
-				if (!c) continue;
-				if (c.getKind() == kind) out.push_back(c);
-				// recurse — collect kind-matches at any depth
-				std::vector<ContainerHandleBase> sub = containersByKind(c, kind);
-				for (std::size_t j = 0; j < sub.size(); ++j) out.push_back(sub[j]);
-			}
+			detail::visitContainersByKind_(root, kind, out);
 			return out;
 		}
 

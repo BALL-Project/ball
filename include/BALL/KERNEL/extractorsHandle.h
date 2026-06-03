@@ -59,11 +59,11 @@ namespace BALL
 	*/
 	inline ContainerHandleBase asContainerHandle(const AtomContainer& c)
 	{
-		// getContainerRowStore_ / getContainerRow_ are non-const virtual overrides
-		// in v0; the binding itself does not mutate the container.
-		AtomContainer& nc = const_cast<AtomContainer&>(c);
-		MoleculeStore* store = nc.getContainerRowStore_();
-		std::uint32_t row = nc.getContainerRow_();
+		// H3b-CR NIT 5: the accessors are const-qualified (Composite.h:1640-1641
+		// + AtomContainer.h:411-412) so no const_cast is needed; the binding is
+		// genuinely a read-only query.
+		MoleculeStore* store = c.getContainerRowStore_();
+		std::uint32_t row = c.getContainerRow_();
 		if (store == nullptr || row == 0) return ContainerHandleBase();
 		return ContainerHandleBase(*store, row);
 	}
@@ -160,10 +160,22 @@ namespace BALL
 		std::vector<AtomHandle> all = atomHandles(fragment);
 		if (all.empty()) return out;
 
-		// All subtree handles share a store (the subtree's container row's
-		// store). Resolve via the root handle.
+		// H3b-CR FLAW 4: defensively enforce the single-store invariant. Today
+		// asContainerHandle + atom traversal can only yield handles bound to the
+		// fragment's container-row store, but turning a latent mirror corruption
+		// into a loud failure (rather than silent bitmap-miss filtering) is
+		// strictly safer in an additive migration.
 		MoleculeStore* store = all[0].getStore();
 		if (store == 0) return out;
+		for (Size i = 1; i < all.size(); ++i)
+		{
+			if (all[i].getStore() != store)
+			{
+				throw Exception::InvalidArgument(__FILE__, __LINE__,
+					"atomHandlesBy: subtree spans multiple stores -- "
+					"CompiledExpression is store-specific (D-H3 invariant)");
+			}
+		}
 
 		std::vector<std::uint8_t> bitmap;
 		compiled.evaluate(*store, bitmap);
@@ -176,31 +188,53 @@ namespace BALL
 		return out;
 	}
 
-	// --- v2.2 H3b.3: typed container-handle extractors over a v0 AtomContainer
-	// root. Analogs of extractors.h's residues / chains / secondaryStructures
-	// (which use dynamic_cast over the AtomContainer children). Delegate to
-	// StructureQuery::fragmentsByRole on the bridged root — role-based, so
-	// they survive HCP-2d's SS-as-annotation change and the H4 ContainerKind
-	// shrink unchanged.
+	// --- v2.2 H3b.3 (H3b-CR FLAW 1 fix): typed container-handle extractors
+	// over a v0 AtomContainer root. Analogs of extractors.h's residues / chains
+	// / secondaryStructures (which iterate `beginAtomContainer()` -- which
+	// VISITS THE ROOT FIRST in v0 Composite traversal). To preserve parity we
+	// must emit `root` itself if it matches, then the matching descendants.
+	// This matches `for (it = c.beginAtomContainer(); +it; ++it)`'s behavior
+	// for `c` itself.
 	inline std::vector<FragmentHandle> residueHandles(const AtomContainer& fragment)
 	{
+		std::vector<FragmentHandle> out;
 		ContainerHandleBase root = asContainerHandle(fragment);
-		if (!root) return std::vector<FragmentHandle>();
-		return StructureQuery::fragmentsByRole(root, FragmentRole::RESIDUE);
+		if (!root) return out;
+		FragmentHandle root_f = root.as<FragmentHandle>();
+		if (root_f && root_f.getFragmentRole() == FragmentRole::RESIDUE)
+			out.push_back(root_f);
+		std::vector<FragmentHandle> sub =
+			StructureQuery::fragmentsByRole(root, FragmentRole::RESIDUE);
+		for (Size i = 0; i < sub.size(); ++i) out.push_back(sub[i]);
+		return out;
 	}
 
 	inline std::vector<FragmentHandle> chainHandles(const AtomContainer& fragment)
 	{
+		std::vector<FragmentHandle> out;
 		ContainerHandleBase root = asContainerHandle(fragment);
-		if (!root) return std::vector<FragmentHandle>();
-		return StructureQuery::fragmentsByRole(root, FragmentRole::CHAIN);
+		if (!root) return out;
+		FragmentHandle root_f = root.as<FragmentHandle>();
+		if (root_f && root_f.getFragmentRole() == FragmentRole::CHAIN)
+			out.push_back(root_f);
+		std::vector<FragmentHandle> sub =
+			StructureQuery::fragmentsByRole(root, FragmentRole::CHAIN);
+		for (Size i = 0; i < sub.size(); ++i) out.push_back(sub[i]);
+		return out;
 	}
 
 	inline std::vector<FragmentHandle> secondaryStructureHandles(const AtomContainer& fragment)
 	{
+		std::vector<FragmentHandle> out;
 		ContainerHandleBase root = asContainerHandle(fragment);
-		if (!root) return std::vector<FragmentHandle>();
-		return StructureQuery::fragmentsByRole(root, FragmentRole::SECONDARY_STRUCTURE);
+		if (!root) return out;
+		FragmentHandle root_f = root.as<FragmentHandle>();
+		if (root_f && root_f.getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE)
+			out.push_back(root_f);
+		std::vector<FragmentHandle> sub =
+			StructureQuery::fragmentsByRole(root, FragmentRole::SECONDARY_STRUCTURE);
+		for (Size i = 0; i < sub.size(); ++i) out.push_back(sub[i]);
+		return out;
 	}
 
 	// --- v2.2 H3b.4: ContainerKind-level extractors. Forward-stable analogs
@@ -210,10 +244,17 @@ namespace BALL
 	// stable {MOLECULE, FRAGMENT} layer: `moleculeHandles` matches any
 	// molecule-equivalent kind today (MOLECULE | PROTEIN | NUCLEIC_ACID), and
 	// `fragmentHandles` matches any fragment-equivalent kind (FRAGMENT |
-	// CHAIN | RESIDUE | SECONDARY_STRUCTURE | NUCLEOTIDE). Post-shrink, both
-	// the pre- and post-shrink kinds collapse to the same single value so the
-	// predicate keeps working unchanged. Typed `proteinHandles` /
-	// `nucleicAcidHandles` are intentionally NOT added — they disappear at H4.
+	// CHAIN | RESIDUE | SECONDARY_STRUCTURE | NUCLEOTIDE). Typed
+	// `proteinHandles` / `nucleicAcidHandles` are intentionally NOT added --
+	// they disappear at H4.
+	//
+	// **HCP-2 shrink follow-up (H3b-CR FLAW 2):** at the HCP-2 commit that
+	// removes PROTEIN / NUCLEIC_ACID / CHAIN / RESIDUE / SECONDARY_STRUCTURE
+	// / NUCLEOTIDE from `enum class ContainerKind`, the obsolete arms of
+	// `isMoleculeKind_` / `isFragmentKind_` STOP COMPILING and must be
+	// removed in the same commit (only `MOLECULE` / `FRAGMENT` survive).
+	// This is intentional: a hard-fail at the shrink commit catches every
+	// caller in one go. Logged in V22-API-BREAK-LEDGER.md.
 	namespace detail
 	{
 		inline bool isMoleculeKind_(ContainerKind k)
@@ -231,9 +272,10 @@ namespace BALL
 			    || k == ContainerKind::NUCLEOTIDE;
 		}
 
-		// Local recursive walker — preorder, all kinds, no skipping. (Couldn't
-		// reuse StructureQuery::containersByKind which is single-kind: we want
-		// any-of-set membership in one pass.)
+		// Local recursive walker -- preorder, all kinds, no skipping. (We
+		// don't reuse StructureQuery::containersByKind which is single-kind:
+		// we want any-of-set membership in one pass.) NIT 7: visitor pattern
+		// avoids per-node temporary-vector allocation.
 		template <typename KindPred, typename Visit>
 		inline void visitContainersIf_(const ContainerHandleBase& root,
 		                                KindPred&& kp, Visit&& v)
@@ -254,6 +296,12 @@ namespace BALL
 		std::vector<MoleculeHandle> out;
 		ContainerHandleBase root = asContainerHandle(root_c);
 		if (!root) return out;
+		// FLAW 1 fix: include root if it itself is molecule-kind (v0 parity).
+		if (detail::isMoleculeKind_(root.getKind()))
+		{
+			MoleculeHandle root_m = root.as<MoleculeHandle>();
+			if (root_m) out.push_back(root_m);
+		}
 		detail::visitContainersIf_(root, detail::isMoleculeKind_,
 			[&](const ContainerHandleBase& c)
 			{
@@ -263,7 +311,7 @@ namespace BALL
 		return out;
 	}
 
-	// FRAGMENT-kind containers in `root_c`'s subtree — the role-agnostic
+	// FRAGMENT-kind containers in `root_c`'s subtree -- the role-agnostic
 	// counterpart of residueHandles / chainHandles / secondaryStructureHandles.
 	// Analog of v0 extractors.h::fragments(c).
 	inline std::vector<FragmentHandle> fragmentHandles(const AtomContainer& root_c)
@@ -271,6 +319,12 @@ namespace BALL
 		std::vector<FragmentHandle> out;
 		ContainerHandleBase root = asContainerHandle(root_c);
 		if (!root) return out;
+		// FLAW 1 fix: include root if it itself is fragment-kind.
+		if (detail::isFragmentKind_(root.getKind()))
+		{
+			FragmentHandle root_f = root.as<FragmentHandle>();
+			if (root_f) out.push_back(root_f);
+		}
 		detail::visitContainersIf_(root, detail::isFragmentKind_,
 			[&](const ContainerHandleBase& c)
 			{
@@ -280,11 +334,14 @@ namespace BALL
 		return out;
 	}
 
-	/** Handle analog of `extractors.h::bonds(const AtomContainer&, bool)` —
+	/** Handle analog of `extractors.h::bonds(const AtomContainer&, bool)` --
 			returns each UNIQUE bond of the subtree's atoms as `BondHandle`s,
 			dedup-keyed on `bond StableId` (the D-H3.8 durable identity, NOT raw
-			Bond* pointers). When `selected_only` is true, only bonds whose BOTH
-			endpoints are selected are returned.
+			Bond* pointers). When `selected_only` is true, matches v0 semantics
+			(extractors.C:108-130): iterate the SELECTED atoms only and accept
+			ALL their bonds -- so a bond participates iff AT LEAST ONE endpoint
+			is in the selected-atom set. (The H3b.1 first cut required BOTH
+			endpoints selected; H3b-CR FLAW 3 restored v0 parity.)
 	*/
 	inline std::vector<BondHandle> bondHandles(const AtomContainer& fragment,
 	                                           bool selected_only = false)
@@ -303,13 +360,6 @@ namespace BALL
 			{
 				BondHandle b = a.getBond(j);
 				if (!b) continue;
-				if (selected_only)
-				{
-					AtomHandle f = b.getFirstAtom();
-					AtomHandle s = b.getSecondAtom();
-					if (!f || !f.isSelected()) continue;
-					if (!s || !s.isSelected()) continue;
-				}
 				if (seen.insert(b.getStableId()).second)
 					out.push_back(b);
 			}

@@ -464,3 +464,75 @@ Verdict: **GO-WITH-FIXES**. H3a is mostly additive and the stable-id/processor/n
 7. **WEAK** — The leak gate catches the common direct forms (`HashSet`, `HashMap`, `StringHashMap`, STL set/map/unordered/vector with first template arg `(const )?(Atom|Bond)*`) in files that include handle headers. It intentionally misses aliases, nested pointer keys such as `std::set<std::pair<Atom*, Atom*>>`, boost containers, and containers introduced through included typedefs; acceptable as a guardrail, not as proof. False positives in H3b should be manageable because the gate only triggers on handle opt-in files.
 8. **SOUND** — The reviewed handle/query headers do not include `_moleculeStoreInternal.h` or name private `ContainerRow`/`ContainerTable` types. `structureQuery.h` uses public `ContainerChildRef`; `atom_parent_container_idx()` delegates to the private table only in `moleculeStore.C`, preserving the D66a/D31b boundary.
 9. **WEAK** — No ABI blocker found for the inline value types or `std::hash` specializations, and hash collisions are harmless under equality. The cross-store `operator<` implementations use raw pointer `<`; replace with `std::less<MoleculeStore*>()` or `std::less<const void*>()` to get the standard total-order comparator intended for unrelated object pointers.
+
+## H3b-CR close review
+
+5 sub-commits reviewed (7a65bd3be / 30788d13a / 9b5691722 / d39bad8cc / 31c761138).
+
+Verdict: **GO-WITH-FIXES (applied)**. The handle extractor cluster (atomHandles
++ bondHandles + Expression + generic-callable + role-based residue/chain/SS +
+kind-set molecule/fragment + ExpressionPredicate + CompiledExpression bitmap)
+is sound; the HandleKeyLeakGate stays clean throughout. Four FLAWs landed in
+one H3b-CR commit before continuing:
+
+1. **FLAW 1 — root self-inclusion (v0 parity).** v0 `extractors.h::molecules(c)`
+   /`residues(c)`/`chains(c)`/`secondaryStructures(c)` iterate
+   `beginAtomContainer()` which visits the root first; the H3b cuts walked
+   descendants only, so e.g. `moleculeHandles(prot)` was `0` where v0
+   `molecules(prot)` would include `prot` itself. Fixed in `extractorsHandle.h`
+   for all five typed extractors: emit `root` as the first element if it
+   matches the role/kind, then iterate descendants. Test fixture added:
+   `moleculeHandles(prot)` returns 1 (the PROTEIN itself);
+   `chainHandles(ch)` returns 1; `residueHandles(r)` returns 1.
+
+2. **FLAW 2 — HCP-2 enum-shrink forward-stability documentation.** The
+   predicate group sets `isMoleculeKind_` / `isFragmentKind_` directly name
+   enum constants (`PROTEIN`, `NUCLEIC_ACID`, `CHAIN`, `RESIDUE`,
+   `SECONDARY_STRUCTURE`, `NUCLEOTIDE`) that disappear at the HCP-2 shrink.
+   The earlier comment claimed "works unchanged post-shrink" which is false:
+   the file stops compiling at that commit. Logged as **Class L** in
+   V22-API-BREAK-LEDGER.md with the full inventory of sites that must be
+   hand-edited at the shrink commit (containerHandle.h legacy-handle macro,
+   extractorsHandle.h predicates, system.C kindOfContainer_). Comment in
+   extractorsHandle.h refreshed to "intentional hard-fail at shrink commit".
+
+3. **FLAW 3 — `bondHandles(c, selected_only=true)` v0 parity.** v0
+   extractors.C:108-130 iterates the SELECTED atoms and inserts ALL their
+   bonds; the bond participates iff at least one endpoint is selected. The
+   H3b.1 cut required BOTH endpoints to be selected -- a silent
+   behavior-change for consumers migrating off v0 `bonds(c, true)`. Restored
+   v0 semantics; the `BondHandle f/s` endpoint cross-check is gone. Test
+   fixture added: `a-b-c` with only `a` selected -> 1 bond (`a-b`).
+
+4. **FLAW 4 — `atomHandlesBy` single-store assertion.** The bitmap path
+   resolves the store from `all[0].getStore()` and trusts every other handle
+   to share it. Today asContainerHandle + atom traversal can only yield one
+   store per subtree, but defensive `getStore() == store` checks across the
+   handles now throw `Exception::InvalidArgument` instead of silently
+   bitmap-missing -- so any future mirror corruption produces a loud failure
+   in the migration bridge.
+
+NITs addressed in the same commit:
+
+- **NIT 5** -- `asContainerHandle` no longer uses `const_cast`. The Composite
+  / AtomContainer accessors are const-qualified; the const_cast was
+  spurious and confusing to readers.
+- **NIT 7** -- `StructureQuery::containersByKind` was per-node-allocating
+  vectors during recursion; rewritten to a `detail::visitContainersByKind_`
+  visitor that writes into a single output vector. (extractorsHandle.h's
+  `visitContainersIf_` already had this shape.)
+- **NIT 8** -- new test: interleaved sibling order (atom, container, atom
+  under one parent) verifies the H2c ordered-ChildRef preorder claim against
+  v0 `AtomIterator`.
+- **NIT 9** -- new test: atomHandlesBy with intervening freed atom slots in
+  the store, so the CompiledExpression bitmap has interior zeros. The
+  intersection-by-store-index path stays correct.
+
+NIT 6 (silent-skip on `getAtom() == nullptr`) is deferred: under H3 dual
+existence v0 backing is always present; once it disappears the silent-skip
+behavior becomes meaningful and the overload's contract gets revisited then.
+
+**Outcome:** ctest 287/287 PASS post-fixes. HandleKeyLeakGate clean. H3b
+cluster CLOSED at H3b-CR. Move on to next H3 cluster after H3b's deferred
+piece (PDBAtom-handle extractor over D-H3.6 origin predicate, needs H3a.3b
+deferred work).
