@@ -32,23 +32,29 @@ namespace BALL
 	void Atom::bindToStore_(MoleculeStore& store)
 	{
 		// K0.3c.8 / K0.4.6: atomic slot + back-ptr binding. The unified
-		// allocate_atom(this) path writes back_ptr_ BEFORE clearing
-		// is_freed_, so no concurrent reader can see a live-but-unbound
-		// slot. For the orphan store, the orphan mutex additionally
-		// serialises the column mutation against other Atom() ctors and
-		// ~Atom calls running on other threads.
+		// allocate_atom(this, origin_hint_) path writes back_ptr_ AND
+		// origin_flags_ BEFORE clearing is_freed_, so no concurrent reader
+		// can see a live-but-unbound or (back_ptr=set, origin_flags=0) slot.
+		// For the orphan store, the orphan mutex additionally serialises
+		// the column mutation against other Atom() ctors and ~Atom calls
+		// running on other threads.
+		// v2.2 H3a.3b (D-H3.11-R5): origin_hint_ was set by the Atom ctor
+		// (0 for base ctors; AtomCtor::Origin::bits for tagged overloads
+		// PDBAtom passes through). It travels INTO the allocation atomically,
+		// so the slot's origin_flags_ column is born consistent with the
+		// dynamic class of the v0 Atom object.
 		const bool is_orphan = (&store == &MoleculeStore::orphanStore());
 		if (is_orphan)
 		{
 			std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex());
 			store_ = &store;
-			store_idx_ = store.allocate_atom(this);
+			store_idx_ = store.allocate_atom(this, origin_hint_);
 			store_generation_ = store.generation();
 		}
 		else
 		{
 			store_ = &store;
-			store_idx_ = store.allocate_atom(this);
+			store_idx_ = store.allocate_atom(this, origin_hint_);
 			store_generation_ = store.generation();
 		}
 	}
