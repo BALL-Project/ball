@@ -68,6 +68,7 @@ IF(BALL_COLLAPSE_KERNEL_ONLY)
 		StructureQuery_test
 		AtomHandle_test
 		BondHandle_test
+		ExtractorsHandle_test
 		CompositeIteratorStability_test
 		# (SelectorBench_test excluded: it loads a PDB via FORMAT.)
 	)
@@ -140,6 +141,7 @@ ELSEIF(BALL_CORE_ONLY)
 		StructureQuery_test
 		AtomHandle_test
 		BondHandle_test
+		ExtractorsHandle_test
 		CompositeIteratorStability_test
 		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
 		# FORMAT (subset) compiled into libBALL. These were deferred
