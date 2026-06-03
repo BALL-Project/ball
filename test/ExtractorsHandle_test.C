@@ -100,6 +100,40 @@ CHECK(atomHandles with Expression filter (carbons in named-atom set))
 		TEST_EQUAL(carbons[i].getElement().getAtomicNumber(), 6)
 RESULT
 
+CHECK(residueHandles / chainHandles / secondaryStructureHandles)
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA");
+	Residue r2;    r2.setName("GLY");
+	SecondaryStructure ss; ss.setName("H1"); ss.setType(SecondaryStructure::HELIX);
+	Residue r3;    r3.setName("SER");
+	PDBAtom a1; a1.setName("CA");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("CA");
+	r1.insert(a1); r2.insert(a2); r3.insert(a3);
+	ss.insert(r3);
+	ch.insert(r1); ch.insert(r2); ch.insert(ss);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	// 3 residues (r1, r2, r3 — r3 sits under SS but still has RESIDUE role)
+	std::vector<FragmentHandle> rs = residueHandles(prot);
+	TEST_EQUAL(rs.size(), 3)
+	for (Size i = 0; i < rs.size(); ++i)
+		TEST_EQUAL(rs[i].getFragmentRole() == FragmentRole::RESIDUE, true)
+
+	// 1 chain
+	std::vector<FragmentHandle> chs = chainHandles(prot);
+	TEST_EQUAL(chs.size(), 1)
+	TEST_EQUAL(chs[0].getFragmentRole() == FragmentRole::CHAIN, true)
+
+	// 1 SS layer
+	std::vector<FragmentHandle> sss = secondaryStructureHandles(prot);
+	TEST_EQUAL(sss.size(), 1)
+	TEST_EQUAL(sss[0].getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE, true)
+RESULT
+
 CHECK(atomHandlesIf with a generic callable predicate)
 	System sys;
 	Protein prot;  prot.setName("PROT");

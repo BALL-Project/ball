@@ -106,6 +106,33 @@ namespace BALL
 		return out;
 	}
 
+	// --- v2.2 H3b.3: typed container-handle extractors over a v0 AtomContainer
+	// root. Analogs of extractors.h's residues / chains / secondaryStructures
+	// (which use dynamic_cast over the AtomContainer children). Delegate to
+	// StructureQuery::fragmentsByRole on the bridged root — role-based, so
+	// they survive HCP-2d's SS-as-annotation change and the H4 ContainerKind
+	// shrink unchanged.
+	inline std::vector<FragmentHandle> residueHandles(const AtomContainer& fragment)
+	{
+		ContainerHandleBase root = asContainerHandle(fragment);
+		if (!root) return std::vector<FragmentHandle>();
+		return StructureQuery::fragmentsByRole(root, FragmentRole::RESIDUE);
+	}
+
+	inline std::vector<FragmentHandle> chainHandles(const AtomContainer& fragment)
+	{
+		ContainerHandleBase root = asContainerHandle(fragment);
+		if (!root) return std::vector<FragmentHandle>();
+		return StructureQuery::fragmentsByRole(root, FragmentRole::CHAIN);
+	}
+
+	inline std::vector<FragmentHandle> secondaryStructureHandles(const AtomContainer& fragment)
+	{
+		ContainerHandleBase root = asContainerHandle(fragment);
+		if (!root) return std::vector<FragmentHandle>();
+		return StructureQuery::fragmentsByRole(root, FragmentRole::SECONDARY_STRUCTURE);
+	}
+
 	/** Handle analog of `extractors.h::bonds(const AtomContainer&, bool)` —
 			returns each UNIQUE bond of the subtree's atoms as `BondHandle`s,
 			dedup-keyed on `bond StableId` (the D-H3.8 durable identity, NOT raw
