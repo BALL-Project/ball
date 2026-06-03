@@ -12,8 +12,15 @@ using namespace::std;
 namespace BALL 
 {
 
+	// v2.2 H3a.3b step 5 (D-H3.10-R5 / D-H3.6): all 4 PDBAtom ctors now call
+	// the tagged Atom overloads with AtomCtor::Origin{0x01}. The hint flows
+	// through Atom::origin_hint_ -> bindToStore_ -> allocate_atom(this,
+	// origin_hint_); the slot's origin_flags_ column is born marked as
+	// PDB-origin in the same atomic critical section that publishes
+	// back_ptr_. No (back_ptr=PDBAtom, origin_flags=0) tearing window.
+
 	PDBAtom::PDBAtom()
-		:	Atom(),
+		:	Atom(AtomCtor::Origin{0x01}),
 			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
 			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
 			alternate_location_indicator_(BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR),
@@ -21,9 +28,9 @@ namespace BALL
 			temperature_factor_(BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR)
 	{
 	}
-		
+
 	PDBAtom::PDBAtom(const PDBAtom& pdb_atom, bool deep)
-		:	Atom(pdb_atom, deep),
+		:	Atom(pdb_atom, deep, AtomCtor::Origin{0x01}),
 			branch_designator_(pdb_atom.branch_designator_),
 			remoteness_indicator_(pdb_atom.remoteness_indicator_),
 			alternate_location_indicator_(pdb_atom.alternate_location_indicator_),
@@ -33,12 +40,12 @@ namespace BALL
 	}
 
 	PDBAtom::PDBAtom
-		(Element& element, 
-		 const String& name, 
+		(Element& element,
+		 const String& name,
 		 const String& type_name,
 		 Atom::Type atom_type,
-		 const Vector3& position, 
-		 const Vector3& velocity, 
+		 const Vector3& position,
+		 const Vector3& velocity,
 		 const Vector3& force,
 		 float charge,
 		 float radius,
@@ -47,7 +54,12 @@ namespace BALL
 		 char alternate_location_indicator,
 		 float occupancy,
 		 float temperature_factor)
-		:	Atom(element, name, type_name, atom_type, position, velocity, force, charge, radius),
+		// Tagged detailed Atom ctor is fully non-defaulted (DR4 Fix 1). Pass
+		// formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE explicitly because the
+		// v0 PDBAtom detailed ctor never exposed formal_charge to its callers --
+		// preserves the prior behavior (Atom-detailed-ctor's default).
+		:	Atom(element, name, type_name, atom_type, position, velocity, force,
+			     charge, radius, BALL_ATOM_DEFAULT_FORMAL_CHARGE, AtomCtor::Origin{0x01}),
 			branch_designator_(branch_designator),
 			remoteness_indicator_(remoteness_indicator),
 			alternate_location_indicator_(alternate_location_indicator),
@@ -55,9 +67,9 @@ namespace BALL
 			temperature_factor_(temperature_factor)
 	{
 	}
-		
+
 	PDBAtom::PDBAtom(const String& name)
-		:	Atom(),
+		:	Atom(AtomCtor::Origin{0x01}),
 			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
 			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
 			alternate_location_indicator_(BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR),
