@@ -107,6 +107,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	json type_names   = json::array();
 	json stable_ids   = json::array();
 	json is_freed     = json::array();
+	json origin_flags = json::array();    // v2.2 H3a.3b (D-H3.14-R3): class-of-origin column
 	json properties   = json::array();   // K0.6.5b per-atom PropertyManager bag
 
 	positions.get_ptr<json::array_t*>()->reserve(n);
@@ -122,6 +123,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	type_names.get_ptr<json::array_t*>()->reserve(n);
 	stable_ids.get_ptr<json::array_t*>()->reserve(n);
 	is_freed.get_ptr<json::array_t*>()->reserve(n);
+	origin_flags.get_ptr<json::array_t*>()->reserve(n);   // v2.2 H3a.3b
 	properties.get_ptr<json::array_t*>()->reserve(n);
 
 	for (std::size_t i = 0; i < n; ++i)
@@ -148,6 +150,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 		type_names.push_back(store.get_type_name(i));
 		stable_ids.push_back(static_cast<std::uint64_t>(store.stable_id(i)));
 		is_freed.push_back(store.is_freed(i) ? 1 : 0);
+		origin_flags.push_back(static_cast<int>(store.origin_flags(i)));    // v2.2 H3a.3b
 
 		// K0.6.5b: per-atom PropertyManager bag. Lives on the heap-
 		// allocated Atom handle (PropertyManager is a base class), so
@@ -175,6 +178,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	atoms["type_names"]     = std::move(type_names);
 	atoms["stable_ids"]     = std::move(stable_ids);
 	atoms["is_freed"]       = std::move(is_freed);
+	atoms["origin_flags"]   = std::move(origin_flags);   // v2.2 H3a.3b
 	atoms["properties"]     = std::move(properties);   // K0.6.5b
 
 	// --- Bond table ------------------------------------------------------
@@ -333,9 +337,29 @@ void json_obj_to_store(MoleculeStore& store, const void* json_in)
 		// if present we check; if absent we trust is_freed.
 		std::size_t live_count_from_freed = 0;
 
+		// v2.2 H3a.3b (D-H3.14-R3): origin_flags is optional for backward
+		// compatibility -- pre-H3a.3b documents have no column; we treat
+		// absent as all-zeros (no PDB origin). When present, validate length.
+		const bool has_origin = a.contains("origin_flags");
+		if (has_origin)
+		{
+			require_(a["origin_flags"].is_array(),   "origin_flags must be array");
+			require_(a["origin_flags"].size() == n,  "origin_flags length != size");
+		}
+
 		for (std::size_t i = 0; i < n; ++i)
 		{
-			const auto idx = store.allocate_atom();   // sequential -> i
+			// v2.2 H3a.3b: pass origin to the flagged allocate so the
+			// slot's back_ptr_ (nullptr -- store-only load) and
+			// origin_flags_ are written atomically.
+			std::uint8_t origin_i = 0;
+			if (has_origin)
+			{
+				const int ov = a["origin_flags"][i].get<int>();
+				require_(ov >= 0 && ov <= 255, "origin_flags out of [0,255]");
+				origin_i = static_cast<std::uint8_t>(ov);
+			}
+			const auto idx = store.allocate_atom(/*back_ptr=*/nullptr, origin_i);   // sequential -> i
 			(void)idx;
 			const json& p = a["positions"][i];
 			const json& v = a["velocities"][i];
