@@ -132,8 +132,12 @@ namespace BALL
 		bool    sel     = src->selected(src_idx);
 		std::string name = src->get_name(src_idx);
 		std::string tname = src->get_type_name(src_idx);
+		std::uint8_t origin = src->origin_flags(src_idx);   // v2.2 H3a.3b: carry class-of-origin into dst slot
 
-		const std::uint32_t dst_idx = dst->allocate_atom(&atom);   // atomic bind
+		// v2.2 H3a.3b (D-H3.11-R5 row "System::adopt"): origin travels INTO
+		// allocate_atom so the dst slot's back_ptr_ + origin_flags_ are
+		// written atomically. No (back_ptr=PDBAtom, origin_flags=0) window.
+		const std::uint32_t dst_idx = dst->allocate_atom(&atom, origin);   // atomic bind
 
 		dst->position(dst_idx)       = pos;
 		dst->velocity(dst_idx)       = vel;
@@ -351,8 +355,9 @@ namespace BALL
 			bool sel = e.src->selected(e.src_idx);
 			std::string nm = e.src->get_name(e.src_idx);
 			std::string tn = e.src->get_type_name(e.src_idx);
+			std::uint8_t origin = e.src->origin_flags(e.src_idx);   // v2.2 H3a.3b
 
-			std::uint32_t di = dst->allocate_atom(e.atom);
+			std::uint32_t di = dst->allocate_atom(e.atom, origin);
 			dst->position(di) = pos;
 			dst->velocity(di) = vel;
 			dst->force(di) = force;
