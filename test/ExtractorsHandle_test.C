@@ -13,6 +13,8 @@
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atomIterator.h>
+#include <BALL/KERNEL/standardPredicates.h>
+#include <BALL/KERNEL/compiledExpression.h>
 ///////////////////////////
 
 START_TEST(ExtractorsHandle)
@@ -196,6 +198,58 @@ CHECK(atomHandlesIf with a generic callable predicate)
 	std::vector<AtomHandle> matches = atomHandlesIf(prot,
 		[](const AtomHandle& h){ return h.getElement().getAtomicNumber() == 6; });
 	TEST_EQUAL(matches.size(), 2)
+RESULT
+
+/////////////////////////////////////////////////////////////
+// H3b.5: ExpressionPredicate + CompiledExpression handle integration
+/////////////////////////////////////////////////////////////
+
+CHECK(atomHandlesIf with v0 ExpressionPredicate (ElementPredicate))
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA");
+	PDBAtom a1; a1.setName("N"); a1.setElement(PTE[Element::NITROGEN]);
+	PDBAtom a2; a2.setName("CA"); a2.setElement(PTE[Element::CARBON]);
+	PDBAtom a3; a3.setName("C"); a3.setElement(PTE[Element::CARBON]);
+	r1.insert(a1); r1.insert(a2); r1.insert(a3);
+	ch.insert(r1); prot.insert(ch);
+	sys.insert(prot);
+
+	ElementPredicate ep;
+	ep.setArgument("C");
+	std::vector<AtomHandle> carbons = atomHandlesIf(prot, ep);
+	TEST_EQUAL(carbons.size(), 2)
+	for (Size i = 0; i < carbons.size(); ++i)
+		TEST_EQUAL(carbons[i].getElement().getAtomicNumber(), 6)
+RESULT
+
+CHECK(atomHandlesBy with CompiledExpression (bitmap evaluator))
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA");
+	PDBAtom a1; a1.setName("N"); a1.setElement(PTE[Element::NITROGEN]);
+	PDBAtom a2; a2.setName("CA"); a2.setElement(PTE[Element::CARBON]);
+	PDBAtom a3; a3.setName("C"); a3.setElement(PTE[Element::CARBON]);
+	PDBAtom a4; a4.setName("O"); a4.setElement(PTE[Element::OXYGEN]);
+	r1.insert(a1); r1.insert(a2); r1.insert(a3); r1.insert(a4);
+	ch.insert(r1); prot.insert(ch);
+	sys.insert(prot);
+
+	// Resolve the store via an arbitrary atom handle, then compile against it.
+	std::vector<AtomHandle> all = atomHandles(prot);
+	TEST_EQUAL(all.size(), 4)
+	MoleculeStore* store = all[0].getStore();
+	TEST_NOT_EQUAL(store, 0)
+
+	std::shared_ptr<const CompiledExpression> ce =
+		CompiledExpression::compile(*store, "element(C)");
+
+	std::vector<AtomHandle> carbons = atomHandlesBy(prot, *ce);
+	TEST_EQUAL(carbons.size(), 2)
+	for (Size i = 0; i < carbons.size(); ++i)
+		TEST_EQUAL(carbons[i].getElement().getAtomicNumber(), 6)
 RESULT
 
 /////////////////////////////////////////////////////////////

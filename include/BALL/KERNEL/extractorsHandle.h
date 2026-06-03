@@ -33,8 +33,22 @@
 # include <BALL/KERNEL/expression.h>      // H3b.2: predicate-filtered atomHandles
 #endif
 
+#ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
+# include <BALL/KERNEL/expressionPredicate.h>  // H3b.5: ExpressionPredicate overload
+#endif
+
+#ifndef BALL_KERNEL_COMPILEDEXPRESSION_H
+# include <BALL/KERNEL/compiledExpression.h>   // H3b.5: compiled-bitmap path
+#endif
+
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+# include <BALL/KERNEL/moleculeStore.h>        // H3b.5: store used by evaluate()
+#endif
+
 #include <vector>
 #include <unordered_set>
+#include <cstdint>
+#include <type_traits>
 
 namespace BALL
 {
@@ -95,7 +109,10 @@ namespace BALL
 			subclasses or lambdas; lets H3b consumers migrate predicate-using code
 			off `dynamic_cast`/`Atom*` while the v0 extractor stays.
 	*/
-	template <typename Predicate>
+	template <typename Predicate,
+	          typename = typename std::enable_if<
+	              std::is_invocable<Predicate&, const AtomHandle&>::value
+	          >::type>
 	inline std::vector<AtomHandle> atomHandlesIf(const AtomContainer& fragment,
 	                                             Predicate&& predicate)
 	{
@@ -103,6 +120,59 @@ namespace BALL
 		std::vector<AtomHandle> out;
 		for (Size i = 0; i < all.size(); ++i)
 			if (predicate(all[i])) out.push_back(all[i]);
+		return out;
+	}
+
+	// --- v2.2 H3b.5: ExpressionPredicate + CompiledExpression integration.
+	// Sugar for code that already uses the v0 predicate hierarchy (TruePred /
+	// SelectedPred / ResiduePred / standardPredicates.h) — bridge through the
+	// v0 Atom under each handle. Predicates that operate on Composite-shape
+	// (e.g. ResiduePredicate) keep working because Atom retains its v0 parent
+	// links until H4. Atoms with no v0 backing are skipped (consistent with
+	// the H3b.2 Expression-filtered overload).
+
+	/// ExpressionPredicate overload: yields handles whose v0 Atom matches `p`.
+	inline std::vector<AtomHandle> atomHandlesIf(const AtomContainer& fragment,
+	                                             const ExpressionPredicate& p)
+	{
+		std::vector<AtomHandle> all = atomHandles(fragment);
+		std::vector<AtomHandle> out;
+		for (Size i = 0; i < all.size(); ++i)
+		{
+			Atom* a = all[i].getAtom();
+			if (a != 0 && p(*a)) out.push_back(all[i]);
+		}
+		return out;
+	}
+
+	/** CompiledExpression overload: amortizes parse over the whole subtree
+			via the store-wide bitmap evaluator (one O(N_store) pass), then
+			intersects with the subtree atoms. Much cheaper than `evaluate_one`
+			per atom when N_subtree is large or the predicate tree is deep.
+			Throws `Exception::InvalidArgument` if `compiled` was compiled
+			against a different store, or if its compile generation is stale
+			(see CompiledExpression::evaluate).
+	*/
+	inline std::vector<AtomHandle> atomHandlesBy(const AtomContainer& fragment,
+	                                              const CompiledExpression& compiled)
+	{
+		std::vector<AtomHandle> out;
+		std::vector<AtomHandle> all = atomHandles(fragment);
+		if (all.empty()) return out;
+
+		// All subtree handles share a store (the subtree's container row's
+		// store). Resolve via the root handle.
+		MoleculeStore* store = all[0].getStore();
+		if (store == 0) return out;
+
+		std::vector<std::uint8_t> bitmap;
+		compiled.evaluate(*store, bitmap);
+
+		for (Size i = 0; i < all.size(); ++i)
+		{
+			std::uint32_t idx = all[i].getStoreIndex();
+			if (idx < bitmap.size() && bitmap[idx] != 0) out.push_back(all[i]);
+		}
 		return out;
 	}
 
