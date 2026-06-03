@@ -150,6 +150,30 @@ namespace BALL
 			return out;
 		}
 
+		/** All containers of kind `kind` in `root`'s subtree, in preorder, as
+				`ContainerHandleBase`. Parallel to `fragmentsByRole` but at the
+				ContainerKind layer (D45/D60). Useful for walking MOLECULE-level
+				descendants (a system's molecules / a complex's components). After
+				HCP-2's ContainerKind shrink to {MOLECULE, FRAGMENT}, this stays the
+				stable building block.
+		*/
+		inline std::vector<ContainerHandleBase> containersByKind(const ContainerHandleBase& root,
+		                                                          ContainerKind kind)
+		{
+			std::vector<ContainerHandleBase> out;
+			std::size_t n = root.countChildren();
+			for (std::size_t i = 0; i < n; ++i)
+			{
+				ContainerHandleBase c = root.getChildContainer(i);
+				if (!c) continue;
+				if (c.getKind() == kind) out.push_back(c);
+				// recurse — collect kind-matches at any depth
+				std::vector<ContainerHandleBase> sub = containersByKind(c, kind);
+				for (std::size_t j = 0; j < sub.size(); ++j) out.push_back(sub[j]);
+			}
+			return out;
+		}
+
 		/// Direct/indirect CHAIN-role fragments of a molecule (v0 Protein::chains()).
 		inline std::vector<FragmentHandle> chains(const MoleculeHandle& m)
 		{ return fragmentsByRole(m, FragmentRole::CHAIN); }

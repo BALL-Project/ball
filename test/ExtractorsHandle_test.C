@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/extractorsHandle.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/PDBAtom.h>
@@ -132,6 +133,50 @@ CHECK(residueHandles / chainHandles / secondaryStructureHandles)
 	std::vector<FragmentHandle> sss = secondaryStructureHandles(prot);
 	TEST_EQUAL(sss.size(), 1)
 	TEST_EQUAL(sss[0].getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE, true)
+RESULT
+
+CHECK(moleculeHandles / fragmentHandles API + kind-set semantics)
+	// Set up a Protein with chain/residue/atoms. The MOLECULE-kind extractor
+	// matches the {MOLECULE, PROTEIN, NUCLEIC_ACID} set (forward-stable
+	// across HCP-2's ContainerKind shrink); the FRAGMENT-kind extractor
+	// matches {FRAGMENT, CHAIN, RESIDUE, SECONDARY_STRUCTURE, NUCLEOTIDE}.
+	System sys;
+	Protein  prot;  prot.setName("PROT");
+	Chain    ch;    ch.setName("A");
+	Residue  r1;    r1.setName("ALA");
+	Residue  r2;    r2.setName("GLY");
+	PDBAtom  a1; a1.setName("CA");
+	PDBAtom  a2; a2.setName("CA");
+	r1.insert(a1); r2.insert(a2);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	// System has no container row (it IS the materialiser, never
+	// materialised itself). asContainerHandle returns null.
+	TEST_EQUAL((bool)asContainerHandle(sys), false)
+	TEST_EQUAL(moleculeHandles(sys).size(), 0)
+	TEST_EQUAL(fragmentHandles(sys).size(), 0)
+
+	// Rooting at prot: no MOLECULE-kind descendants (prot itself is the root,
+	// not a descendant), but 3 FRAGMENT-kind descendants (chain + r1 + r2).
+	TEST_EQUAL(moleculeHandles(prot).size(), 0)
+
+	std::vector<FragmentHandle> frags = fragmentHandles(prot);
+	TEST_EQUAL(frags.size(), 3)
+	bool saw_chain = false; Size n_residue = 0;
+	for (Size i = 0; i < frags.size(); ++i)
+	{
+		if (frags[i].getKind() == ContainerKind::CHAIN)   saw_chain = true;
+		if (frags[i].getKind() == ContainerKind::RESIDUE) n_residue++;
+	}
+	TEST_EQUAL(saw_chain, true)
+	TEST_EQUAL(n_residue, 2)
+
+	// Kind-set predicate sanity: residues + chains are both FRAGMENT-kind
+	// in fragmentHandles; this is the forward-stable group. Calling
+	// fragmentHandles(ch) yields the 2 residues (r1, r2).
+	TEST_EQUAL(fragmentHandles(ch).size(), 2)
 RESULT
 
 CHECK(atomHandlesIf with a generic callable predicate)

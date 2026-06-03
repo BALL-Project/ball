@@ -133,6 +133,83 @@ namespace BALL
 		return StructureQuery::fragmentsByRole(root, FragmentRole::SECONDARY_STRUCTURE);
 	}
 
+	// --- v2.2 H3b.4: ContainerKind-level extractors. Forward-stable analogs
+	// of extractors.h's molecules / proteins / nucleicAcids / fragments. Since
+	// HCP-2 collapses Protein + NucleicAcid into MOLECULE and Chain / Residue
+	// / SecondaryStructure / Nucleotide into FRAGMENT, we group at the H4-
+	// stable {MOLECULE, FRAGMENT} layer: `moleculeHandles` matches any
+	// molecule-equivalent kind today (MOLECULE | PROTEIN | NUCLEIC_ACID), and
+	// `fragmentHandles` matches any fragment-equivalent kind (FRAGMENT |
+	// CHAIN | RESIDUE | SECONDARY_STRUCTURE | NUCLEOTIDE). Post-shrink, both
+	// the pre- and post-shrink kinds collapse to the same single value so the
+	// predicate keeps working unchanged. Typed `proteinHandles` /
+	// `nucleicAcidHandles` are intentionally NOT added — they disappear at H4.
+	namespace detail
+	{
+		inline bool isMoleculeKind_(ContainerKind k)
+		{
+			return k == ContainerKind::MOLECULE
+			    || k == ContainerKind::PROTEIN
+			    || k == ContainerKind::NUCLEIC_ACID;
+		}
+		inline bool isFragmentKind_(ContainerKind k)
+		{
+			return k == ContainerKind::FRAGMENT
+			    || k == ContainerKind::CHAIN
+			    || k == ContainerKind::RESIDUE
+			    || k == ContainerKind::SECONDARY_STRUCTURE
+			    || k == ContainerKind::NUCLEOTIDE;
+		}
+
+		// Local recursive walker — preorder, all kinds, no skipping. (Couldn't
+		// reuse StructureQuery::containersByKind which is single-kind: we want
+		// any-of-set membership in one pass.)
+		template <typename KindPred, typename Visit>
+		inline void visitContainersIf_(const ContainerHandleBase& root,
+		                                KindPred&& kp, Visit&& v)
+		{
+			std::size_t n = root.countChildren();
+			for (std::size_t i = 0; i < n; ++i)
+			{
+				ContainerHandleBase c = root.getChildContainer(i);
+				if (!c) continue;
+				if (kp(c.getKind())) v(c);
+				visitContainersIf_(c, kp, v);
+			}
+		}
+	} // namespace detail
+
+	inline std::vector<MoleculeHandle> moleculeHandles(const AtomContainer& root_c)
+	{
+		std::vector<MoleculeHandle> out;
+		ContainerHandleBase root = asContainerHandle(root_c);
+		if (!root) return out;
+		detail::visitContainersIf_(root, detail::isMoleculeKind_,
+			[&](const ContainerHandleBase& c)
+			{
+				MoleculeHandle m = c.as<MoleculeHandle>();
+				if (m) out.push_back(m);
+			});
+		return out;
+	}
+
+	// FRAGMENT-kind containers in `root_c`'s subtree — the role-agnostic
+	// counterpart of residueHandles / chainHandles / secondaryStructureHandles.
+	// Analog of v0 extractors.h::fragments(c).
+	inline std::vector<FragmentHandle> fragmentHandles(const AtomContainer& root_c)
+	{
+		std::vector<FragmentHandle> out;
+		ContainerHandleBase root = asContainerHandle(root_c);
+		if (!root) return out;
+		detail::visitContainersIf_(root, detail::isFragmentKind_,
+			[&](const ContainerHandleBase& c)
+			{
+				FragmentHandle f = c.as<FragmentHandle>();
+				if (f) out.push_back(f);
+			});
+		return out;
+	}
+
 	/** Handle analog of `extractors.h::bonds(const AtomContainer&, bool)` —
 			returns each UNIQUE bond of the subtree's atoms as `BondHandle`s,
 			dedup-keyed on `bond StableId` (the D-H3.8 durable identity, NOT raw
