@@ -1391,6 +1391,25 @@ CHECK(H2d -- randomized full-surface parity sweep (topology + scalars + selectio
 		if (store->container_selection_count_(root) != sel)
 		{ ok = false; std::ostringstream e; e << "selection mismatch @step " << step
 		    << " got " << store->container_selection_count_(root) << " exp " << sel; fail = e.str(); break; }
+
+		// (3) v2.2 H3a.3b (D-H3.13-R3) origin parity: every store slot with a
+		// live v0 back_ptr must satisfy isKindOf<PDBAtom>(back_ptr) ==
+		// (origin_flags & 0x01). The fixture allocates PDBAtoms (atoms[]),
+		// so every back-bound slot in the System's store should be PDB-origin.
+		bool origin_ok = true;
+		std::uint32_t bad_idx = 0;
+		for (std::uint32_t i = 0; i < store->size(); ++i)
+		{
+			if (store->is_freed(i)) continue;
+			Atom* back = store->back_ptr(i);
+			if (back == nullptr) continue;
+			const bool is_pdb = RTTI::isKindOf<PDBAtom>(back);
+			const bool bit_set = (store->origin_flags(i) & 0x01u) != 0u;
+			if (is_pdb != bit_set) { origin_ok = false; bad_idx = i; break; }
+		}
+		if (!origin_ok)
+		{ ok = false; std::ostringstream e; e << "origin parity mismatch @step " << step
+		    << " op " << last_op << " slot " << bad_idx; fail = e.str(); break; }
 	}
 
 	// On failure, surface the step/detail; on success this passes silently.
