@@ -290,6 +290,80 @@ namespace BALL
 		});
 	}
 
+	// v2.2 H3a.3b (D-H3.10-R5): tagged ctor overloads. Each initializes
+	// origin_hint_(origin.bits) BEFORE bindToStore_(), so the slot's
+	// origin_flags_ column is written atomically with back_ptr_ to the
+	// passed value (the allocate_atom(Atom*, uint8_t) overload guarantees
+	// the atomic pair-write inside its critical section). PDBAtom calls
+	// these with origin.bits = 0x01; post-H4 a PDB factory will too.
+
+	#define BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_(BODY) \
+		{ const bool _orphan = (store_ == &MoleculeStore::orphanStore()); \
+		  if (_orphan) { std::lock_guard<std::recursive_mutex> _lk(MoleculeStore::orphanMutex()); BODY } \
+		  else { BODY } }
+
+	Atom::Atom(AtomCtor::Origin origin)
+		: Composite(),
+		  PropertyManager(),
+		  interactions(0),
+		  store_interactions_disabled_(0),
+		  number_of_bonds_(0),
+		  origin_hint_(origin.bits)     // H3a.3b: hint set BEFORE bindToStore_; allocate_atom uses it atomically
+	{
+		bindToStore_(globalOrphanStore_());
+	}
+
+	Atom::Atom(const Atom& atom, bool deep, AtomCtor::Origin origin)
+		: Composite(atom, deep),
+		  PropertyManager(atom),
+		  interactions(0),
+		  store_interactions_disabled_(0),
+			number_of_bonds_(0),
+			origin_hint_(origin.bits)    // H3a.3b: copy ctor variant for PDBAtom-from-PDBAtom (or non-PDB explicitly)
+	{
+		bindToStore_(globalOrphanStore_());
+		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
+			store_->position(store_idx_) = atom.getPosition();
+			store_->charge(store_idx_) = atom.getCharge();
+			store_->velocity(store_idx_) = atom.getVelocity();
+			store_->force(store_idx_) = atom.getForce();
+			store_->set_name(store_idx_, atom.getName());
+			store_->set_type_name(store_idx_, atom.getTypeName());
+			writeStoreRadius_(atom.getRadius());
+			writeStoreAtomType_(static_cast<short>(atom.getType()));
+			writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
+			writeStoreElement_(&atom.getElement());
+		});
+	}
+
+	Atom::Atom
+			(Element& element, const String& name,
+			 const String& type_name, Atom::Type type,
+			 const Vector3& position, const Vector3& velocity,
+			 const Vector3& force, float charge, float radius, Index formal_charge,
+			 AtomCtor::Origin origin)
+		: Composite(),
+		  PropertyManager(),
+		  interactions(0),
+		  store_interactions_disabled_(0),
+		  number_of_bonds_(0),
+		  origin_hint_(origin.bits)
+	{
+		bindToStore_(globalOrphanStore_());
+		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
+			store_->position(store_idx_) = position;
+			store_->charge(store_idx_) = charge;
+			store_->velocity(store_idx_) = velocity;
+			store_->force(store_idx_) = force;
+			store_->set_name(store_idx_, name);
+			store_->set_type_name(store_idx_, type_name);
+			writeStoreRadius_(radius);
+			writeStoreAtomType_(static_cast<short>(type));
+			writeStoreFormalCharge_(static_cast<short>(formal_charge));
+			writeStoreElement_(&element);
+		});
+	}
+
 	#undef BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_
 
 	Atom::~Atom()

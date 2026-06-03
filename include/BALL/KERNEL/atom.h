@@ -58,6 +58,17 @@ namespace BALL
 	class MolecularInteractions;
 	class MoleculeStore;  // v2.0 KERNEL replacement (K0.3b.1)
 
+	// v2.2 H3a.3b (D-H3.10-R5): tag-struct namespace for the new tagged
+	// Atom ctor overloads. `Origin{bits}` carries a class-of-origin hint
+	// (bit 0 = PDB-origin per D-H3.6; bits 1..7 reserved). The tag is
+	// non-defaulted at the call site, so it disambiguates against the
+	// existing 3 Atom ctor signatures -- no source-level ambiguity and
+	// no ABI break (existing symbols unchanged).
+	namespace AtomCtor
+	{
+		struct Origin { std::uint8_t bits; };
+	}
+
 	/** Atom class.
 			A class representing atoms.
 			During each runtime instance of a program an atom is unique and
@@ -227,6 +238,26 @@ namespace BALL
 					 float charge = BALL_ATOM_DEFAULT_CHARGE,
 					 float radius = BALL_ATOM_DEFAULT_RADIUS,
 					 Index formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE);
+
+			// v2.2 H3a.3b (D-H3.10-R5): tagged ctor overloads. PDBAtom (the
+			// only forward subtype until H4) passes AtomCtor::Origin{0x01} so
+			// the slot is born marked as PDB-origin. Bit 0 = PDB; bits 1..7
+			// reserved for future origin classes. These overloads are strictly
+			// additive -- the existing 3 ctor signatures above are unchanged
+			// (ABI preserved per H3a.3b-DR3 FLAW 8).
+			explicit Atom(AtomCtor::Origin origin);
+			Atom(const Atom& atom, bool deep, AtomCtor::Origin origin);
+			Atom(Element& element,
+					 const String& name,
+					 const String& type_name,
+					 Type atom_type,
+					 const Vector3& position,
+					 const Vector3& velocity,
+					 const Vector3& force,
+					 float charge,
+					 float radius,
+					 Index formal_charge,
+					 AtomCtor::Origin origin);    // detailed tagged: every arg explicit (no defaults)
 
 			//@}
 
