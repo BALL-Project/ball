@@ -536,3 +536,565 @@ behavior becomes meaningful and the overload's contract gets revisited then.
 cluster CLOSED at H3b-CR. Move on to next H3 cluster after H3b's deferred
 piece (PDBAtom-handle extractor over D-H3.6 origin predicate, needs H3a.3b
 deferred work).
+
+## H3a.3b design — PDBAtom origin (D-H3.6 detail)
+
+**Goal:** D-H3.6 eliminates the `PDBAtom` subtype forward; pre-H4 the v0
+`PDBAtom` class stays, and we add a forward-stable **origin marker** on the
+atom store that says "this slot was constructed as a PDBAtom". The marker
+becomes the SOLE truth post-H4 when the subtype is removed; pre-H4 it MUST
+agree with `RTTI::isKindOf<PDBAtom>(back_ptr)` (dual-existence parity, D60).
+
+### D-H3.10 — `pdb_origin_bits_` SoA column on `MoleculeStore`
+
+```cpp
+// include/BALL/KERNEL/moleculeStore.h, alongside selection_/is_freed_
+std::vector<std::uint8_t> pdb_origin_bits_;   // K0.5.5 / H3a.3b origin flag
+```
+
+- One byte per slot (matches `selection_`, `is_freed_` shape). Bit-packing
+  is deferred — atom-slot scalar columns are byte-per-slot today; staying
+  byte-per-slot keeps the access pattern uniform.
+- Forward-extensible: at HCP-3+ when other class-of-origin tags ship (e.g.
+  NMR atoms), we can either add a parallel column or pack into one
+  `origin_flags_` column. The decision can wait — adding the column is
+  cheap relative to changing the schema after the fact, and naming it
+  `pdb_origin_bits_` makes the intent explicit at the call site.
+- Read accessor: `bool is_pdb_origin(std::uint32_t idx) const` (slot-bound
+  query, no validity assertion — the AtomHandle layer does that).
+- Write accessor: `void set_pdb_origin(std::uint32_t idx, bool on)`.
+
+### D-H3.11 — Lifecycle invariants
+
+| Event | Bit transition | Justification |
+|---|---|---|
+| `add_atom()` (fresh slot or recycled) | initialised to **0** | Birth-default: no atom is PDB-origin until explicitly marked. Equivalent to today's `back_ptr_[i] = nullptr` initialisation. |
+| `release_atom(i)` | set to **0** | Reset on release, NOT on the next `add_atom`. Matches `selection_[i] = 0` policy. Prevents a recycled slot from inheriting the previous occupant's PDB-origin. |
+| `PDBAtom::PDBAtom(...)` ctor body | set to **1** via `store->set_pdb_origin(getStoreIndex(), true)` | Atom base ctor allocates the slot; PDBAtom body marks it. The window where the slot exists but bit=0 is intra-ctor (no observer sees it). |
+| `compact()` | column compacted parallel to all other slot-bound columns | Slot index changes — bit travels with the slot, via the same swap-down pattern used for `selection_`, `is_freed_`, `back_ptr_`. |
+| `clear()` | column resized to 0 alongside other columns | The whole store goes away; trivially preserved. |
+| `PDBAtom::operator= (deep)` and `set()`  | bit UNCHANGED | The slot's class-of-origin is a stable property; assigning attribute values into a PDBAtom does not change its origin. |
+| `PDBAtom::clear()` (v0 attribute reset, NOT slot release) | bit UNCHANGED | Same rationale — attribute clear ≠ class-of-origin change. |
+
+### D-H3.12 — Handle-level API
+
+```cpp
+// include/BALL/KERNEL/atomHandle.h (additive)
+bool isPDBOrigin() const
+{
+    return isValid() && store_->is_pdb_origin(idx_);
+}
+```
+
+```cpp
+// include/BALL/KERNEL/extractorsHandle.h (additive)
+inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer& fragment)
+{
+    return atomHandlesIf(fragment,
+        [](const AtomHandle& h) { return h.isPDBOrigin(); });
+}
+
+inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer& fragment,
+                                              const String& expression)
+{
+    std::vector<AtomHandle> all = atomHandles(fragment, expression);
+    std::vector<AtomHandle> out;
+    for (Size i = 0; i < all.size(); ++i)
+        if (all[i].isPDBOrigin()) out.push_back(all[i]);
+    return out;
+}
+```
+
+This is the forward-stable replacement of v0
+`extractors.h::PDBAtoms(c)` / `PDBAtoms(c, expr)`. Returns AtomHandles
+(not PDBAtom*); consumers fetch PDB attributes through either the
+v0 bridge (`h.getAtom()` → `dynamic_cast<PDBAtom*>` pre-H4) or future
+`AtomHandle::getOccupancy()/getTemperatureFactor()` if/when those
+columns migrate (post-HCP-3).
+
+### D-H3.13 — Dual-existence parity test
+
+Pre-H4 the v0 RTTI must agree with the bit:
+
+```
+for every live slot i:
+    isKindOf<PDBAtom>(back_ptr_[i]) == is_pdb_origin(i)
+```
+
+Add this as a randomised parity sweep in `HierarchyParity_test` (touch the
+PDBAtom-creating fixtures) or as a standalone gate inside a new
+`PDBAtomOriginParity_test`. The cluster review (H3a.3b-CR) checks coverage
+of release/recycle/compact paths.
+
+### D-H3.14 — Out of scope for H3a.3b (deferred)
+
+- **PDB attribute columns** (`branch_designator_`, `remoteness_indicator_`,
+  `alternate_location_indicator_`, `occupancy_`, `temperature_factor_`)
+  STAY on v0 `PDBAtom`. Their migration to store columns is HCP-3 work
+  and orthogonal to the origin flag.
+- **PDBAtom property bit** (`PROPERTY__HETATM`) STAYS on the v0 property
+  bag (read/written via the HCP-1P PropertyColumnRegistry shim). No
+  migration here.
+- **PDB Iterator / FORMAT/PDBFile dispatch** STAYS on v0 dynamic_cast
+  until H4 (only the *handle-side* consumers migrate now, via
+  `pdbAtomHandles`).
+
+### Open questions for Codex (H3a.3b-DR review prompt)
+
+Q1: Is the slot-recycled invariant (bit reset on `release_atom`, NOT on
+`add_atom`) correct? Could there be a code path that bypasses `release_atom`
+and reuses a slot directly?
+
+Q2: PDBAtom's `operator=` / `set(deep=true)` keeps the bit unchanged. Is
+that genuinely correct, or does the v0 semantic of "deep assignment from
+a non-PDBAtom Atom" exist somewhere and create a slot that's PDB-origin in
+the bit but not in the v0 class? (Likely no — `Atom::operator=(Atom&)` is
+distinct from `PDBAtom::operator=(PDBAtom&)`, but worth verifying.)
+
+Q3: Should `pdb_origin_bits_` be made `friend` to a narrow lifecycle helper,
+or kept on the `MoleculeStore` accessor surface and called by `PDBAtom`'s
+ctor through a public store getter? (Symmetric to how `back_ptr_` is set.)
+
+Q4: Bond-aware extractors -- no change needed (bonds don't have a
+class-of-origin), correct?
+
+Q5: For the dual-existence parity test, where in the test surface is the
+right home? `HierarchyParity_test` already has a randomised sweep; a small
+`PDBAtomOriginParity_test` keeps the gate focused on this single
+invariant. Pick one.
+
+## H3a.3b-DR review (Codex)
+
+Verdict: **NOT-GO** — 3 BLOCKERs + 6 FLAWs + 2 NITs. Adoption misses the new
+column (System::adopt + adoptSubtreeInto_ snapshot atom payload but not
+origin), detached rebinding via ensureStoreBinding_ silently allocates an
+unmarked slot post-System-teardown, post-H4 has no writer once PDBAtom is
+gone. Also: compact() does NOT swap-down today (FLAW 4 mis-statement),
+operator= goes through Atom::operator= NOT set() (FLAW 6 mis-statement),
+persistence-scope was un-specified, parity invariant must scope-guard
+store-only loads, test surface under-specified.
+
+## H3a.3b-R2 — Revised design (addressing the 3 BLOCKERs + 6 FLAWs)
+
+### D-H3.10-R2 — Column rename + allocation-time origin hint
+
+Rename `pdb_origin_bits_` -> **`origin_flags_`** (`std::vector<std::uint8_t>`,
+bit 0 = PDB origin; bits 1..7 reserved for future origin classes per NIT 10).
+
+The construction protocol becomes an **allocation-time hint** rather than a
+post-bind write. This is the central change vs the original draft and
+collapses BLOCKERs 1, 3, 5 + FLAW 5 into a single atomic operation under
+the existing orphan-mutex lock:
+
+```cpp
+// moleculeStore.h (signature change):
+Index allocate_atom();                                 // bit 0 = 0
+Index allocate_atom(Atom* back_ptr);                   // bit 0 = 0
+Index allocate_atom(Atom* back_ptr, std::uint8_t origin_flags);  // NEW
+
+// PDBAtom.C ctor (orphan path):
+store_idx_ = store.allocate_atom(this, /*origin_flags=*/0x01);
+```
+
+Why allocation-time:
+- **Atomic with allocation under orphan_mutex_** — no post-bind write
+  needs its own locking story; the bit lands in the SAME critical
+  section that allocates and sets back_ptr (atom.C:32).
+- **No ctor-window observability gap** — the bit is set at the same
+  moment the slot becomes visible to any observer.
+- **Forward-stable post-H4** — once PDBAtom subtype is gone, the PDB
+  format loader / handle-level factory passes the same flag through
+  `allocate_atom(nullptr, 0x01)`. No subtype constructor required.
+
+### D-H3.11-R2 — Lifecycle invariants (revised)
+
+| Event | bit transition | Justification / verification |
+|---|---|---|
+| `allocate_atom(back_ptr, flags)` — fresh slot or recycled | bit = (flags >> 0) & 1 | Atomic with slot bind. Recycled slots are zeroed at `release_atom`, so the hint always wins. |
+| `release_atom(i)` | bit = 0 | Reset on release. Mirror of `selection_[i] = 0` policy (moleculeStore.C). |
+| `add_atom()` / `allocate_atom(back_ptr)` no-flag overloads | bit = 0 | Birth-default zero for the non-PDB code paths. |
+| `PDBAtom::PDBAtom(...)` ctor | bit set via allocate_atom hint | NOT a post-bind write. |
+| `PDBAtom::~PDBAtom` → release_atom | bit = 0 (above) | |
+| `PDBAtom::operator=(PDBAtom&)` (which delegates to `Atom::operator=`, per FLAW 6 correction) | bit UNCHANGED | The slot stays the same slot; assigning v0 attribute values does NOT change origin. |
+| `PDBAtom::set(deep=true)` (calls Atom::set → ensureStoreBinding_ if unbound) | bit copied from `pdb_atom` source | **BLOCKER 2 fix**: `PDBAtom::set` is the rebind reentry point; override it so the *new* slot allocation passes origin_flags=0x01 (or pass it down through Atom::ensureStoreBinding_ + an Atom::origin_hint_ field set by PDBAtom). |
+| `Atom::ensureStoreBinding_()` (unbound atom needs an orphan slot at first non-ctor mutation) | reads atom's `origin_hint_` field; passes to allocate_atom | A new private `Atom::origin_hint_: std::uint8_t = 0`. PDBAtom ctor sets `origin_hint_ = 0x01`. ensureStoreBinding_ passes it through. (FLAW 6 / BLOCKER 2 fix.) |
+| `System::adopt(Atom&)` | copy src bit -> dst bit alongside other columns | **BLOCKER 1 fix**: extend the snapshot block in system.C:120-150 with `std::uint8_t origin = src->origin_flags(src_idx)`, then `dst->set_origin_flags(dst_idx, origin)` after allocate_atom. Same for `adoptSubtreeInto_` (system.C:340-355). |
+| `compact()` | column compacted parallel to other slot-bound columns if/when swap-down lands | **FLAW 4 fix**: today `compact()` only `shrink_to_fit()` + rebuilds string pools (moleculeStore.C:1172) — there is no slot-index motion to track. The column lives in the same vector + `shrink_to_fit` set as other atom columns. The FUTURE swap-down work (separate milestone) lands a full slot-move algorithm covering ALL atom columns at once; origin_flags participates symmetrically with selection_/back_ptr_/stable_ids_ at that time. |
+| `clear()` | column resized to 0 alongside other columns | Trivial — store goes away. |
+| `loadStoreJSON` (persistence read path) | bit = 0 for every slot (current minor version) | **FLAW 7 fix**: H3a.3b explicitly DEFERS persistence of origin_flags. Store/System JSON minor-version stays put. The post-load slot is bit=0; a future minor-version bump adds the column with `origin_flags == 0` interpreted as "unknown origin" for backward compatibility. |
+
+### D-H3.12-R2 — Handle-level API (unchanged from R1)
+
+```cpp
+// AtomHandle
+bool isPDBOrigin() const
+{ return isValid() && (store_->origin_flags(idx_) & 0x01u) != 0; }
+
+// extractorsHandle.h
+inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer& fragment);
+inline std::vector<AtomHandle> pdbAtomHandles(const AtomContainer&, const String& expr);
+```
+
+`AtomHandle` writer API for post-H4 is `markPDBOrigin(bool)` (new), set as
+a *creation hint* not a post-construction mutation — i.e. the v0 PDBAtom
+ctor path eventually disappears and is replaced by callers building atoms
+via a factory function `AtomHandle createPDBAtom(MoleculeStore&, ...)` that
+funnels through `allocate_atom(..., 0x01)`. Post-H4 detail; not coded now.
+
+### D-H3.13-R2 — Parity invariant (scope-guarded for store-only state)
+
+The dual-existence parity invariant becomes (**FLAW 8 fix**):
+
+```
+for every slot i where back_ptr_[i] != nullptr:
+    RTTI::isKindOf<PDBAtom>(back_ptr_[i]) == ((origin_flags_[i] & 0x01) != 0)
+```
+
+i.e., the invariant is over the dual-existence range only. Store-only
+slots (loaded via JSON; back_ptr is nullptr) carry the bit by itself --
+the bit IS the truth, with no v0 to compare. The same pattern v2.1
+adopted for `selection_` columns vs `Atom::isSelected()` (D60).
+
+### D-H3.14-R2 — Out of scope for H3a.3b (revised)
+
+Unchanged + add:
+- **JSON persistence of origin_flags** (FLAW 7 deferral)
+- **Typed v0 APIs that stay**: `AtomContainer::getPDBAtom`, `countPDBAtoms`
+  in Protein/Chain/Residue/SecondaryStructure (NIT 12). These keep
+  `dynamic_cast<PDBAtom*>(&*it)` until H4. Handle-side replacement is
+  `pdbAtomHandles(c)`.
+- **Future bond-origin / origin-class extensions** (Q4 was: bonds don't
+  need this — confirmed).
+
+### D-H3.15 — Test surface (FLAW 9 fix — explicit coverage)
+
+A new focused `PDBAtomOriginParity_test` with these CHECK blocks:
+
+1. **Orphan ctor**: `PDBAtom a;` → orphan store slot has bit=1.
+2. **Plain Atom ctor**: `Atom a;` → orphan store slot has bit=0.
+3. **System adoption (single atom)**: orphan PDBAtom → System::insert →
+   System's store has bit=1 at the dst slot, src orphan slot bit=0
+   after release.
+4. **System adoption (subtree)**: same with a Protein/Chain/Residue tree
+   containing PDBAtoms; bits preserved across adoptSubtreeInto_.
+5. **Release + recycle into non-PDB Atom**: free a PDBAtom slot, allocate
+   an Atom at the same idx, bit=0.
+6. **Detached rebinding after System teardown**: PDBAtom alive after
+   ~System, mutate to trigger ensureStoreBinding_, new orphan slot is bit=1.
+7. **Cross-store move**: PDBAtom in one System adopted by another System,
+   bit=1 in dst store.
+8. **Swap** (PDBAtom::swap with another PDBAtom): bits stay correct.
+9. **Deep copy** (`PDBAtom b(a, true)`): new slot has bit=1.
+10. **JSON load (FLAW 8 scope)**: store-only state with bit=0; isPDBOrigin
+    returns false; no parity violation (back_ptr is nullptr → invariant
+    range excludes the slot).
+
+Also extend `HierarchyParity_test` ATTACH/REMOVE/SWAP randomized sweep
+(test/HierarchyParity_test.C:1270+) with a parallel "for each live slot
+where back_ptr != nullptr, assert isKindOf<PDBAtom>(back_ptr) ==
+origin_flags & 0x01" pass post-each-op. Catches mirror drift in the
+randomized fixture.
+
+### Codex Q1-Q5 (answered in revised design)
+
+Q1: Resolved — `release_atom` reset is correct AND `allocate_atom` hint
+    is the new write path. compact() needs no special handling today;
+    future swap-down handles all atom columns uniformly.
+
+Q2: Resolved — `PDBAtom::operator=` (which calls `Atom::operator=` per
+    FLAW 6 correction) preserves the bit. The detached-rebind case goes
+    through `Atom::ensureStoreBinding_` which reads `Atom::origin_hint_`
+    set by the PDBAtom ctor (D-H3.11-R2 row).
+
+Q3: Resolved — `allocate_atom(back_ptr, origin_flags)` is the narrow
+    lifecycle helper. PDBAtom ctor uses it; adoption snapshot+copy uses
+    a `set_origin_flags` accessor (not a casual setter — it's the
+    adoption migration path).
+
+Q4: Confirmed — bonds have no origin concept.
+
+Q5: Both — focused `PDBAtomOriginParity_test` (10 CHECK blocks) PLUS
+    randomized parity assertion in `HierarchyParity_test`.
+
+
+## H3a.3b-DR2 review (Codex)
+
+Verdict: **NOT-GO** (again). 3 BLOCKERs persist + 4 new/refined FLAWs:
+
+- **BLOCKER 1** — PDBAtom ctor body runs AFTER Atom base ctor's
+  `bindToStore_` allocates the slot, so a derived-side `origin_hint_`
+  assignment is too late for the FIRST allocation. The R2 protocol
+  silently relied on dispatch that does not exist.
+- **BLOCKER 2** — Adoption R2 plan: `allocate_atom(&atom)` + post-write
+  `set_origin_flags`. That creates a parity-violation window: `back_ptr_
+  [dst]` is observable as a PDBAtom while `origin_flags_[dst]` is still 0.
+  Atomicity requires passing the flag INTO the allocation.
+- **BLOCKER 3** — JSON round-trip deferral is a real observable
+  fidelity loss: save+load drops PDB origin. Must add the column to JSON
+  now OR document + test the loss.
+- **FLAW 4** — Atom layout: a new `uint8_t origin_hint_` placed at the
+  end of Atom inflates sizeof(Atom). Pack near `number_of_bonds_`
+  (atom.h:981).
+- **FLAW 5** — `markPDBOrigin()` handle writer contradicts the "creation
+  hint only" rule. Remove from the public handle surface.
+- **FLAW 6** — Test surface must cover `Atom::swap(Atom&)` between a
+  PDBAtom and a plain Atom (payload swap; slot/back_ptr stays; origin
+  travels with the SLOT, not the payload).
+- **FLAW 7** — Test surface must cover
+  `static_cast<Atom&>(pdb_atom) = plain_atom;` (base-assignment from a
+  non-PDB Atom into a PDBAtom subobject — bit must stay 1).
+
+## H3a.3b-R3 — Revised design (BLOCKER fixes done at ALLOCATION SITE)
+
+### D-H3.10-R3 — `allocate_atom` takes the origin hint AS a parameter
+
+Replace the post-bind-write idea entirely. The hint travels through
+construction:
+
+```cpp
+// moleculeStore.h public surface (extension):
+Index allocate_atom();                                      // hint = 0
+Index allocate_atom(Atom* back_ptr);                        // hint = 0
+Index allocate_atom(Atom* back_ptr, std::uint8_t origin_flags);   // NEW
+// No "set_origin_flags" public mutator. The bit is settable ONLY at
+// allocate-time; reads via `origin_flags(idx)`.
+
+// atom.h constructor surface (additive):
+Atom(std::uint8_t origin_hint = 0);
+Atom(const Atom& atom, bool deep = true, std::uint8_t origin_hint = 0);
+Atom(Element& element, const String& name, ...,
+     std::uint8_t origin_hint = 0);    // detailed ctor adds tail param
+// bindToStore_ takes the hint:
+void bindToStore_(MoleculeStore& store, std::uint8_t origin_hint = 0);
+
+// Atom private member (BLOCKER 1 anchor):
+std::uint8_t origin_hint_;   // ctor-set; consulted by ensureStoreBinding_
+
+// PDBAtom.C ctors (forward the hint through Atom):
+PDBAtom::PDBAtom() : Atom(/*origin_hint=*/0x01), branch_designator_(...), ... {}
+PDBAtom::PDBAtom(const PDBAtom& o, bool deep)
+   : Atom(o, deep, /*origin_hint=*/0x01), ... {}
+PDBAtom::PDBAtom(const String& name) : Atom(/*origin_hint=*/0x01)
+   { Atom::setName(name); ... }
+PDBAtom::PDBAtom(Element& e, ..., float t) : Atom(e, name, ..., 0x01) { ... }
+```
+
+This atomically lands the bit at allocation:
+- `Atom::Atom(hint)` -> sets `origin_hint_ = hint` BEFORE the body.
+- `bindToStore_(store, origin_hint_)` -> `store.allocate_atom(this, origin_hint_)`.
+- `allocate_atom(Atom*, uint8_t)` -> sets `back_ptr_[idx] = atom` AND
+  `origin_flags_[idx] = origin_flags` under the same orphan_mutex lock
+  before returning. Slot becomes visible to other threads as a
+  CONSISTENT pair, never as a (back_ptr=PDBAtom, origin_flags=0) state.
+
+**This fully closes BLOCKER 1** (construction-order atomicity).
+
+### D-H3.11-R3 — Adoption uses the flagged overload too
+
+System::adopt + adoptSubtreeInto_ change their snapshot block:
+
+```cpp
+// system.C:120-150 snapshot, BEFORE allocate_atom call:
+const std::uint8_t origin = src->origin_flags(src_idx);
+...
+const std::uint32_t dst_idx = dst->allocate_atom(&atom, origin);
+// No post-write needed. Atomicity = allocation site.
+```
+
+Same change in adoptSubtreeInto_ at system.C:340-355.
+
+**This closes BLOCKER 2.**
+
+### D-H3.12-R3 — Detached rebind via Atom::ensureStoreBinding_
+
+ensureStoreBinding_ reads `this->origin_hint_` and forwards:
+
+```cpp
+// atom.C ensureStoreBinding_:
+if (store_ == nullptr) {
+    bindToStore_(MoleculeStore::orphanStore(), origin_hint_);
+}
+```
+
+`origin_hint_` was set in the Atom ctor (D-H3.10-R3 above), so a PDBAtom
+whose first allocation gets detached and later rebinds via
+ensureStoreBinding_ reuses the stored hint -- the new orphan slot is
+correctly marked.
+
+### D-H3.12b-R3 — Drop `AtomHandle::markPDBOrigin()` from the public surface
+
+The handle gets ONLY a reader: `isPDBOrigin() const`. There is no
+post-construction writer. Post-H4, the PDB-file format loader calls
+`store.allocate_atom(nullptr, 0x01)` directly via a factory function
+in PDBFile (or via a public `MoleculeStore::createPDBAtomSlot()` helper).
+The R2 sketch of `markPDBOrigin(bool)` is **deleted** from the design.
+
+**Closes FLAW 5.**
+
+### D-H3.13-R3 — Atom layout: pack `origin_hint_` near `number_of_bonds_`
+
+Atom currently has `unsigned char number_of_bonds_;` followed by
+`Bond* bond_[MAX_NUMBER_OF_BONDS];` at atom.h:981+. Insert
+`std::uint8_t origin_hint_;` IMMEDIATELY after `number_of_bonds_`. Both
+byte-scale fields pack into the same alignment slot the previous
+single-byte field occupied (or into the natural padding before the
+`Bond*` pointer array).
+
+Verification gate:
+```cpp
+static_assert(sizeof(Atom) <= BALL_ATOM_SIZE_HINT,
+    "Atom inflated; origin_hint_ placement violated layout budget");
+```
+We'll set `BALL_ATOM_SIZE_HINT = sizeof(Atom)-at-current-HEAD` during
+implementation and assert no growth.
+
+**Closes FLAW 4.**
+
+### D-H3.14-R3 — JSON persistence: round-trip the column NOW
+
+Reject the FLAW 7 deferral. Add `origin_flags` to:
+- `moleculeStoreJson.C` writer (atoms object, alongside "selection") --
+  base64 or raw byte array column same length as `selection`.
+- `moleculeStoreJson.C` reader: parse "origin_flags" if present;
+  zero-fill if absent (backward compat with pre-v2.2.X JSON).
+- Bump JSON minor version (the format already supports minor-version
+  forward-compat per existing reader).
+
+Test: PDBAtom-bearing System -> save -> load -> `pdbAtomHandles(loaded)`
+matches the original.
+
+**Closes BLOCKER 3.**
+
+### D-H3.15-R3 — Test surface (expanded per FLAW 6 + 7)
+
+Replace the D-H3.15 list with these 13 CHECK blocks:
+
+ 1. Orphan ctor: `PDBAtom a;` -> bit=1.
+ 2. Plain Atom ctor: `Atom a;` -> bit=0.
+ 3. System adoption (single atom).
+ 4. System adoption (subtree).
+ 5. Release + recycle: free PDBAtom slot, allocate Atom at same idx -> bit=0.
+ 6. Detached rebind after System teardown (via ensureStoreBinding_).
+ 7. Cross-store move (System -> System).
+ 8. PDBAtom::swap(PDBAtom&) -- bits stay correct (both 1).
+ 9. **NEW (FLAW 6):** Plain `Atom::swap(Atom&)` between a PDBAtom and a
+    plain Atom -- payload swaps but **origin bit travels with the SLOT
+    identity, not the payload**. Verify: after swap, the PDBAtom object's
+    slot bit stays 1; the plain Atom's slot bit stays 0.
+10. Deep copy: `PDBAtom b(a, true);` -> new slot has bit=1.
+11. **NEW (FLAW 7):** Base-assignment from non-PDB:
+    `static_cast<Atom&>(pdb_atom) = plain_atom;` -- PDBAtom's slot bit
+    stays 1 (the SLOT is PDB-origin; assigning a non-PDB payload does
+    NOT change origin).
+12. Save+Load (JSON round-trip): origin bit preserved (D-H3.14-R3).
+13. HierarchyParity_test extension: randomised sweep at .C:1270+
+    asserts parity invariant after each op (`back_ptr != nullptr =>
+    isKindOf<PDBAtom>(back_ptr) == (origin_flags & 0x01)`).
+
+### Summary of R3 vs R2
+
+| Issue | R2 plan | R3 fix |
+|---|---|---|
+| BLOCKER 1 (ctor order) | post-bind write | hint in `allocate_atom(Atom*, uint8_t)` -- atomic with bind; PDBAtom passes via Atom ctor overload |
+| BLOCKER 2 (adoption window) | snapshot + post-write | snapshot + flagged allocate; atomic |
+| BLOCKER 3 (JSON loss) | deferred | add column NOW + minor-version bump |
+| FLAW 4 (Atom inflation) | un-specified | pack near number_of_bonds_ + static_assert |
+| FLAW 5 (markPDBOrigin) | mentioned briefly | dropped from public handle API |
+| FLAW 6 (swap test) | only PDBAtom::swap | + Atom::swap(Atom&) mixed-type |
+| FLAW 7 (base assign) | un-tested | base-assign test added |
+
+## H3a.3b-DR3 review (Codex)
+
+Verdict: **NOT-GO**, but the verdict is partly a category-error:
+findings 1-7 flag "R3 not implemented at branch tip" -- correct as a
+fact, but R3 is DESIGN TEXT, not landed code. Per the project's
+design-lock-before-code discipline (used at H3-DR/DR2/DR3 and H2-0
+prior), implementation lands AFTER design GO. So findings 1-7 collapse
+to a single implementation-todo list, not design defects.
+
+The one **genuine new finding** is:
+
+- **FLAW 8 (NEW, GENUINE):** Changing `Atom()` to `Atom(std::uint8_t=0)`
+  emits a different ctor symbol -> ABI break. Keeping both produces
+  source-level ambiguity for `Atom()` calls (both viable -- the new one
+  via default arg, the old one direct). R4 must preserve the existing
+  public ctor signatures and add the hint via a non-defaulted overload.
+
+## H3a.3b-R4 — Final tweak (FLAW 8 fix)
+
+### D-H3.10-R4 — Atom ctors stay; add a TAGGED hint overload
+
+Don't modify the existing three `Atom` ctor signatures. Instead, add
+three NEW overloads taking a NON-DEFAULTED tag-typed origin parameter:
+
+```cpp
+// atom.h additions (no signature change to existing ctors):
+namespace AtomCtor
+{
+    /// Non-defaulted tag carrying an origin-flag hint. Existing
+    /// `Atom()` / `Atom(const Atom&, bool)` / detailed ctor remain
+    /// unchanged; the four taking AtomCtor::Origin land alongside.
+    struct Origin { std::uint8_t bits; };
+}
+
+Atom(AtomCtor::Origin origin);
+Atom(const Atom& atom, bool deep, AtomCtor::Origin origin);
+Atom(Element& element, const String& name, ...,
+     AtomCtor::Origin origin);     // detailed ctor, origin appended
+```
+
+**ABI compat:** Existing `Atom()` symbol unchanged. New symbols are
+strictly additive. **Source disambiguation:** `Atom()` is unambiguous
+(the new overloads require an `Origin` argument; no default).
+
+PDBAtom ctors call the tagged overloads explicitly:
+
+```cpp
+PDBAtom::PDBAtom() : Atom(AtomCtor::Origin{0x01}), branch_designator_(...), ... {}
+PDBAtom::PDBAtom(const PDBAtom& o, bool deep)
+   : Atom(o, deep, AtomCtor::Origin{0x01}), ... {}
+PDBAtom::PDBAtom(Element& e, ..., float t)
+   : Atom(e, name, ..., AtomCtor::Origin{0x01}), ... {}
+PDBAtom::PDBAtom(const String& name) : Atom(AtomCtor::Origin{0x01})
+   { Atom::setName(name); ... }
+```
+
+`AtomCtor::Origin` is a tag struct (a typed wrapper around `uint8_t`)
+specifically to keep these overloads from being silently chosen for
+non-PDB callers passing a stray uint8_t.
+
+### D-H3.16-R4 — Implementation TODO list (the items DR3's findings 1-7
+        identified as not-yet-implemented)
+
+These are the implementation steps that follow design GO. NONE of them
+land in the design doc -- only as actual commits after R4 GO:
+
+1. Add `std::vector<std::uint8_t> origin_flags_` column to MoleculeStore,
+   alongside `selection_` / `is_freed_`.
+2. Add `Index allocate_atom(Atom*, std::uint8_t origin_flags)` overload;
+   `allocate_atom_with_back_ptr_` internal helper takes the new flags
+   param and writes both columns under the same lock.
+3. Add `bool origin_flags(Index)` accessor (slot-bound, no validity check).
+4. Add `bindToStore_(MoleculeStore&, std::uint8_t)` overload, forward to
+   `allocate_atom(this, hint)`.
+5. Add the three new tagged Atom ctors (D-H3.10-R4); existing 3 unchanged.
+6. PDBAtom: 4 ctors call tagged Atom variants.
+7. Atom layout: add `std::uint8_t origin_hint_;` immediately after
+   `number_of_bonds_` (atom.h:981); `static_assert(sizeof(Atom) ==
+   BALL_ATOM_SIZE_HINT)` where BALL_ATOM_SIZE_HINT = current value at
+   implementation time.
+8. `Atom::ensureStoreBinding_()` reads `this->origin_hint_`, passes
+   to bindToStore_.
+9. System::adopt + adoptSubtreeInto_: snapshot `src->origin_flags(idx)`,
+   pass into the new flagged `allocate_atom(&atom, origin)`.
+10. JSON writer (`moleculeStoreJson.C:127`): add origin_flags column
+    alongside selection. Reader (line 301): accept missing column as
+    all-zeros (backward compat). Bump minor version.
+11. JSON System load (`systemJson.C:408`): use the flagged
+    `allocate_atom` overload with the column value.
+12. `AtomHandle::isPDBOrigin()` accessor in atomHandle.h (READ ONLY;
+    no `markPDBOrigin` writer per D-H3.12b-R3).
+13. extractorsHandle.h `pdbAtomHandles(c)` and
+    `pdbAtomHandles(c, expression)`.
+14. New `PDBAtomOriginParity_test` with the 13 CHECK blocks (D-H3.15-R3).
+15. HierarchyParity_test sweep extension.
