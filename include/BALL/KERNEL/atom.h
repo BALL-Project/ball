@@ -979,6 +979,14 @@ namespace BALL
 		// number). getElement() resolves via PTE[number].
 		///
 		unsigned char		number_of_bonds_;
+		// v2.2 H3a.3b (D-H3.11-R5): class-of-origin hint carried with the
+		// Atom object so detached rebinds via ensureStoreBinding_() can
+		// re-stamp the bit on the new orphan slot. Set to 0 by the base
+		// Atom() ctors; set to AtomCtor::Origin::bits by the tagged
+		// overloads (PDBAtom passes 0x01). Placed immediately after
+		// number_of_bonds_ to fill the byte-scale padding before the
+		// Bond* array pointer alignment.
+		std::uint8_t		origin_hint_;
 		///
 		Bond*						bond_[MAX_NUMBER_OF_BONDS];
 		// K0.3b.LATER.1: Vector3 position_ DELETED. Authority moved to

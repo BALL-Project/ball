@@ -216,7 +216,8 @@ namespace BALL
 		  PropertyManager(),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-		  number_of_bonds_(0)
+		  number_of_bonds_(0),
+		  origin_hint_(0)             // v2.2 H3a.3b: default ctors -> bit 0 (non-PDB)
 	{
 		// HCP-1P.A: allocate_atom births the slot at the BALL_ATOM_DEFAULT_*
 		// values already (position/charge/velocity/force = 0, radius = 0,
@@ -236,7 +237,8 @@ namespace BALL
 		  PropertyManager(atom),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-			number_of_bonds_(0)
+			number_of_bonds_(0),
+			origin_hint_(0)             // v2.2 H3a.3b: copy ctor born non-PDB; PDBAtom copy ctor uses the tagged Atom(const Atom&, bool, AtomCtor::Origin) overload instead
 	{
 		bindToStore_(globalOrphanStore_());
 		// K0.3b.LATER.1-10 + R11 fix A: copy under orphan mutex.
@@ -263,7 +265,8 @@ namespace BALL
 		  PropertyManager(),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-		  number_of_bonds_(0)
+		  number_of_bonds_(0),
+		  origin_hint_(0)             // v2.2 H3a.3b: default ctors -> bit 0 (non-PDB)
 	{
 		bindToStore_(globalOrphanStore_());
 		// K0.3b.LATER.1-10 + R11 fix A: write ctor args under orphan mutex.

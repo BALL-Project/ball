@@ -36,7 +36,7 @@ CHECK(K0.7.1 sizeof Atom handle pinned <= 512 bytes; surprise documented)
 	// packed_ side-table slot). The 512 B upper bound pins against
 	// silent regression; the v2.2 thin-handle flip (delete D2/D3/D4
 	// inheritance) is what brings this down to the ~24-32 B target.
-	std::cerr << "  [K0.7.1] sizeof(Atom)           = " << sizeof(Atom) << " B (v2.0=360, v2.1=368 incl. P1.3 slot; v2.2 target ~32)" << std::endl;
+	std::cerr << "  [K0.7.1] sizeof(Atom)           = " << sizeof(Atom) << " B (v2.0=360, v2.1=368 incl. P1.3 slot; v2.2 H3a.3b=376 incl. origin_hint_; target ~32)" << std::endl;
 	TEST_EQUAL(sizeof(Atom) <= 512, true)
 RESULT
 
