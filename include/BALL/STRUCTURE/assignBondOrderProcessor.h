@@ -656,6 +656,23 @@ namespace BALL
 			/// Processor is in an evaluation mode. Default is false
 			bool evaluation_mode_;
 
+			// v2.2 H3d.D (D-H3.8) -- ABO's pointer-keyed members below
+			// (bond_fixed_, free_bonds_, bond_to_index_, index_to_bond_,
+			// number_of_virtual_hydrogens_, virtual_bond_index_to_atom_,
+			// atom_to_virtual_bond_index_, bond_lengths_penalties_) are
+			// PURELY TRANSIENT scratch within a single ABO::apply()
+			// invocation: AssignBondOrderProcessor::start() unconditionally
+			// calls clear() which resets every one of them to empty, and no
+			// external API exposes them for between-call inspection. The
+			// forward-stability concern that motivates D-H3.8 -- pointer
+			// keys outliving the slots they reference -- therefore does NOT
+			// apply to this scratch state, mirroring the Kekuliser
+			// transient-scratch carve-out (kekulizer.h:131). Full sid
+			// migration of the scratch is deferred per A1 until H4 retires
+			// the v0 surface. The .C TU is opted into the H3a.5 gate (via
+			// atomHandle.h) and is clean of stored-pointer-key containers
+			// in its own translation unit.
+
 			// Map for storing the bonds fixed orders
 			// if a bond is free, the map returns 0
 			std::map<Bond*, short> bond_fixed_;
