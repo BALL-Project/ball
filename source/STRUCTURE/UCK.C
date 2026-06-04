@@ -5,6 +5,7 @@
 #include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c follow-up: D-H3.8 opt-in (forward gate coverage, no leaks)
 #include <BALL/KERNEL/PTE.h>
 
 #include <QtCore/QCryptographicHash>

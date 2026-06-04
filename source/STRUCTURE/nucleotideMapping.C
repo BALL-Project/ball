@@ -2,6 +2,7 @@
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c follow-up: D-H3.8 opt-in (forward gate coverage, no leaks)
 #include <BALL/KERNEL/protein.h>
 
 namespace BALL
