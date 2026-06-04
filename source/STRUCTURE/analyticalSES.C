@@ -130,7 +130,61 @@ namespace BALL
 		return area;
 	}
 
-	float calculateSESVolume	
+	// v2.2 H3d.B (D-H3.8): StableId-keyed overload. Replicates the v0
+	// surface computation; only the output-map key type changes.
+	float calculateSESAtomAreas
+		(const AtomContainer& fragment,
+		 HashMap<MoleculeStore::StableId, float>& atom_areas_sid,
+		 float probe_radius)
+	{
+		vector<const Atom*> atoms;
+		MoleculeStore* store = nullptr;
+		AtomConstIterator it = fragment.beginAtom();
+		for (; +it; ++it)
+		{
+			if (it->getRadius() <= 0.0) continue;
+			MoleculeStore* s = const_cast<Atom&>(*it).getStore();
+			if (s == nullptr) continue;
+			if (store == nullptr) store = s;
+			else if (s != store) continue;
+			atoms.push_back(&*it);
+		}
+		if (atoms.empty()) { atom_areas_sid.clear(); return 0; }
+
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		double* tmp_atom_areas = new double[atoms.size()];
+		for (Size i = 0; i < atoms.size(); i++)
+		{
+			float tmp[3];
+			atoms[i]->getPosition().get(tmp);
+			coordinates[i * 3]     = tmp[0];
+			coordinates[i * 3 + 1] = tmp[1];
+			coordinates[i * 3 + 2] = tmp[2];
+			radii[i] = atoms[i]->getRadius();
+		}
+
+		double area, volume;
+		int number_of_atoms = (int)atoms.size();
+		connolly_(number_of_atoms, coordinates, radii,
+		          &volume, &area, probe_radius, 0.0, tmp_atom_areas);
+
+		atom_areas_sid.clear();
+		for (Position i = 0; i < atoms.size(); ++i)
+		{
+			const MoleculeStore::StableId sid =
+				store->stable_id(atoms[i]->getStoreIndex());
+			atom_areas_sid.insert(std::pair<MoleculeStore::StableId, float>(
+				sid, static_cast<float>(tmp_atom_areas[i])));
+		}
+
+		delete [] coordinates;
+		delete [] radii;
+		delete [] tmp_atom_areas;
+		return area;
+	}
+
+	float calculateSESVolume
 		(const AtomContainer& fragment, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and

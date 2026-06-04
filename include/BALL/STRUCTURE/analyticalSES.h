@@ -9,7 +9,11 @@
 #	include <BALL/common.h>
 #endif
 
-namespace BALL 
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+#	include <BALL/KERNEL/moleculeStore.h>     // v2.2 H3d.B
+#endif
+
+namespace BALL
 {
 	// forward declarations
 	class Atom;
@@ -29,6 +33,17 @@ namespace BALL
 	*/
 	BALL_EXPORT float calculateSESAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius = 1.5);
+
+	/** v2.2 H3d.B (D-H3.8): StableId-keyed overload. The output map keys
+	    the resulting SES atom areas by StableId. Single-store discipline:
+	    the fragment's store is captured at the first qualifying atom;
+	    foreign-store atoms are skipped. The v0 HashMap<const Atom*, float>
+	    overload above stays for back-compat with QSAR/Solvation/PB
+	    consumers which migrate piecewise in follow-up H3d.B commits. */
+	BALL_EXPORT float calculateSESAtomAreas
+		(const AtomContainer& fragment,
+		 HashMap<MoleculeStore::StableId, float>& atom_areas_sid,
+		 float probe_radius = 1.5f);
 	
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.
