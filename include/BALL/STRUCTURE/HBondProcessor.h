@@ -15,6 +15,7 @@
 
 #ifndef BALL_MATHS_VECTOR3_H
 #include <BALL/MATHS/vector3.h>
+#include <BALL/KERNEL/moleculeStore.h>      // v2.2 H3c Pattern B (D-H3.8)
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -290,13 +291,17 @@ namespace BALL
 			 */
 			//@{
 
-			/*_ list of __ShiftX__ HBond donors collected by <tt>operator ()</tt>
-			 */
-			std::vector<Atom*>             donors_;
+			/*_ list of __ShiftX__ HBond donors collected by <tt>operator ()</tt>.
+			    v2.2 H3c Pattern B (D-H3.8): StableId-keyed; consumer code
+			    resolves sid -> Atom* via hbond_store_ at access time. */
+			std::vector<MoleculeStore::StableId>  donors_;
 
-			/*_ list of HBond acceptors collected by <tt>operator ()</tt>
-			 */
-			std::vector<Atom*>             acceptors_;
+			/*_ list of HBond acceptors collected by <tt>operator ()</tt>. */
+			std::vector<MoleculeStore::StableId>  acceptors_;
+
+			/*_ source store captured at first push by operator(); both
+			    donors_ and acceptors_ are scoped to this store. */
+			MoleculeStore*                  hbond_store_ = nullptr;
 
 			std::map< Residue*, Position>  residue_ptr_to_position_;
 			//@}

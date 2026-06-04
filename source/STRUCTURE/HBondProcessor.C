@@ -5,6 +5,8 @@
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern B: D-H3.8 opt-in
+#include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -79,6 +81,7 @@ namespace BALL
     residue_data_.clear();
     donors_.clear();
     acceptors_.clear();
+    hbond_store_ = nullptr;        // v2.2 H3c Pattern B: reset store scope
 		residue_ptr_to_position_.clear();
 		h_bonds_.clear();
 		return true;
@@ -119,8 +122,12 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		// delete all previous hydrogen bonds
-		std::set< Bond* >  to_delete;
+		// delete all previous hydrogen bonds. v2.2 H3c Pattern B (D-H3.8):
+		// collection keyed on bond StableId; resolve sid -> Bond* at delete
+		// time via the H3c Phase 0 reverse map. Single-store discipline:
+		// capture the source store from the first bond we touch.
+		std::set<MoleculeStore::StableId> to_delete;
+		MoleculeStore* delete_store = nullptr;
 		Atom::BondIterator bi;
 		AtomIterator       ai;
 		ResidueIterator    ri_del(ri);
@@ -130,15 +137,33 @@ namespace BALL
 			{
 				if (bi->getType() == Bond::TYPE__HYDROGEN)
 				{
-					to_delete.insert(&*bi);
+					Atom* a1 = bi->getFirstAtom();
+					if (a1 == nullptr) continue;
+					MoleculeStore* s = a1->getStore();
+					if (s == nullptr) continue;
+					if (delete_store == nullptr) delete_store = s;
+					else if (s != delete_store) continue;
+					// Walk the atom's bond CSR to find the bond's sid.
+					const std::uint32_t a_idx = a1->getStoreIndex();
+					Bond* target = &*bi;
+					s->for_each_bond_of(a_idx, [&](std::uint32_t bidx) {
+						if (s->bond_back_ptr(bidx) == target)
+							to_delete.insert(s->bond_stable_id(bidx));
+					});
 				}
 			}
 		}
-		for (std::set< Bond* >::iterator sit = to_delete.begin();
-				 sit != to_delete.end(); 
-				 sit++)
+		if (delete_store != nullptr)
 		{
-			delete *sit;
+			for (std::set<MoleculeStore::StableId>::iterator sit = to_delete.begin();
+			     sit != to_delete.end();
+			     sit++)
+			{
+				std::uint32_t bidx = delete_store->bond_idx_by_stable_id(*sit);
+				if (bidx == ~std::uint32_t(0)) continue;
+				Bond* b = delete_store->bond_back_ptr(bidx);
+				if (b != nullptr) delete b;
+			}
 		}
 
 		// compute the hydrogen bonds
@@ -177,16 +202,25 @@ namespace BALL
 					// no Atom-RTTI needed.
 					Atom* atom = &(*ai);
 
+					// v2.2 H3c Pattern B (D-H3.8): store StableId; capture
+					// source store at first push (single-store discipline).
+					MoleculeStore* atom_store = atom->getStore();
+					if (atom_store == nullptr) continue;
+					if (hbond_store_ == nullptr) hbond_store_ = atom_store;
+					else if (atom_store != hbond_store_) continue;
+					const MoleculeStore::StableId asid =
+						atom_store->stable_id(atom->getStoreIndex());
+
 					// we store all oxygens as potential hydrogen bond acceptors
 					if (atom->getElement() == PTE[Element::O])
 					{
-						acceptors_.push_back(atom);
+						acceptors_.push_back(asid);
 					}
 					// and the hydrogen as potential hydrogen bond donors
 					if (   (atom->getName().hasSubstring("HA"))
 							|| (atom->getName() == "H")  )
 					{
-						donors_.push_back(atom);
+						donors_.push_back(asid);
 					}
 				}
 			}
@@ -445,10 +479,13 @@ namespace BALL
 
 		backbone_h_bond_pairs_.resize(residue_ptr_to_position_.size());
 
-		/* map distance to (donor, acceptor) for the ShiftXwise hydrogen bond determination*/
-		std::multimap<float, std::pair<Atom*, Atom*> >  potential_shiftX_hbonds;
-		std::map<Atom*, bool> donor_occupied;
-		std::map<Atom*, bool> acceptor_occupied;
+		/* map distance to (donor, acceptor) for the ShiftXwise hydrogen bond determination.
+		   v2.2 H3c Pattern B (D-H3.8): pair-of-StableIds + sid-keyed
+		   occupancy. Atom* resolution happens inside each iteration via
+		   the H3c Phase 0 reverse map. */
+		std::multimap<float, std::pair<MoleculeStore::StableId, MoleculeStore::StableId> > potential_shiftX_hbonds;
+		std::map<MoleculeStore::StableId, bool> donor_occupied;
+		std::map<MoleculeStore::StableId, bool> acceptor_occupied;
 
 		// if there were no donors or acceptors, return immediately
 		if (donors_.empty() || acceptors_.empty())
@@ -482,62 +519,77 @@ namespace BALL
 
 		// we need a datastructure to collect the hydrogen bonds
 		// --> fill potential_shiftX_hbonds
+		// v2.2 H3c Pattern B (D-H3.8): resolve donor/acceptor sids -> v0 Atom*
+		// at the TOP of each (d, a) iteration; the local Atom* references then
+		// match the original code verbatim, no per-access bridge needed.
+		auto resolve_ = [this](MoleculeStore::StableId sid) -> Atom*
+		{
+			if (hbond_store_ == nullptr) return nullptr;
+			MoleculeStore::Index idx = hbond_store_->atom_idx_by_stable_id(sid);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+			return hbond_store_->back_ptr(idx);
+		};
 		for (Position d=0; d<donors_.size(); ++d)
 		{
+			Atom* donor_atom = resolve_(donors_[d]);
+			if (donor_atom == nullptr) continue;
 			for (Position a=0; a<acceptors_.size(); ++a)
 			{
+				Atom* acceptor_atom = resolve_(acceptors_[a]);
+				if (acceptor_atom == nullptr) continue;
+
 				// does the bond fullfill all ShiftX criteria?
 				// exclude self interaction
-				if (donors_[d]->getResidue() == acceptors_[a]->getResidue())
+				if (donor_atom->getResidue() == acceptor_atom->getResidue())
 				{
 					continue;
 				}
 
 				// HA does not form hydrogen bonds with its _neighbours_
-				if (donors_[d]->getName().hasSubstring("HA"))
+				if (donor_atom->getName().hasSubstring("HA"))
 				{
 					bool adjacent_residues =
-						   donors_[d]->getResidue()->isNextSiblingOf(*(acceptors_[a]->getResidue()))
-						|| donors_[d]->getResidue()->isPreviousSiblingOf(*(acceptors_[a]->getResidue()))
-						|| (   abs(  donors_[d]->getResidue()->getID().toInt()
-								 - acceptors_[a]->getResidue()->getID().toInt())  <= 1);
+						   donor_atom->getResidue()->isNextSiblingOf(*(acceptor_atom->getResidue()))
+						|| donor_atom->getResidue()->isPreviousSiblingOf(*(acceptor_atom->getResidue()))
+						|| (   abs(  donor_atom->getResidue()->getID().toInt()
+								 - acceptor_atom->getResidue()->getID().toInt())  <= 1);
 
 					if (adjacent_residues)
 						continue;
 				}
 
-				//  oxygen--hydrogen separation  
-				float distance = (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+				//  oxygen--hydrogen separation
+				float distance = (donor_atom->getPosition() - acceptor_atom->getPosition()).getLength();
 
-				if (   (  donors_[d]->getName().hasSubstring("HA") && (distance > ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE ))
-						|| ( (donors_[d]->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
+				if (   (  donor_atom->getName().hasSubstring("HA") && (distance > ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE ))
+						|| ( (donor_atom->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
 					continue;
 
 				// the angle criterion for H
-				if (donors_[d]->getName()== "H")
+				if (donor_atom->getName()== "H")
 				{
 					Atom* C = NULL;
 					Atom* N = NULL;
-					// we have to find the C to which the acceptor O is bound and 
-					// 								 the N to which the _donor_ H is bound 
+					// we have to find the C to which the acceptor O is bound and
+					// 								 the N to which the _donor_ H is bound
 
 					// we can't use countBonds here because of the hydrogen bonds which we want to ignore
 					int bond_count_acceptor = 0;
 					Atom::BondIterator bi;
-					for (bi = acceptors_[a]->beginBond(); +bi; ++bi)
+					for (bi = acceptor_atom->beginBond(); +bi; ++bi)
 					{
 						bond_count_acceptor++;
-						if (bi->getPartner(*acceptors_[a])->getName().hasSubstring("C"))
-							C = bi->getPartner(*acceptors_[a]);
+						if (bi->getPartner(*acceptor_atom)->getName().hasSubstring("C"))
+							C = bi->getPartner(*acceptor_atom);
 					}
 
 					int bond_count_donor = 0;
-					for (bi = donors_[d]->beginBond(); +bi; ++bi)
+					for (bi = donor_atom->beginBond(); +bi; ++bi)
 					{
 						if (bi->getType() != Bond::TYPE__HYDROGEN)
 						{
 							bond_count_donor++;
-							N = bi->getPartner(*donors_[d]);
+							N = bi->getPartner(*donor_atom);
 						}
 					}
 
@@ -548,8 +600,8 @@ namespace BALL
 					}
 
 					// compute the vectors CO and NH
-					BALL::Vector3 CO = acceptors_[a]->getPosition() - C->getPosition();
-					BALL::Vector3 HN = N->getPosition() - donors_[d]->getPosition();
+					BALL::Vector3 CO = acceptor_atom->getPosition() - C->getPosition();
+					BALL::Vector3 HN = N->getPosition() - donor_atom->getPosition();
 
 					float bond_angle = CO.getAngle(HN);
 					// NOTE: the following looks different from the SHIFTX paper, but is not :-)
@@ -557,13 +609,13 @@ namespace BALL
 							|| (distance >= 2.5 + cos(bond_angle))))
 						continue;
 
-					// hydrogen-oxygen distance < 3.5 A and hydrogen-oxygen distance < nitrogen - oxygen distance		
-					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptors_[a]->getPosition()).getLength()))
+					// hydrogen-oxygen distance < 3.5 A and hydrogen-oxygen distance < nitrogen - oxygen distance
+					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptor_atom->getPosition()).getLength()))
 						continue;
 				}
 
-				std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
-				potential_shiftX_hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
+				std::pair<MoleculeStore::StableId, MoleculeStore::StableId> bond_sids(donors_[d], acceptors_[a]);
+				potential_shiftX_hbonds.insert(std::pair<float, std::pair<MoleculeStore::StableId, MoleculeStore::StableId> >(distance, bond_sids));
 			}
 		}
 
@@ -572,17 +624,22 @@ namespace BALL
 		// To ensure that we assign only one (the smallest) bond for each donor and acceptor atom,
 		// we iterate over the bonds sorted by their distance. If a bond is assigned, we mark this
 		// in the occupied data structures
-		std::multimap<float, std::pair<Atom*, Atom*> >::iterator it_b = potential_shiftX_hbonds.begin();
+		std::multimap<float, std::pair<MoleculeStore::StableId, MoleculeStore::StableId> >::iterator it_b = potential_shiftX_hbonds.begin();
 
 		for ( ; it_b != potential_shiftX_hbonds.end(); ++it_b)
 		{
 			//double distance = it_b->first;
-			Atom* donor    = it_b->second.first;
-			Atom* acceptor = it_b->second.second;
+			// v2.2 H3c Pattern B: resolve sids -> Atom* once per iteration
+			// via the H3c Phase 0 reverse map.
+			const MoleculeStore::StableId donor_sid    = it_b->second.first;
+			const MoleculeStore::StableId acceptor_sid = it_b->second.second;
+			Atom* donor    = resolve_(donor_sid);
+			Atom* acceptor = resolve_(acceptor_sid);
+			if (donor == nullptr || acceptor == nullptr) continue;
 
 			// is this bond still allowed? i.e. are acceptor and donor still unoccupied?
-			if (   (donor_occupied.find(donor) != donor_occupied.end())
-					|| (acceptor_occupied.find(acceptor)  != acceptor_occupied.end()))
+			if (   (donor_occupied.find(donor_sid) != donor_occupied.end())
+					|| (acceptor_occupied.find(acceptor_sid)  != acceptor_occupied.end()))
 			{
 				continue;
 			}
@@ -632,9 +689,9 @@ namespace BALL
 				bond->setProperty("HBOND_ANGLE", bond_angle);
 			}
 
-			// finally mark the current participants as occupied
-			donor_occupied[donor] = true;
-			acceptor_occupied[acceptor] = true;
+			// finally mark the current participants as occupied (sid-keyed)
+			donor_occupied[donor_sid] = true;
+			acceptor_occupied[acceptor_sid] = true;
 		}
 		return true;
 	}
