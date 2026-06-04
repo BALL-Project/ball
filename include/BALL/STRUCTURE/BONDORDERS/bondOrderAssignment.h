@@ -54,17 +54,29 @@ namespace BALL
 			// denotes whether the problem could be solved or not
 			bool valid;
 
-			// v2.2 H3d.D (D-H3.8): bond_order_map +
-			// number_of_virtual_hydrogens are PURELY TRANSIENT result
-			// containers populated by the bond-order solver and consumed
-			// inside the same ABO::apply() invocation (bondOrderAssignment::
-			// apply() reads them, writes the results back to the molecule
-			// via setOrder() / inserts virtual H atoms, then ABO's start_()
-			// clears them at the next apply via solutions_.clear()). No
-			// external code observes them between apply calls. The D-H3.8
-			// forward-stability concern does NOT apply, mirroring the
-			// AssignBondOrderProcessor scratch carve-out (commit 7ca8384cd)
-			// and the Kekuliser scratch carve-out (commit ae46c8d8c).
+			// v2.2 H3d.D (D-H3.8) + H3d closing-CR MEDIUM finding 5:
+			//
+			// bond_order_map + number_of_virtual_hydrogens are populated
+			// by the bond-order solver and consumed inside the same
+			// AssignBondOrderProcessor::apply() invocation that produced
+			// them. Inside one apply() they ARE pure scratch. HOWEVER --
+			// the parent ABO retains its solutions_ vector (which holds
+			// BondOrderAssignment values) BETWEEN apply() calls until
+			// the next ABO::start() -> clear() runs, and the public
+			// ABO API exposes those solutions through `getNumberOf...
+			// Assignments()` and `apply(solution_index)`. A caller who
+			// mutates the underlying MoleculeStore (compact() /
+			// release_atom) AFTER apply() but BEFORE consuming a
+			// solution via these accessors will see stale Atom*/Bond*
+			// pointers inside the cached bond_order_map and
+			// number_of_virtual_hydrogens.
+			//
+			// This is a documented RESIDUAL HAZARD, not pure scratch.
+			// Callers MUST treat ABO solutions as "valid only until the
+			// next MoleculeStore mutation OR the next ABO::apply()".
+			// H4 v0 retirement migrates these to sid-keyed forms;
+			// until then, the caller-side discipline is the safety
+			// boundary.
 
 			// the result : the set of bond orders for _ALL_ original bonds
 			HashMap<Bond*, int> bond_order_map;

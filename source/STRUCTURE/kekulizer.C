@@ -48,6 +48,28 @@ Kekuliser::Kekuliser()
 
 bool Kekuliser::setup(Molecule& mol)
 {
+	// v2.2 H3d closing-CR HIGH finding 1: enforce the "derived scratch
+	// cleared at setup() entry" invariant the kekulizer.h carve-out
+	// depends on. Without this, a Kekuliser instance carrying derived
+	// Atom*/Bond* state from a previous setup() invocation would walk
+	// into the new setup with stale pointers; the H3d.A #3 end-of-setup
+	// clears (commit ae46c8d8c CR1.5) only run on NORMAL exit, and
+	// public clear() may be skipped between setups (e.g. MMFF94::setup
+	// at MMFF94.C:205-206 sets rings/aromaticRings then setup() without
+	// an intervening clear()). This drops ONLY derived state -- the
+	// public-input rings_ / aromatic_rings_ (just populated by the
+	// caller above) are preserved, the sid-keyed max_valence_ +
+	// kekuliser_store_ are forward-stable anyway.
+	solutions_.clear();
+	atom_infos_.clear();
+	current_aromatic_system_.clear();
+	aromatic_atoms_.clear();
+	all_aromatic_atoms_.clear();
+	aromatic_systems_.clear();
+	unassigned_bonds_.clear();
+	max_valence_.clear();
+	kekuliser_store_ = nullptr;
+
 	molecule_ = &mol;
 
 	// collect aromatic bonds and atoms to speed up SMARTS matching:
@@ -764,11 +786,21 @@ void Kekuliser::getMaximumValence_()
 
 void Kekuliser::clear()
 {
+	// v2.2 H3d closing-CR HIGH finding 2: public clear() must drop
+	// ALL pointer-keyed members, not just the subset it previously
+	// touched. Prior versions omitted solutions_, all_aromatic_atoms_,
+	// and rings_ (the public-input ring set); a caller invoking
+	// clear() explicitly to reset the kekulizer would still leave
+	// stale Atom*/Bond* in those three. Now complete.
 	aromatic_systems_.clear();
 	aromatic_rings_.clear();
+	rings_.clear();
+	all_aromatic_atoms_.clear();
+	solutions_.clear();
 	unassigned_bonds_.clear();
 	aromatic_atoms_.clear();
 	max_valence_.clear();
+	kekuliser_store_ = nullptr;
 	current_aromatic_system_.clear();
 	atom_infos_.clear();
 }

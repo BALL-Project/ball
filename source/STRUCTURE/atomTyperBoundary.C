@@ -38,6 +38,32 @@ namespace
 	// Translate caller-provided v0 ring sets (vector<HashSet<Atom*>>)
 	// into the sid-keyed internal representation, capturing the
 	// MoleculeStore at first push and skipping any foreign-store atoms.
+	//
+	// v2.2 H3d closing-CR HIGH finding 3: this helper now PROBES the
+	// caller-provided rings for their dominant store BEFORE consulting
+	// the typer's existing atom_typer_store_. If the caller is feeding
+	// rings from a NEW store, we drop the previously-typer-captured
+	// store so the new sids land coherently; without this, every atom
+	// in the new ring set would be rejected as "foreign" against the
+	// stale captured store and the typer would silently see empty
+	// rings. The probe is single-pass and only resets atom_typer_store_
+	// on a genuine store change.
+	static MoleculeStore* probe_dominant_store_(const vector<HashSet<Atom*> >& src)
+	{
+		for (Position p = 0; p < src.size(); ++p)
+		{
+			HashSet<Atom*>::ConstIterator it = src[p].begin();
+			for (; +it; ++it)
+			{
+				Atom* a = *it;
+				if (a == nullptr) continue;
+				MoleculeStore* s = a->getStore();
+				if (s != nullptr) return s;
+			}
+		}
+		return nullptr;
+	}
+
 	static void translate_ring_sets_(const vector<HashSet<Atom*> >& src,
 	                                  vector<HashSet<MoleculeStore::StableId> >& dst,
 	                                  MoleculeStore*& captured_store)
@@ -63,11 +89,32 @@ namespace
 
 void AtomTyper::setRings(const vector<HashSet<Atom*> >& rings)
 {
+	// Cross-store rebind guard (H3d closing-CR finding 3): if the
+	// incoming rings come from a DIFFERENT store than atom_typer_store_,
+	// drop the stale store + the (now-orphaned) aromatic_rings_ so the
+	// pair stays coherent. assignTo()'s own rebind covers the case
+	// where ONLY assignTo is called on a fresh mol; this covers the
+	// reverse where setRings/setAromaticRings get called on a fresh
+	// store after a prior typer use.
+	MoleculeStore* incoming = probe_dominant_store_(rings);
+	if (incoming != nullptr && atom_typer_store_ != nullptr &&
+	    incoming != atom_typer_store_)
+	{
+		aromatic_rings_.clear();
+		atom_typer_store_ = nullptr;
+	}
 	translate_ring_sets_(rings, rings_, atom_typer_store_);
 }
 
 void AtomTyper::setAromaticRings(const vector<HashSet<Atom*> >& rings)
 {
+	MoleculeStore* incoming = probe_dominant_store_(rings);
+	if (incoming != nullptr && atom_typer_store_ != nullptr &&
+	    incoming != atom_typer_store_)
+	{
+		rings_.clear();
+		atom_typer_store_ = nullptr;
+	}
 	translate_ring_sets_(rings, aromatic_rings_, atom_typer_store_);
 }
 

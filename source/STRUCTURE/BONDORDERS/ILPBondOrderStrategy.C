@@ -7,6 +7,18 @@
 // scratch (commit 7ca8384cd) and the standardPredicates auxiliary
 // predicates (commit 328d3fa42). H4 v0 retirement will fold these
 // transient locals into the sid surface.
+//
+// v2.2 H3d closing-CR MEDIUM finding 6 -- COVERAGE GAP:
+// The entire ILPBondOrderStrategy TU is gated on BALL_HAS_LPSOLVE and
+// is NOT compiled in the default Homebrew / Apple Silicon build (the
+// lpsolve library is not packaged). The H3d.D benchmark baseline
+// (V22-DECISIONS.md D-H3d.D.BASELINE) therefore omits the ILP path.
+// Any latent compile error or runtime regression introduced by H3d.D
+// migrations in this TU will only surface on a build configured with
+// `-DBALL_HAS_LPSOLVE=ON`. H3d.D close-out MUST include at least one
+// configured-build run of AssignBondOrder_bench's ILP section before
+// the ILPBondOrderStrategy.h leak elimination commit lands. Until then
+// the ILP path is "compiles-only verified" in this session.
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 

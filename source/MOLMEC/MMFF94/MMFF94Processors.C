@@ -304,6 +304,16 @@ void MMFF94AtomTyper::assignTo(System& s)
 	// sid collisions across stores would silently corrupt resolution
 	// (per Codex CR1 finding 4). A System with no atoms or one whose
 	// atoms have no store skips assignment cleanly.
+	//
+	// v2.2 H3d closing-CR LOW finding 7 -- RESIDUAL COMPATIBILITY RISK:
+	// This is a HARD behaviour break vs. v2.1 (which silently skipped
+	// foreign-store atoms). External callers feeding a multi-store
+	// System into MMFF94 atom typing now see a thrown
+	// Exception::InvalidArgument instead of partial completion. The
+	// internal codebase has no such caller -- MMFF94::setup feeds the
+	// Molecule it operates on, which is single-store by construction.
+	// If a downstream consumer relied on the silent-skip, the new
+	// throw must be caught and the System pre-split per store first.
 	MoleculeStore* mol_store = nullptr;
 	{
 		AtomIterator probe = s.beginAtom();

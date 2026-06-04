@@ -17,6 +17,8 @@
 #	include <BALL/KERNEL/moleculeStore.h>     // v2.2 H3d.B: StableId-keyed
 #endif
 
+#include <cassert>
+
 namespace BALL
 {
 
@@ -232,9 +234,34 @@ namespace BALL
 				sb->stable_id(p.second->getStoreIndex())));
 		}
 
-		/** Direct sid push (assumes single-store discipline already
-		    established or being established). */
-		void push_back(const SidPair& sp) { pairs_.push_back(sp); }
+		/** v2.2 H3d closing-CR MEDIUM finding 4: Direct sid push REQUIRES
+		    the caller to have already established both stores via either
+		    a prior `push_back(AtomPair)` (which captures stores at first
+		    push) or `bindStores(store_a, store_b)` below. Without a
+		    captured store, atomA(i)/atomB(i) cannot resolve the entries
+		    -- they return nullptr unconditionally because store_a_ /
+		    store_b_ are nullptr. Calling this overload before binding
+		    stores is a programmer error and asserted in debug builds.
+		    Production builds tolerate the call but the entries will be
+		    unresolvable until the stores are bound. */
+		void push_back(const SidPair& sp)
+		{
+			assert(store_a_ != nullptr && store_b_ != nullptr);
+			pairs_.push_back(sp);
+		}
+
+		/** Bind the two stores explicitly. Required before
+		    `push_back(SidPair)` if no `push_back(AtomPair)` has run.
+		    Setting non-null on an already-captured store enforces the
+		    same single-store discipline as the AtomPair path: the call
+		    is a no-op if it matches, and silently keeps the prior
+		    binding if it doesn't (so a mistaken cross-store push is
+		    caught by the assert above, not by silently re-binding). */
+		void bindStores(MoleculeStore* sa, MoleculeStore* sb)
+		{
+			if (store_a_ == nullptr) store_a_ = sa;
+			if (store_b_ == nullptr) store_b_ = sb;
+		}
 
 		reference       operator[](size_type i)       { return pairs_[i]; }
 		const_reference operator[](size_type i) const { return pairs_[i]; }
