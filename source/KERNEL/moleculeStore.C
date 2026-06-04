@@ -1070,7 +1070,17 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr,
 void MoleculeStore::release_atom(Index i)
 {
 	if (i >= back_ptr_.size())   return;   // defensive
-	if (is_freed_[i] != 0)       return;   // already freed (idempotent)
+
+	// v2.2 H3a.3b (close-review FLAW 6): defensive normalization of the
+	// class-of-origin column. If something has drifted the bit on a freed
+	// slot between releases, force it back to 0 before the idempotent
+	// early return. Costs one store; preserves the locked contract
+	// "release_atom always leaves origin_flags_[i] = 0".
+	if (is_freed_[i] != 0)
+	{
+		origin_flags_[i] = 0;
+		return;   // already freed (idempotent)
+	}
 
 	is_freed_[i] = 1;
 	back_ptr_[i] = nullptr;

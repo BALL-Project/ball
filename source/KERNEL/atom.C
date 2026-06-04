@@ -20,6 +20,18 @@ using namespace::std;
 
 namespace BALL
 {
+	// v2.2 H3a.3b (close-review FLAW 7): tight upper bound on sizeof(Atom).
+	// Locks the current measured Darwin arm64 release size (376 B after
+	// origin_hint_ packing) into a static_assert that fires AT COMPILE TIME
+	// if a future change inflates the class. Sizeof_test's runtime <=512
+	// guard catches gross creep; this assert catches a single extra byte
+	// that would otherwise slip past until measured. The 384 ceiling
+	// leaves 8 B of headroom for unrelated cross-platform-padding drift.
+	static_assert(sizeof(Atom) <= 384,
+		"sizeof(Atom) inflated past v2.2 H3a.3b ceiling (376 B + 8 B headroom). "
+		"Check recent additions to Atom's private section; pack byte-scale "
+		"fields near number_of_bonds_/origin_hint_ before adding new members.");
+
 	// K0.3b.1 / K0.4.6: process-global orphan store now lives on
 	// MoleculeStore::orphanStore() with a serialising mutex on
 	// MoleculeStore::orphanMutex(). This accessor remains for the
