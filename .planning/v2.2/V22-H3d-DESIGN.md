@@ -171,3 +171,228 @@ Q7: Cross-cluster: with H3d expected to land ~15 more commits, is there value in
 ## H3d-DR — Codex adversarial round (next)
 
 After this design lands at HEAD, run the Codex adversarial review prompt against this doc + the H3c lessons + the cited file paths. Iterate to GO / GO-WITH-FIXES, then implement per D-H3d.1 ordering.
+
+## H3d-DR review (Codex)
+
+Verdict: **GO-WITH-FIXES**. 2 BLOCKERs + 8 FLAWs + 1 NIT + 1 PRAISE.
+
+- **BLOCKER 1**: ringAnalyser/sdGenerator coupling not addressed.
+  `RingAnalyser::Ring::atoms` is public `vector<Atom*>` consumed
+  directly by sdGenerator at 4+ sites. h3d.B can't migrate ringAnalyser
+  without also touching sdGenerator (which h3d.C marked "skip").
+- **BLOCKER 2**: h3d.D benchmark gate references `KernelCreation_bench.C`
+  which measures atom creation/destruction, NOT ILP bond-order
+  assignment. Real bond-order benchmark with baseline + <=5% threshold
+  + revert criterion needed.
+- **FLAW 3**: h3d.D does NOT depend on h3d.A (no atomTyper dep in
+  assignBondOrderProcessor.C). My dependency claim was wrong.
+- **FLAW 4**: A2 adapter cost is per-rule (atomTyper's match() loop),
+  not amortized. A1 (overload-add) preferred.
+- **FLAW 5**: h3d.A scope misses KERNEL predicates, QSAR, applications,
+  tests as SmartsMatcher callers.
+- **FLAW 6**: atomBijection base-class extraction should be its OWN
+  preparatory commit before StableId migration.
+- **FLAW 7**: h3d.D inventory missed BONDORDERS/* strategy files
+  (ILPBondOrderStrategy has its own Bond* maps).
+- **FLAW 8**: DNAMutator phase text imprecise about which sids
+  invalidate. Spec: res_at_sid CAN invalidate (it's a base atom
+  removed by removeHavingProperty); res_connection_at_sid stays valid
+  (C1 connection); frag_at_sid stays valid across splice.
+- **FLAW 9**: analyticalSES downstream caller migration (Solvation,
+  QSAR consumers) broader than stated.
+- **FLAW 10 (NIT)**: D-H3d.2 pattern inheritance overbroad. Public
+  output maps + public value objects need different treatment.
+- **FLAW 11**: Estimates low. Revised: **20-28 commits, 4-6 reviews,
+  dedicated D benchmark review**.
+- **PRAISE 12**: DNAMutator-first ordering correct (low blast radius,
+  already opted in, current code holds raw pointers across mutations).
+
+## H3d-R2 — Revised scoping (DR fixes applied)
+
+### D-H3d.1-R2 — Revised sub-cluster ordering
+
+**E → atomBijection-extraction → A-API-decision → B-with-ringAnalyser/sdGenerator-decision → D-with-benchmark → C-explicit-skip**
+
+Key changes vs R1:
+- Insert **atomBijection-extraction** as a prep step BEFORE B (FLAW 6).
+- A goes BEFORE B because the SmartsMatcher API decision unblocks the
+  rest of B's plan (atomTyper / kekulizer cleanup gates on A landing).
+- B's ringAnalyser entry becomes a coupled `ringAnalyser + sdGenerator
+  + downstream callers` cluster (BLOCKER 1).
+- D is decoupled from A (no longer "h3d.A blocks h3d.D" -- FLAW 3 fix).
+- D requires its own benchmark commit BEFORE migration (BLOCKER 2 fix).
+- C disposition is explicit "skip + document": no opt-in for builders.
+
+### D-H3d.3-R2 — Revised sub-cluster details
+
+#### h3d.E DNAMutator (1 commit, first)
+
+Per-sid validity table (FLAW 8 fix):
+| Sid | Phase 1 | Phase 2 destroyBond | Phase 4a removeHavingProperty(prop_) | Phase 4b splice | Phase 4c createBond |
+|---|---|---|---|---|---|
+| res_at_sid | valid | valid (unbonded) | **invalid** (base atom removed) | n/a | n/a |
+| res_connection_at_sid | valid | valid | valid (C1 NOT marked) | valid | valid |
+| frag_at_sid | valid | valid | n/a | valid (reparented to res) | valid |
+| frag_connection_at_sid | valid | valid (unbonded) | valid (frag retains) | **invalid** (delete frag) | n/a |
+
+Phase 1.5 prevalidate: all 4 sids valid.
+Phase 2: destroyBond ×2. After this: all sids still valid.
+Phase 3: geometric transforms (no sid resolution).
+Phase 4a: res->removeHavingProperty(prop_). res_at_sid now invalid.
+Phase 4b: splice frag into res. frag_at_sid REMAINS valid (atom
+moved but slot intact).
+Phase 4c: re-resolve res_connection_at_sid + frag_at_sid; createBond.
+Phase 5: delete frag. frag_connection_at_sid now invalid (slot freed
+by frag dtor).
+
+Estimate: 1 commit + close-review.
+
+#### atomBijection-extraction (NEW prep commit, before B)
+
+Per FLAW 6. Extract the `std::vector<std::pair<Atom*, Atom*>>` base
+into a private member; preserve the index-access semantics via
+operator[] + size() + push_back forwarders. NO StableId migration
+in this commit -- just the inheritance break.
+
+Estimate: 1 commit + close-review (touches RMSD/StructureMapper/
+sideChainPlacement that use `ab[i].first/second`).
+
+#### h3d.A SmartsMatcher cluster (revised)
+
+Per FLAW 4 + 5. Migration uses **A1 overload-add** (NOT A2 adapter)
+to avoid per-rule translation cost:
+
+```cpp
+// smartsMatcher.h public surface (additive):
+typedef std::vector<std::set<MoleculeStore::StableId>> MatchSidSet;
+void setSSSR(const std::vector<std::vector<MoleculeStore::StableId>>& rings, MoleculeStore&);
+bool match(MatchSidSet& result, const AtomContainer&, const String& expr,
+           const std::set<MoleculeStore::StableId>& atoms_to_match, MoleculeStore&);
+// Existing v0 setSSSR / match REMAIN, route into the sid form via
+// boundary-translation HELPERS inside smartsMatcher.C. This means v0
+// callers still work; new callers (atomTyper migrated, kekulizer
+// migrated) use the sid form directly.
+```
+
+Callers enumerated (FLAW 5):
+- source/STRUCTURE/{atomTyper, kekulizer, smartsParser, smilesParser}
+- source/KERNEL/standardPredicates.C (SMARTS predicate)
+- source/QSAR/* (descriptor matchers)
+- source/APPLICATIONS/* (CLI tools)
+- test/{Smarts,Smiles,AtomTyper,Kekulizer}_test.C
+
+Migration order:
+1. smartsMatcher.h+C add sid-keyed overloads (boundary-translated to v0
+   inside)
+2. atomTyper migrate to sid form
+3. kekulizer migrate to sid form
+4. smartsParser/smilesParser migrate
+5. standardPredicates SMARTS predicate migrate (kernel-level)
+6. QSAR + APPLICATIONS migrate
+7. h3d.A close-review
+
+Estimate: 7-8 commits + 1 design DR (API decision) + 1 close-review.
+
+#### h3d.B Public-Atom*-vector cluster (revised)
+
+Per BLOCKER 1 + FLAW 9. atomBijection-extraction lands first (above).
+Then per-file:
+
+1. **analyticalSES** + downstream Solvation/QSAR/Pierotti consumers
+   (FLAW 9 expanded scope) — 2-3 commits.
+2. **atomBijection** StableId migration AFTER extraction —
+   1 commit (touches RMSD/StructureMapper/sideChainPlacement).
+3. **reconstructFragmentProcessor** — 1 commit.
+4. **ringAnalyser** + sdGenerator coupling (BLOCKER 1):
+   - Option B.4.a: migrate Ring::atoms to sids; sdGenerator becomes
+     part of B (NOT skipped). Pro: clean ringAnalyser; con: sdGenerator
+     loses Pattern D skip.
+   - Option B.4.b: keep Ring::atoms as v0 vector<Atom*>; add a parallel
+     `vector<StableId>` accessor. sdGenerator stays v0.
+     Pro: preserves Pattern D skip; con: dual storage.
+   - **Recommendation**: B.4.b for H3d (forward-stable accessor; v0
+     surface preserved). Re-evaluate at H4 when builders retire.
+
+Estimate: 5-6 commits + close-review.
+
+#### h3d.D ILP solver (revised)
+
+Per BLOCKER 2 + FLAW 7. Scope expanded to BONDORDERS strategy files
+(ILPBondOrderStrategy + others).
+
+Phase 0 (NEW prep commit): bond-order benchmark.
+- Add `source/BENCHMARKS/AssignBondOrder_bench.C` modeled on
+  KernelCreation_bench, exercising assignBondOrderProcessor on a
+  representative molecule set (e.g., the test/data MOL2 fixtures).
+- Capture baseline numbers in V22-DECISIONS.md.
+- Required: ALL D commits gate on <=5% regression vs baseline.
+
+Then per-file:
+1. assignBondOrderProcessor.h leak elimination (8 sites) + boundary-
+   translation in `.C`
+2. BONDORDERS/ILPBondOrderStrategy.C + .h leak elimination
+3. BONDORDERS/AStarBondOrderStrategy.C (similar pattern; verify)
+4. Other BONDORDERS/* files surveyed
+5. h3d.D close-review including benchmark verification
+
+Estimate: 5-6 commits + benchmark prep + benchmark close-review.
+
+#### h3d.C explicit skip (no commits)
+
+Per Q5. Builders stay v0. NO opt-in. NO migration. Document in
+D-H3c.4-R2 carry-over.
+
+The H3c follow-up opt-ins (residueChecker, hybridisationProcessor,
+defaultProcessors, UCK, nucleotideMapping) shipped at `3e0155f41` +
+`f82754050` are NOT builders -- those were Pattern A clean.
+
+Builders (peptideBuilder, sdGenerator, molecularSimilarity,
+rGroupAssembler, sideChainPlacementProcessor, smilesParser-as-builder)
+remain non-opt-in.
+
+### D-H3d.2-R2 — Pattern conformance (NIT 10 fix)
+
+The H3c patterns apply to SINGLE-INPUT processor STATE (where the
+processor consumes atoms from one System). For:
+
+- **Public output maps / vectors** (h3d.B): caller provides the
+  container; processor populates. Cross-store risk is mitigated only
+  by caller-side discipline. The h3d.B migration must specify whether
+  output maps are caller-cleared (analyticalSES is) or caller-owned.
+- **Public value objects** (atomBijection): need a "Bijection between
+  TWO systems" semantic. The container holds pairs from (sys_a,
+  sys_b); the sids are scoped to their respective stores. Migration
+  must specify the 2-store invariant.
+
+### D-H3d.6-R2 — Revised estimate
+
+Per FLAW 11. Total: **20-28 commits + 4-6 design/close reviews + 1
+benchmark review**. Sub-breakdown:
+- h3d.E DNAMutator: 1 commit + 1 CR
+- atomBijection extraction: 1 commit + 1 CR
+- h3d.A SmartsMatcher: 7-8 commits + 1 design DR + 1 CR
+- h3d.B remaining: 5-6 commits + 1 CR
+- h3d.D ILP: 1 benchmark commit + 5-6 migration commits + 1 benchmark CR
+- h3d.C skip: 0 commits
+- H3d closing CR: 1
+
+### D-H3d.7-R2 — Answered Q1-Q7
+
+Q1: Order is `E → atomBijection-extraction → A → B → D-benchmark
+    → D-migrate → C-skip` (revised per BLOCKER 1 + FLAW 6).
+Q2: A1 overload-add (FLAW 4 fix).
+Q3: Hard benchmark gate <=5% (BLOCKER 2 fix).
+Q4: 5-phase split per the validity table above (FLAW 8 fix).
+Q5: Builders skip + explicit document. No gate exception complexity.
+Q6: Extract first (FLAW 6 fix).
+Q7: handle_pair_of helper deferred; bond/atom sid helpers come up
+    as needed inside D's strategy migrations.
+
+### DESIGN LOCKED at R2.
+
+Per the project's gated discipline, R3 would normally need DR2. The
+R2 fixes are surface corrections (taxonomy + sub-cluster details +
+order) that don't change the structural approach. Implementation
+begins per the revised D-H3d.1-R2 order; each sub-cluster gets its
+own design DR (h3d.A specifically) and close-review.
+
