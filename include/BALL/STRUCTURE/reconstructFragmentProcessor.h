@@ -12,6 +12,8 @@
 #endif
 
 #include <list>
+#include <BALL/KERNEL/moleculeStore.h>      // v2.2 H3d.B: StableId-keyed
+#include <BALL/DATATYPE/hashSet.h>
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -137,9 +139,13 @@ namespace BALL
 				only atoms contained in the hash set <tt>allowed</tt>.
 
 		*/
+		/* v2.2 H3d.B (D-H3.8): allowed set keyed on StableId; tpl_store
+		   is the source store for both ref_center_atom and the sids in
+		   allowed_sids. */
 		static Triple<bool, const Atom*, const Atom*>
-		getTwoReferenceAtoms(const Atom& ref_center_atom, const HashSet<const Atom*>& allowed)
-			;
+		getTwoReferenceAtoms(const Atom& ref_center_atom,
+		                     const HashSet<MoleculeStore::StableId>& allowed_sids,
+		                     MoleculeStore* tpl_store);
 
 		/**
 		*/
