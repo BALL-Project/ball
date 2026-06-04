@@ -520,3 +520,45 @@ section rewritten). R30 reviews the A2 architecture.
 
 *H0 confirmations + container fork recorded 2026-05-20. D55
 resolved A2 2026-05-20.*
+
+---
+
+# H3d.D phase 0 baseline (2026-06-04)
+
+## D-H3d.D.BASELINE — AssignBondOrder benchmark baseline numbers
+
+Per V22-H3d-DESIGN.md D-H3d.3-R2 h3d.D phase 0: capture pre-migration
+timing for the AssignBondOrderProcessor strategies, gate all h3d.D
+migration commits on <=5% regression vs these numbers.
+
+Benchmark: `source/BENCHMARKS/AssignBondOrder_bench.C`
+Fixtures: 5 MOL2 files from `test/data/` (1b5i_ligand, AAG, AAA,
+AGLYSL01_out, BEWCUB); 10 passes per fixture per algorithm.
+
+Baseline numbers (Apple Silicon, BALL libBALL.dylib, release build, no
+BALL_HAS_LPSOLVE -> ILP section skipped at compile time):
+
+| Section                                | Pre-migration (s) |
+|----------------------------------------|------------------|
+| AStar bond-order assignment (default)  | 6.55             |
+| FPT  bond-order assignment             | 5.91             |
+| Total benchmark wall (weighted)        | 12.46            |
+
+Run command:
+```
+BALL_DATA_PATH=$(realpath data) \
+  DYLD_LIBRARY_PATH=$(realpath build/lib) \
+  ./build/bin/BENCHMARKS/AssignBondOrder_bench -v
+```
+
+ILP path baseline is INTENTIONALLY MISSING in the public ledger
+because Homebrew / Apple Silicon BALL is built without lpsolve. The
+h3d.D ILPBondOrderStrategy migration commit MUST re-run this bench
+on a build configured with `-DBALL_HAS_LPSOLVE=ON` and re-capture
+the ILP section number before landing.
+
+Regression threshold: any single-section growth above **5%** vs the
+numbers above triggers either (a) rework the migration commit or
+(b) surface a DR with measured justification before landing.
+
+*H3d.D phase 0 baseline recorded 2026-06-04.*
