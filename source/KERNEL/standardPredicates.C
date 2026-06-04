@@ -1768,13 +1768,26 @@ namespace BALL
 			? atom_store->stable_id(atom.getStoreIndex())
 			: 0;
 
-		if (last_molecule_ == mol && last_match_store_ == atom_store && atom_store != nullptr)
+		// v2.2 H3d.A Codex CR1 finding 1: the cache short-circuit MUST
+		// validate that the cached aromaticity/ring perception is still
+		// fresh for `mol` before returning, otherwise a reused Molecule
+		// pointer with a NEW topology (e.g. mutated and the time stamp
+		// advanced) returns stale SMARTS results. Compute the freshness
+		// here once and gate BOTH the cache-hit return and the
+		// re-perception below on it.
+		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
+		const bool perception_fresh =
+			(it != call_time_map_.end()) && !it->second.isOlderThan(mol->getModificationTime());
+
+		if (last_molecule_ == mol &&
+		    last_match_store_ == atom_store &&
+		    atom_store != nullptr &&
+		    perception_fresh)
  		{
 			return matches_.has(query_sid);
  		}
 
-		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
-		if ((it == call_time_map_.end()) || it->second.isOlderThan(mol->getModificationTime()))
+		if (!perception_fresh)
 		{
 			mol->apply(ring_proc_);
 			mol->apply(arom_proc_);

@@ -299,8 +299,11 @@ void MMFF94AtomTyper::assignTo(System& s)
 	// v2.2 H3d.A (D-H3.8): aromatic_rings_ inherited from AtomTyper is now
 	// sid-keyed (HashSet<MoleculeStore::StableId>); resolve each sid back
 	// to an Atom* through the System's MoleculeStore. Single-store
-	// discipline: the typer's captured store must match s' molecules'
-	// store; foreign-store atoms are silently skipped.
+	// discipline: hard precondition -- a System whose atoms come from
+	// MORE than one store throws Exception::InvalidArgument; otherwise
+	// sid collisions across stores would silently corrupt resolution
+	// (per Codex CR1 finding 4). A System with no atoms or one whose
+	// atoms have no store skips assignment cleanly.
 	MoleculeStore* mol_store = nullptr;
 	{
 		AtomIterator probe = s.beginAtom();
@@ -309,7 +312,14 @@ void MMFF94AtomTyper::assignTo(System& s)
 			MoleculeStore* st = probe->getStore();
 			if (st == nullptr) continue;
 			if (mol_store == nullptr) mol_store = st;
-			else if (st != mol_store) { /* foreign store atom; skip */ }
+			else if (st != mol_store)
+			{
+				throw Exception::InvalidArgument(__FILE__, __LINE__,
+					"MMFF94AtomTyper::assignTo: System spans multiple "
+					"MoleculeStores; sid resolution cannot disambiguate. "
+					"Per D-H3.8 single-store discipline, assign each "
+					"store-rooted subsystem separately.");
+			}
 		}
 	}
 	auto resolve = [mol_store](MoleculeStore::StableId sid) -> Atom*

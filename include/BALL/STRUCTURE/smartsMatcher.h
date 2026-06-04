@@ -290,8 +290,22 @@ namespace BALL
 			/// user SSSR set?
 			bool has_user_sssr_;
 
-			/// user sssr
+			/// user sssr (v0 storage; re-resolved per match() when
+			/// sssr_store_ != nullptr, see Codex CR1 finding 2).
 			std::vector<std::vector<Atom*> > sssr_;
+
+			// v2.2 H3d.A Codex CR1 finding 2: when the sid-keyed
+			// setSSSR(sids, store) overload is used, the matcher
+			// remembers the sid copy + the source store so that
+			// each subsequent match() call can RE-RESOLVE sssr_
+			// (vector<vector<Atom*>>) from the forward-stable sid
+			// view -- otherwise sssr_ holds bridge Atom* across
+			// calls and a MoleculeStore mutation between setSSSR
+			// and match silently invalidates them. v0 setSSSR
+			// (atoms-only) leaves sssr_sids_ empty, signalling the
+			// caller owns the lifetime.
+			std::vector<std::vector<MoleculeStore::StableId> > sssr_sids_;
+			MoleculeStore*                                     sssr_store_ = nullptr;
 
 			// debug output depth
 			Size depth_;

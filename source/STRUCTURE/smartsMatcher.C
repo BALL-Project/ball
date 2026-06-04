@@ -36,6 +36,8 @@ namespace BALL
 		:	rec_matches_(matcher.rec_matches_),
 			has_user_sssr_(matcher.has_user_sssr_),
 			sssr_(matcher.sssr_),
+			sssr_sids_(matcher.sssr_sids_),
+			sssr_store_(matcher.sssr_store_),
 			depth_(matcher.depth_)
 	{
 	}
@@ -51,6 +53,8 @@ namespace BALL
 			rec_matches_ = matcher.rec_matches_;
 			has_user_sssr_ = matcher.has_user_sssr_;
 			sssr_ = matcher.sssr_;
+			sssr_sids_ = matcher.sssr_sids_;
+			sssr_store_ = matcher.sssr_store_;
 			depth_ = matcher.depth_;
 		}
 		return *this;
@@ -58,13 +62,19 @@ namespace BALL
 
 	void SmartsMatcher::setSSSR(const vector<vector<Atom*> >& sssr)
 	{
+		// v0 caller: clears the sid mirror so the next match() trusts
+		// the Atom* form as-is (caller owns lifetime).
 		sssr_ = sssr;
+		sssr_sids_.clear();
+		sssr_store_ = nullptr;
 		has_user_sssr_ = true;
 	}
 
 	void SmartsMatcher::unsetSSSR()
 	{
 		sssr_.clear();
+		sssr_sids_.clear();
+		sssr_store_ = nullptr;
 		has_user_sssr_ = false;
 	}
 
@@ -126,6 +136,30 @@ namespace BALL
 			}
 			else
 			{
+				// v2.2 H3d.A Codex CR1 finding 2: if the sid-keyed
+				// setSSSR variant fed us, re-resolve sssr_ from
+				// sssr_sids_ NOW via the captured sssr_store_, so a
+				// MoleculeStore mutation since the last match() does
+				// not leave stale Atom* pointers in sssr_. Stale sids
+				// silently drop.
+				if (sssr_store_ != nullptr)
+				{
+					sssr_.clear();
+					sssr_.reserve(sssr_sids_.size());
+					for (const auto& ring_sids : sssr_sids_)
+					{
+						std::vector<Atom*> ring;
+						ring.reserve(ring_sids.size());
+						for (auto sid : ring_sids)
+						{
+							MoleculeStore::Index idx = sssr_store_->atom_idx_by_stable_id(sid);
+							if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+							Atom* a = sssr_store_->back_ptr(idx);
+							if (a != nullptr) ring.push_back(a);
+						}
+						sssr_.push_back(std::move(ring));
+					}
+				}
 				parser.setSSSR(sssr_);
 			}
 		}
@@ -1187,24 +1221,16 @@ namespace BALL
 	void SmartsMatcher::setSSSR(const vector<vector<MoleculeStore::StableId> >& sssr_sid,
 	                            MoleculeStore& store)
 	{
-		// Resolve each sid -> Atom* via the store's reverse map, then
-		// invoke the v0 setSSSR. Stale sids skip silently.
-		vector<vector<Atom*> > sssr_v0;
-		sssr_v0.reserve(sssr_sid.size());
-		for (const auto& ring_sids : sssr_sid)
-		{
-			vector<Atom*> ring;
-			ring.reserve(ring_sids.size());
-			for (auto sid : ring_sids)
-			{
-				MoleculeStore::Index idx = store.atom_idx_by_stable_id(sid);
-				if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
-				Atom* a = store.back_ptr(idx);
-				if (a != nullptr) ring.push_back(a);
-			}
-			sssr_v0.push_back(ring);
-		}
-		setSSSR(sssr_v0);
+		// v2.2 H3d.A Codex CR1 finding 2: remember the sid copy + the
+		// source store; each match() RE-RESOLVES the sssr_ Atom* form
+		// from this sid view, so a slot recycle between setSSSR and
+		// match cannot leave stale pointers in sssr_.
+		sssr_sids_ = sssr_sid;
+		sssr_store_ = &store;
+		has_user_sssr_ = true;
+		// sssr_ Atom* form is populated lazily inside match() via
+		// resolveUserSSSR_().
+		sssr_.clear();
 	}
 
 	// Translation helpers (file-local).

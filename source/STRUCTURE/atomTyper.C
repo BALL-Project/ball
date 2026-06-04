@@ -141,6 +141,22 @@ void AtomTyper::assignTo(Molecule& mol)
 	// Defense-in-depth: if no atoms or no store, bail out cleanly.
 	if (atoms_.size() == 0 || mol_store == nullptr) return;
 
+	// v2.2 H3d.A Codex CR1 finding 3: SIDs are unique only WITHIN a
+	// store. If the typer was previously fed rings (via setRings /
+	// setAromaticRings) on a DIFFERENT store, resolving those sids
+	// against mol_store would silently reinterpret them or hit
+	// unrelated atoms. Reject mismatched stores hard: clear rings_ /
+	// aromatic_rings_ and re-bind atom_typer_store_ to mol_store, so
+	// the SmartsMatcher gets an empty SSSR (correct: no ring info for
+	// the new molecule) instead of garbage.
+	if (atom_typer_store_ != nullptr && atom_typer_store_ != mol_store)
+	{
+		rings_.clear();
+		aromatic_rings_.clear();
+		atom_typer_store_ = nullptr;
+	}
+	if (atom_typer_store_ == nullptr) atom_typer_store_ = mol_store;
+
 	SmartsMatcher sm;
 
 	/////////////////////////////////////////////////////////////

@@ -232,13 +232,45 @@ bool Kekuliser::setup(Molecule& mol)
 	}
 
 #ifdef BALL_MMFF94_TEST
-	Log.error() << "Kekulized bonds: " 
-	            << "CA   "  << nr_ca    << " " 
-							<< "NH2  "  << nr_am_gu << " " 
-							<< "ON   "  << on       << " " 
+	Log.error() << "Kekulized bonds: "
+	            << "CA   "  << nr_ca    << " "
+							<< "NH2  "  << nr_am_gu << " "
+							<< "ON   "  << on       << " "
 							<< "PHOS "  << nr_phos  << std::endl;
 	Log.error() << "Not kekulized: " << unassigned_bonds_.size() << std::endl;
 #endif
+
+	// v2.2 H3d.A Codex CR1 finding 5: solutions_ / atom_infos_ /
+	// current_aromatic_system_ / aromatic_atoms_ / all_aromatic_atoms_ /
+	// aromatic_systems_ all hold DERIVED raw Atom*/Bond* values computed
+	// inside this setup() call. Drop them here so the "synchronous
+	// scratch, valid only inside setup()" carve-out documented in
+	// kekulizer.h:131 holds on EXIT, not just on the next entry. This
+	// closes a forward-stability hole: if the caller mutates the
+	// MoleculeStore (compact / release_atom) between this setup() and
+	// the next, those derived containers would otherwise carry stale
+	// pointers across mutations.
+	//
+	// aromatic_rings_ / rings_ are PUBLIC INPUT (populated via
+	// setAromaticRings / setRings) and intentionally NOT cleared here
+	// -- per the class contract callers may call setRings + setup once
+	// and not re-set on the next setup, or call setup repeatedly with
+	// the same SSSR. Their forward-stability is the caller's problem
+	// until v2.2 H3d.B converts them to sid form.
+	//
+	// unassigned_bonds_ is PUBLIC OUTPUT exposed through
+	// getUnassignedBonds(); callers consume it after setup() returns.
+	// Cleared on the next setup() entry only.
+	//
+	// max_valence_ + kekuliser_store_ are sid-keyed and forward-stable
+	// across mutations, so they MAY persist.
+	solutions_.clear();
+	atom_infos_.clear();
+	current_aromatic_system_.clear();
+	aromatic_atoms_.clear();
+	all_aromatic_atoms_.clear();
+	aromatic_systems_.clear();
+
 	return ok;
 }
 
