@@ -168,6 +168,25 @@ namespace BALL
 
 		StableId       stable_id(Index i) const      { return stable_ids_[i]; }
 
+		// v2.2 H3c Phase 0 (D-H3c.0-R3): O(1) reverse lookup from stable_id
+		// to slot index. Returns CONTAINER_NONE-equivalent sentinel (~0u)
+		// if not present. Lifecycle: insert on allocate_atom (after slot
+		// bind), erase on release_atom (BEFORE marking freed). Rebuilt
+		// inside restore_stable_ids_for_load_ -> covers loadStoreJSON AND
+		// loadSystemJSON (DR2 BLOCKER 1 fix). Cost: ~24-32 B per live atom
+		// via std::unordered_map.
+		static constexpr Index UNKNOWN_STABLE_ID = ~static_cast<Index>(0);
+		Index atom_idx_by_stable_id(StableId sid) const
+		{
+			auto it = atom_sid_to_idx_.find(sid);
+			return (it == atom_sid_to_idx_.end()) ? UNKNOWN_STABLE_ID : it->second;
+		}
+		std::uint32_t bond_idx_by_stable_id(StableId sid) const
+		{
+			auto it = bond_sid_to_idx_.find(sid);
+			return (it == bond_sid_to_idx_.end()) ? ~std::uint32_t(0) : it->second;
+		}
+
 		// K0.6.3 / K0.6.3b (Codex R7 OPEN-2): single checked bulk-restore
 		// path for loadStoreJSON. Replaces the prior two underscore-public
 		// helpers, which any caller could invoke and break the
@@ -639,6 +658,13 @@ namespace BALL
 		std::vector<BondRecord>   bonds_;
 		std::vector<Bond*>        bond_back_ptr_;
 		std::vector<StableId>     bond_stable_ids_;   // v2.2 H3a (D-H3.8): parallel to bonds_
+
+		// v2.2 H3c Phase 0 (D-H3c.0-R3): reverse-map state. Insert on
+		// allocate_atom / add_bond after slot/row bind. Erase on
+		// release_atom / remove_bond_unsafe_ BEFORE marking freed/dead.
+		// Rebuilt inside restore_stable_ids_for_load_.
+		std::unordered_map<StableId, Index>          atom_sid_to_idx_;
+		std::unordered_map<StableId, std::uint32_t>  bond_sid_to_idx_;
 
 		// CSR adjacency: bond_csr_off_[i] = first bond-list index for atom i;
 		// bond_csr_off_[i+1] - bond_csr_off_[i] = degree of atom i.

@@ -175,6 +175,21 @@ namespace BALL
 			return isValid() && (store_->origin_flags(idx_) & 0x01u) != 0u;
 		}
 
+		// --- v2.2 H3c Phase 0 (D-H3c.0-R3): factory function paired with
+		// MoleculeStore::atom_idx_by_stable_id. Returns an AtomHandle bound
+		// to the slot currently owning `sid`, or a null handle if no such
+		// slot exists (atom was released, sid never allocated, etc.). The
+		// Pass 2 "re-resolve at apply time" mechanism for the two-pass
+		// rewrite pattern.
+		static AtomHandle bySid(MoleculeStore& store, MoleculeStore::StableId sid)
+		{
+			std::uint32_t idx = store.atom_idx_by_stable_id(sid);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return AtomHandle();
+			// Returned handle captures the slot's CURRENT stable_id (==sid),
+			// so isValid() / generation checks work transparently.
+			return AtomHandle(store, idx);
+		}
+
 		void select()
 		{
 			// Forward through v0 Atom for the full Selectable cascade

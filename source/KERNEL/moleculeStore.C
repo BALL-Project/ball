@@ -71,6 +71,29 @@ void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& id
 
 	for (std::size_t i = 0; i < ids.size(); ++i)
 		stable_ids_[i] = ids[i];
+
+	// v2.2 H3c Phase 0 (D-H3c.0-R3, DR2 BLOCKER 1): rebuild atom reverse
+	// map after stable_ids_ overwrite. Covers BOTH loadStoreJSON and
+	// loadSystemJSON paths (both call this helper).
+	atom_sid_to_idx_.clear();
+	atom_sid_to_idx_.reserve(ids.size());
+	for (Index i = 0; i < ids.size(); ++i)
+	{
+		if (is_freed_[i] == 0)
+			atom_sid_to_idx_[ids[i]] = i;
+	}
+	// bond_sid_to_idx_ rebuilds from the existing bond_stable_ids_ +
+	// bond tombstone state in bonds_[].flags. Bonds aren't re-keyed by
+	// the load helper, so this only fires when restore is called on
+	// already-populated bond tables (current load path doesn't, but
+	// future code might).
+	bond_sid_to_idx_.clear();
+	bond_sid_to_idx_.reserve(bond_stable_ids_.size());
+	for (std::uint32_t k = 0; k < bond_stable_ids_.size(); ++k)
+	{
+		if ((bonds_[k].flags & 0x1u) == 0u)   // FLAG_BOND_DEAD = 0x1
+			bond_sid_to_idx_[bond_stable_ids_[k]] = k;
+	}
 	// V21-STABLE-ID-OVERFLOW: bump only if needed AND not wrapping.
 	// If max_id == UINT64_MAX, future allocations will throw on the
 	// first next_stable_id_alloc_() call rather than silently
@@ -1013,6 +1036,10 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr,
 		name_strings_[idx].clear();
 		type_name_strings_[idx].clear();
 		stable_ids_[idx]      = new_sid;
+		// v2.2 H3c Phase 0 (D-H3c.0-R3): insert into reverse map at end
+		// of slot bind. Free-list reuse path: new_sid is fresh (above);
+		// old sid was already erased on release_atom (ABA-safe).
+		atom_sid_to_idx_[new_sid] = idx;
 		// back_ptr already written above (K0.4.6); for the nullptr-caller
 		// case the slot is live-but-unbound, which is acceptable because
 		// the caller is by contract about to bind it.
@@ -1050,6 +1077,10 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr,
 	// (is_freed=false, back_ptr=nullptr) tearing window is closed.
 	back_ptr_.emplace_back(back_ptr);
 	is_freed_.emplace_back(0);              // K0.3c.1: fresh slot is live
+	// v2.2 H3c Phase 0 (D-H3c.0-R3): insert into reverse map at end of
+	// slot append (fresh-slot path, parallel to the free-list-reuse insert
+	// above).
+	atom_sid_to_idx_[new_sid] = idx;
 
 	// Make sure offset 0 in the string pool is always an empty C-string so
 	// get_name(i) on a fresh atom returns "".
@@ -1081,6 +1112,12 @@ void MoleculeStore::release_atom(Index i)
 		origin_flags_[i] = 0;
 		return;   // already freed (idempotent)
 	}
+
+	// v2.2 H3c Phase 0 (D-H3c.0-R3): erase from reverse map BEFORE
+	// marking freed. Ensures atom_idx_by_stable_id(old_sid) returns
+	// UNKNOWN_STABLE_ID immediately. Free-list reuse allocates a FRESH
+	// sid (next_stable_id_alloc_), so ABA-safe.
+	atom_sid_to_idx_.erase(stable_ids_[i]);
 
 	is_freed_[i] = 1;
 	back_ptr_[i] = nullptr;
@@ -1155,6 +1192,8 @@ void MoleculeStore::clear()
 	element_indices_.clear();
 	selection_.clear();
 	origin_flags_.clear();                   // v2.2 H3a.3b
+	atom_sid_to_idx_.clear();                // v2.2 H3c Phase 0
+	bond_sid_to_idx_.clear();                // v2.2 H3c Phase 0
 	name_offsets_.clear();
 	type_name_offsets_.clear();
 	name_strings_.clear();
@@ -1395,6 +1434,10 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 		// v2.2 H3a (D-H3.8): a recycled bond slot draws a FRESH stable id so a
 		// stale BondHandle into the old occupant goes stale (ABA-safe).
 		bond_stable_ids_[idx] = next_bond_stable_id_alloc_();
+		// v2.2 H3c Phase 0 (D-H3c.0-R3): insert bond reverse map entry
+		// AFTER the slot bind. Free-list reuse: old sid already erased
+		// by remove_bond_unsafe_ (ABA-safe).
+		bond_sid_to_idx_[bond_stable_ids_[idx]] = idx;
 		csr_dirty_ = true;
 		return idx;
 	}
@@ -1408,8 +1451,12 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 	bonds_.push_back(r);
 	bond_back_ptr_.push_back(nullptr);
 	bond_stable_ids_.push_back(next_bond_stable_id_alloc_());   // v2.2 H3a (D-H3.8)
+	const std::uint32_t bond_idx = static_cast<std::uint32_t>(bonds_.size() - 1);
+	// v2.2 H3c Phase 0 (D-H3c.0-R3): insert bond reverse map entry for
+	// fresh-slot path (parallel to free-list-reuse insert above).
+	bond_sid_to_idx_[bond_stable_ids_[bond_idx]] = bond_idx;
 	csr_dirty_ = true;
-	return static_cast<std::uint32_t>(bonds_.size() - 1);
+	return bond_idx;
 }
 
 // K0.3c.2: tombstone a bond record and push onto bond_free_list_.
@@ -1421,6 +1468,12 @@ void MoleculeStore::remove_bond_unsafe_(std::uint32_t bond_idx)
 {
 	if (bond_idx >= bonds_.size()) return;             // defensive
 	if (is_bond_dead(bond_idx))    return;             // already dead
+
+	// v2.2 H3c Phase 0 (D-H3c.0-R3, DR2 FLAW 2): erase bond reverse map
+	// entry BEFORE marking the row dead. Hooked at the UNSAFE path so
+	// every removal site -- remove_bond, remove_bonds_between (which calls
+	// remove_bond_unsafe_ directly) -- gets coverage.
+	bond_sid_to_idx_.erase(bond_stable_ids_[bond_idx]);
 
 	bonds_[bond_idx].flags |= FLAG_BOND_DEAD;
 	bond_back_ptr_[bond_idx] = nullptr;
