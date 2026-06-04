@@ -4,6 +4,8 @@
 
 #include <BALL/STRUCTURE/peptideCapProcessor.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c Pattern B: D-H3.8 opt-in
+#include <BALL/KERNEL/moleculeStore.h>
 //#include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -17,7 +19,7 @@ namespace BALL
 	{
 	}
 
-	float PeptideCapProcessor::computeDistance(std::vector<Atom*>& a, std::vector<Atom*>& b)
+	float PeptideCapProcessor::computeDistance(const std::vector<Vector3>& a, const std::vector<Vector3>& b)
 	{
 		float d = 0.0;
 
@@ -25,7 +27,7 @@ namespace BALL
 		{
 			for (Position j = 0; j < b.size(); ++j)
 			{
-				d += (a[i]->getPosition()-b[j]->getPosition()).getSquareLength();
+				d += (a[i] - b[j]).getSquareLength();
 			}
 		}
 		return d;
@@ -36,8 +38,14 @@ namespace BALL
 		Vector3 translation;
 		Atom* axis   = NULL;
 		Residue* cap = NULL;
-		std::vector<Atom*> a;
-		std::vector<Atom*> b;
+		// v2.2 H3c Pattern B (D-H3.8): the cap and reference atom sets feed
+		// computeDistance which only needs positions. Store the references
+		// as Vector3 directly -- no pointer identity required, and the
+		// position values are stable for the duration of this routine
+		// (no concurrent mutation under the project's single-thread
+		// per-System contract).
+		std::vector<Vector3> a;
+		std::vector<Vector3> b;
 
 		Size nr = chain.countResidues();
 
@@ -52,13 +60,13 @@ namespace BALL
 					translation = it->getPosition();
 				}
 
-				b.push_back(&*it);
+				b.push_back(it->getPosition());
 			}
 
 			cap = chain.getResidue(0);
 			for (AtomIterator it = cap->beginAtom(); +it; ++it)
 			{
-				a.push_back(&*it);
+				a.push_back(it->getPosition());
 				if (it->getName() == "C")
 				{
 					axis = &*it;
@@ -75,13 +83,13 @@ namespace BALL
 					translation = it->getPosition();
 				}
 
-				b.push_back(&*it);
+				b.push_back(it->getPosition());
 			}
 
 			cap = chain.getResidue(nr-1);
 			for (AtomIterator it = cap->beginAtom(); +it; ++it)
 			{
-				a.push_back(&*it);
+				a.push_back(it->getPosition());
 				if (it->getName() == "N")
 				{
 					axis = &*it;
@@ -174,7 +182,13 @@ namespace BALL
 				++ace_atom;
 			}
 
-			std::vector<Atom*> to_remove;
+			// v2.2 H3c Pattern B (D-H3.8): the deferred-delete set is keyed
+			// on StableId. Stored Atom* keys would violate the gate; sids
+			// survive the intervening transforms / fragment-DB calls that
+			// might recycle slots elsewhere. Resolve back via the H3c
+			// Phase 0 reverse map at delete time.
+			std::vector<MoleculeStore::StableId> to_remove;
+			MoleculeStore* to_remove_store = nullptr;   // captured at first push
 
 			AtomIterator n_atom = chain.getResidue(0)->beginAtom();
 
@@ -185,7 +199,14 @@ namespace BALL
 					n_atom->setName("H");
 
 					if (chain.getResidue(0)->getName() == "PRO")
-						to_remove.push_back(&*n_atom);
+					{
+						MoleculeStore* s = n_atom->getStore();
+						if (s != nullptr)
+						{
+							if (to_remove_store == nullptr) to_remove_store = s;
+							to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
+						}
+					}
 				}
 				else if (n_atom->getName() == "N")
 				{
@@ -214,12 +235,22 @@ namespace BALL
 				if (n_atom->getName() == "2H")
 				{
 					h2Atom = n_atom->getPosition();
-					to_remove.push_back(&*n_atom);
+					MoleculeStore* s = n_atom->getStore();
+					if (s != nullptr)
+					{
+						if (to_remove_store == nullptr) to_remove_store = s;
+						to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
+					}
 				}
 				else if (n_atom->getName() == "3H")
 				{
 					h3Atom = n_atom->getPosition();
-					to_remove.push_back(&*n_atom);
+					MoleculeStore* s = n_atom->getStore();
+					if (s != nullptr)
+					{
+						if (to_remove_store == nullptr) to_remove_store = s;
+						to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
+					}
 				}
 				++n_atom;
 			}
@@ -252,10 +283,20 @@ namespace BALL
 			tlp.setTranslation(nAtom);
 			chain.apply(tlp);
 
-			//remove old hydrogens
-			for (Position a = 0; a < to_remove.size(); ++a)
+			//remove old hydrogens. Resolve sids via the H3c Phase 0 reverse
+			// map; if a slot got recycled since collection, skip (defense-
+			// in-depth -- under the single-thread-per-System contract this
+			// branch is unreachable within one operator() call).
+			if (to_remove_store != nullptr)
 			{
-				delete to_remove[a];
+				for (Position a = 0; a < to_remove.size(); ++a)
+				{
+					MoleculeStore::Index idx = to_remove_store->atom_idx_by_stable_id(to_remove[a]);
+					if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+					Atom* p = to_remove_store->back_ptr(idx);
+					if (p == nullptr) continue;
+					delete p;
+				}
 			}
 
 			//torsional optimzation of ACE

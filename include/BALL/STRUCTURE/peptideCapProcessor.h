@@ -58,8 +58,12 @@ namespace BALL
 
 		protected:
 
-			//function to compute the distance of the cap atoms and the last residue
-			float computeDistance(std::vector<Atom*>& a, std::vector<Atom*>& b);
+			//function to compute the distance of the cap atoms and the last residue.
+			// v2.2 H3c Pattern B (D-H3.8): takes positions directly -- the
+			// function never used pointer identity, only summed pair-wise
+			// distances. Callers build the two position vectors at iteration
+			// time. Forward-stable across reparent / recycle.
+			float computeDistance(const std::vector<Vector3>& a, const std::vector<Vector3>& b);
 
 			//function to optimize cap position by rotation
 			void optimizeCapPosition(Chain& chain, bool start);
