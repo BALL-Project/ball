@@ -291,8 +291,10 @@ bool Kekuliser::setup(Molecule& mol)
 	// until v2.2 H3d.B converts them to sid form.
 	//
 	// unassigned_bonds_ is PUBLIC OUTPUT exposed through
-	// getUnassignedBonds(); callers consume it after setup() returns.
-	// Cleared on the next setup() entry only.
+	// getUnassignedBonds(); callers consume it after setup() returns
+	// (or, in MMFF94's case, after a multi-molecule setup() loop).
+	// Cross-setup accumulation is intentional (closing-CR R3 fix);
+	// reset is via explicit Kekuliser::clear() only.
 	//
 	// max_valence_ + kekuliser_store_ are sid-keyed and forward-stable
 	// across mutations, so they MAY persist.

@@ -562,3 +562,76 @@ numbers above triggers either (a) rework the migration commit or
 (b) surface a DR with measured justification before landing.
 
 *H3d.D phase 0 baseline recorded 2026-06-04.*
+
+---
+
+# H3d closure (2026-06-04)
+
+## D-H3d.CLOSE — H3d cluster closed; H3d.C explicit skip, closing CR GO
+
+H3d milestone scope per V22-H3d-DESIGN.md D-H3d.1-R2 ordering
+(E -> atomBijection-extract -> A -> B -> D-bench -> D-migrate ->
+C-skip) is COMPLETE on origin/v2.2:
+
+- **h3d.E** DNAMutator Pattern C rewrite: commit `80e276c57`.
+- **atomBijection extract**: commit `f48b9485a` (HAS-A composition over
+  std::vector base, preserves operator[]/iterator API).
+- **h3d.A SmartsMatcher cluster**: commits `a12608196` -> `029d978f8`
+  (overload-add A1 across SmartsMatcher + atomTyper + MMFF94 cascade +
+  kekulizer + SMARTSPredicate + 2 Codex CR rounds inline) + Codex
+  round 3 GO.
+- **h3d.B Public-Atom*-vector cluster**: commits `4041026c5` ->
+  `efebe25be` (atomBijection sid migration + reconstructFragmentProcessor
+  + analyticalSES sid overload + ringAnalyser B.4.b parallel sid
+  accessor).
+- **h3d.D ILP cluster**: commits `1de7f2b16` -> `45b4c968b`
+  (benchmark + baseline numbers + ABO opt-in + BONDORDERS opt-in;
+  scratch carve-outs for transient solver state; ILP path coverage
+  gap documented in-source).
+- **h3d.C builder skip**: NO COMMITS per design (peptideBuilder /
+  sdGenerator / molecularSimilarity / rGroupAssembler /
+  sideChainPlacementProcessor / smilesParser-as-builder stay v0,
+  no opt-in). Decision recorded here.
+- **H3d closing CR**: commits `595a80ddc` (round 1: 7 findings),
+  `d65908b07` (round 2: 2 findings), `01d1c61d9` (round 3: 1
+  finding), and inline cleanup of stale comment. Codex round 4
+  verdict: **GO**, no behavioral residuals.
+
+Public-surface state after H3d:
+
+- v0 entry points preserved everywhere (A1 overload-add strategy
+  on all public APIs). The H3d.D ABO + BONDORDERS migration is
+  the most conservative: gate opt-in + scratch carve-out
+  documentation only. No public-API break landed in H3d.
+- Single-store discipline enforced HARD in MMFF94AtomTyper
+  (throws on multi-store System); SOFT (capture-first-store +
+  silently-skip-foreign) elsewhere.
+- The H3a.5 handle-key-leak gate is now active on
+  KERNEL/standardPredicates (deferred to keep transient predicate
+  scratch out of the gate scope), STRUCTURE/atomTyper,
+  STRUCTURE/atomTyperBoundary (out of gate scope by design),
+  STRUCTURE/kekulizer, STRUCTURE/assignBondOrderProcessor,
+  STRUCTURE/BONDORDERS/{AStar,FPT,KGreedy,branchAndBound,
+  partialBondOrderAssignment,bondOrderAssignmentStrategy}.
+- Two BONDORDERS files (ILPBondOrderStrategy.C,
+  bondOrderAssignment.C) carry documented gate-deferral notices
+  for local transient scratch.
+
+Known residual hazards (documented in-source where they live):
+
+1. `bondOrderAssignment::bond_order_map` /
+   `number_of_virtual_hydrogens` survive in ABO::solutions_
+   between apply() calls; caller must not mutate the
+   MoleculeStore between apply() and reading a solution.
+2. ILPBondOrderStrategy is compiled-out on default Homebrew /
+   Apple Silicon (no `BALL_HAS_LPSOLVE`); ILP migration commits
+   must re-run AssignBondOrder_bench on a configured build.
+3. MMFF94AtomTyper now THROWS on multi-store System input
+   instead of silently skipping foreign-store atoms. Internal
+   callers are unaffected; external consumers feeding multi-
+   store Systems must catch + pre-split.
+
+H3d officially CLOSED. Next: H4 reconciliation (per design D63 audit)
+or unrelated work.
+
+*H3d closure recorded 2026-06-04.*
