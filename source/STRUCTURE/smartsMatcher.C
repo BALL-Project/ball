@@ -1177,5 +1177,122 @@ namespace BALL
 		cerr << endl;
 	}
 
+	// v2.2 H3d.A (D-H3.8) StableId-keyed overloads. A1 overload-add per
+	// D-H3d.3-R2: each sid-keyed entry-point translates at the boundary
+	// once per call and dispatches into the v0 implementation. Translation
+	// cost: O(N) atom -> sid forward, O(M) sid -> Atom* reverse via the
+	// H3c Phase 0 reverse map (both O(1) per lookup; total negligible vs
+	// the SMARTS match algorithm's cost).
+
+	void SmartsMatcher::setSSSR(const vector<vector<MoleculeStore::StableId> >& sssr_sid,
+	                            MoleculeStore& store)
+	{
+		// Resolve each sid -> Atom* via the store's reverse map, then
+		// invoke the v0 setSSSR. Stale sids skip silently.
+		vector<vector<Atom*> > sssr_v0;
+		sssr_v0.reserve(sssr_sid.size());
+		for (const auto& ring_sids : sssr_sid)
+		{
+			vector<Atom*> ring;
+			ring.reserve(ring_sids.size());
+			for (auto sid : ring_sids)
+			{
+				MoleculeStore::Index idx = store.atom_idx_by_stable_id(sid);
+				if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+				Atom* a = store.back_ptr(idx);
+				if (a != nullptr) ring.push_back(a);
+			}
+			sssr_v0.push_back(ring);
+		}
+		setSSSR(sssr_v0);
+	}
+
+	// Translation helpers (file-local).
+	namespace {
+		void sids_to_atoms_(const std::set<MoleculeStore::StableId>& sids,
+		                    std::set<const Atom*>& out, MoleculeStore& store)
+		{
+			out.clear();
+			for (auto sid : sids)
+			{
+				MoleculeStore::Index idx = store.atom_idx_by_stable_id(sid);
+				if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+				Atom* a = store.back_ptr(idx);
+				if (a != nullptr) out.insert(a);
+			}
+		}
+		void match_to_match_sid_(const SmartsMatcher::Match& m,
+		                          SmartsMatcher::MatchSid& out, MoleculeStore& store)
+		{
+			out.clear();
+			out.reserve(m.size());
+			for (const auto& match_set : m)
+			{
+				std::set<MoleculeStore::StableId> sid_set;
+				for (const Atom* a : match_set)
+				{
+					if (a == nullptr) continue;
+					if (a->getStore() != &store) continue;
+					sid_set.insert(store.stable_id(a->getStoreIndex()));
+				}
+				out.push_back(sid_set);
+			}
+		}
+	}
+
+	void SmartsMatcher::match(MatchSid& matches, Molecule& mol, const String& smarts,
+	                          MoleculeStore& store)
+	{
+		Match v0;
+		match(v0, mol, smarts);
+		match_to_match_sid_(v0, matches, store);
+	}
+
+	void SmartsMatcher::match(MatchSid& matches, Molecule& mol, const String& smarts,
+	                          const std::set<MoleculeStore::StableId>& start_atom_sids,
+	                          MoleculeStore& store)
+	{
+		std::set<const Atom*> v0_start;
+		sids_to_atoms_(start_atom_sids, v0_start, store);
+		Match v0;
+		match(v0, mol, smarts, v0_start);
+		match_to_match_sid_(v0, matches, store);
+	}
+
+	void SmartsMatcher::match(std::vector<MatchSid>& matches, Molecule& mol,
+	                          const std::vector<String>& smarts,
+	                          MoleculeStore& store)
+	{
+		std::vector<Match> v0_matches;
+		match(v0_matches, mol, smarts);
+		matches.clear();
+		matches.reserve(v0_matches.size());
+		for (const Match& m : v0_matches)
+		{
+			MatchSid ms;
+			match_to_match_sid_(m, ms, store);
+			matches.push_back(std::move(ms));
+		}
+	}
+
+	void SmartsMatcher::match(std::vector<MatchSid>& matches, Molecule& mol,
+	                          const std::vector<String>& smarts,
+	                          const std::set<MoleculeStore::StableId>& start_atom_sids,
+	                          MoleculeStore& store)
+	{
+		std::set<const Atom*> v0_start;
+		sids_to_atoms_(start_atom_sids, v0_start, store);
+		std::vector<Match> v0_matches;
+		match(v0_matches, mol, smarts, v0_start);
+		matches.clear();
+		matches.reserve(v0_matches.size());
+		for (const Match& m : v0_matches)
+		{
+			MatchSid ms;
+			match_to_match_sid_(m, ms, store);
+			matches.push_back(std::move(ms));
+		}
+	}
+
 } // namespace BALL
 

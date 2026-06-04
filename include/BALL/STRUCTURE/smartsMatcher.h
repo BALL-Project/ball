@@ -13,6 +13,7 @@
 #include <set>
 #include <map>
 
+#include <BALL/KERNEL/moleculeStore.h>      // v2.2 H3d.A: StableId-keyed
 #include <boost/shared_ptr.hpp>
 
 namespace BALL 
@@ -49,6 +50,8 @@ namespace BALL
 			*/
 			//@{
 			typedef std::vector<std::set<const Atom*> > Match;
+			/// v2.2 H3d.A (D-H3.8): sid-keyed output type, parallel to Match.
+			typedef std::vector<std::set<MoleculeStore::StableId> > MatchSid;
 			//@}
 
 
@@ -80,6 +83,24 @@ namespace BALL
 
 			/// sets an SSSR which is used instead of doing an ring perception
 			void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
+
+			/* v2.2 H3d.A (D-H3.8) -- StableId-keyed overloads, additive
+			   alongside the v0 forms. Each translates at the boundary
+			   (sid <-> Atom*) once per call and dispatches into the v0
+			   implementation. Per H3d-R2 D-H3d.3-R2 A1 strategy.
+			*/
+			void match(MatchSid& matches, Molecule& mol, const String& smarts, MoleculeStore& store);
+			void match(MatchSid& matches, Molecule& mol, const String& smarts,
+			           const std::set<MoleculeStore::StableId>& start_atom_sids,
+			           MoleculeStore& store);
+			void match(std::vector<MatchSid>& matches, Molecule& mol,
+			           const std::vector<String>& smarts, MoleculeStore& store);
+			void match(std::vector<MatchSid>& matches, Molecule& mol,
+			           const std::vector<String>& smarts,
+			           const std::set<MoleculeStore::StableId>& start_atom_sids,
+			           MoleculeStore& store);
+			void setSSSR(const std::vector<std::vector<MoleculeStore::StableId> >& sssr,
+			             MoleculeStore& store);
 
 			/// this function is used to cause the matcher to do an ring perception if needed (do not use the set SSSR any more)
 			void unsetSSSR();
