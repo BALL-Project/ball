@@ -187,6 +187,15 @@ namespace BALL
 			return (it == bond_sid_to_idx_.end()) ? ~std::uint32_t(0) : it->second;
 		}
 
+		// v2.2 H3c CR advisory finding 3: lookup helpers that go directly
+		// through the Bond's public bond_record_idx_/bond_store_ fields
+		// instead of forcing callers to do a CSR scan + bond_back_ptr match.
+		// Replaces the boilerplate used in buildBondsProcessor +
+		// HBondProcessor. Returns ~uint32_t(0) or 0 sid if the bond is not
+		// owned by THIS store (e.g. orphan bond / nullptr).
+		std::uint32_t bond_idx_of(const Bond* b) const;
+		StableId      bond_sid_of(const Bond* b) const;
+
 		// K0.6.3 / K0.6.3b (Codex R7 OPEN-2): single checked bulk-restore
 		// path for loadStoreJSON. Replaces the prior two underscore-public
 		// helpers, which any caller could invoke and break the

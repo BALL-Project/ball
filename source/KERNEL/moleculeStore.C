@@ -5,6 +5,7 @@
 //
 
 #include <BALL/KERNEL/moleculeStore.h>
+#include <BALL/KERNEL/bond.h>             // v2.2 H3c CR finding 3 helpers
 // K0.5.5: invalidate this store's cached CompiledExpressions on dtor so
 // the cache doesn't hold dangling MoleculeStore* keys past our lifetime.
 #include <BALL/KERNEL/compiledExpression.h>
@@ -1629,6 +1630,29 @@ std::vector<std::uint32_t> MoleculeStore::bonds_of(Index i) const
 	return std::vector<std::uint32_t>(
 		bond_csr_idx_.begin() + lo,
 		bond_csr_idx_.begin() + hi);
+}
+
+// v2.2 H3c CR advisory finding 3: direct Bond -> store-row helpers.
+// Bond exposes bond_record_idx_ + bond_store_ publicly (K0.3c.3 /
+// K0.3c.7); these wrappers just guard ownership and bounds. Replaces
+// the for_each_bond_of + bond_back_ptr CSR scan boilerplate that
+// buildBondsProcessor / HBondProcessor wrote inline. Returns ~uint32_t(0)
+// or stable_id 0 when the bond isn't owned by THIS store (foreign /
+// orphan / nullptr).
+std::uint32_t MoleculeStore::bond_idx_of(const Bond* b) const
+{
+	if (b == nullptr || b->bond_store_ != this) return ~std::uint32_t(0);
+	const std::uint32_t bidx = b->bond_record_idx_;
+	if (bidx >= bonds_.size()) return ~std::uint32_t(0);
+	if (bonds_[bidx].flags & 0x1u) return ~std::uint32_t(0);  // FLAG_BOND_DEAD
+	return bidx;
+}
+
+MoleculeStore::StableId MoleculeStore::bond_sid_of(const Bond* b) const
+{
+	const std::uint32_t bidx = bond_idx_of(b);
+	if (bidx == ~std::uint32_t(0)) return 0;
+	return bond_stable_ids_[bidx];
 }
 
 } // namespace BALL

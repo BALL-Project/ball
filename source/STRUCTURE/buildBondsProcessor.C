@@ -312,14 +312,12 @@ namespace BALL
 						if (s != nullptr && (bond_store == nullptr || s == bond_store))
 						{
 							if (bond_store == nullptr) bond_store = s;
-							// Find the bond's stable id via the atom's bond list.
-							// b's store-row idx isn't exposed on Bond; we walk
-							// the atom's bond CSR to find the matching stable id.
-							const std::uint32_t a_idx = (**ait1).getStoreIndex();
-							s->for_each_bond_of(a_idx, [&](std::uint32_t bidx) {
-								if (s->bond_back_ptr(bidx) == b)
-									bonds.insert(s->bond_stable_id(bidx));
-							});
+							// v2.2 H3c follow-up: direct sid lookup via the
+							// bond_sid_of(Bond*) helper. Replaces the prior
+							// for_each_bond_of + bond_back_ptr CSR scan
+							// (Codex CR advisory finding 3).
+							const MoleculeStore::StableId bsid = s->bond_sid_of(b);
+							if (bsid != 0) bonds.insert(bsid);
 						}
 						if (b->isAromatic())
 						{

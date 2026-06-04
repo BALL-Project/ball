@@ -143,13 +143,12 @@ namespace BALL
 					if (s == nullptr) continue;
 					if (delete_store == nullptr) delete_store = s;
 					else if (s != delete_store) continue;
-					// Walk the atom's bond CSR to find the bond's sid.
-					const std::uint32_t a_idx = a1->getStoreIndex();
+					// v2.2 H3c follow-up: direct sid lookup via bond_sid_of
+					// (Codex CR advisory finding 3 helper). Replaces the
+					// for_each_bond_of + bond_back_ptr CSR scan.
 					Bond* target = &*bi;
-					s->for_each_bond_of(a_idx, [&](std::uint32_t bidx) {
-						if (s->bond_back_ptr(bidx) == target)
-							to_delete.insert(s->bond_stable_id(bidx));
-					});
+					const MoleculeStore::StableId bsid = s->bond_sid_of(target);
+					if (bsid != 0) to_delete.insert(bsid);
 				}
 			}
 		}
