@@ -48,25 +48,27 @@ Kekuliser::Kekuliser()
 
 bool Kekuliser::setup(Molecule& mol)
 {
-	// v2.2 H3d closing-CR HIGH finding 1: enforce the "derived scratch
-	// cleared at setup() entry" invariant the kekulizer.h carve-out
-	// depends on. Without this, a Kekuliser instance carrying derived
-	// Atom*/Bond* state from a previous setup() invocation would walk
-	// into the new setup with stale pointers; the H3d.A #3 end-of-setup
-	// clears (commit ae46c8d8c CR1.5) only run on NORMAL exit, and
-	// public clear() may be skipped between setups (e.g. MMFF94::setup
-	// at MMFF94.C:205-206 sets rings/aromaticRings then setup() without
-	// an intervening clear()). This drops ONLY derived state -- the
-	// public-input rings_ / aromatic_rings_ (just populated by the
-	// caller above) are preserved, the sid-keyed max_valence_ +
-	// kekuliser_store_ are forward-stable anyway.
+	// v2.2 H3d closing-CR HIGH finding 1 (refined by closing-CR R2.1):
+	// enforce the "derived scratch cleared at setup() entry" invariant
+	// the kekulizer.h carve-out depends on. Drops derived intra-setup
+	// scratch only.
+	//
+	// EXCLUDED from this clear: unassigned_bonds_. MMFF94::setup() at
+	// MMFF94.C:213 loops over molecules calling kekuliser_.setup() per
+	// molecule and reads getUnassignedBonds() AFTER the loop. Clearing
+	// unassigned_bonds_ on every setup() entry would lose every
+	// molecule's results except the last (closing-CR R2.1 HIGH). The
+	// per-setup() Bond* additions are still safe across the loop --
+	// each molecule's bonds belong to the same MoleculeStore as the
+	// surrounding System, and MMFF94's loop consumes the accumulated
+	// vector immediately on completion of the OUTER assignment without
+	// store mutations between molecules.
 	solutions_.clear();
 	atom_infos_.clear();
 	current_aromatic_system_.clear();
 	aromatic_atoms_.clear();
 	all_aromatic_atoms_.clear();
 	aromatic_systems_.clear();
-	unassigned_bonds_.clear();
 	max_valence_.clear();
 	kekuliser_store_ = nullptr;
 

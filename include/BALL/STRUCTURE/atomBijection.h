@@ -18,6 +18,7 @@
 #endif
 
 #include <cassert>
+#include <BALL/COMMON/exception.h>
 
 namespace BALL
 {
@@ -234,19 +235,28 @@ namespace BALL
 				sb->stable_id(p.second->getStoreIndex())));
 		}
 
-		/** v2.2 H3d closing-CR MEDIUM finding 4: Direct sid push REQUIRES
-		    the caller to have already established both stores via either
-		    a prior `push_back(AtomPair)` (which captures stores at first
-		    push) or `bindStores(store_a, store_b)` below. Without a
-		    captured store, atomA(i)/atomB(i) cannot resolve the entries
-		    -- they return nullptr unconditionally because store_a_ /
-		    store_b_ are nullptr. Calling this overload before binding
-		    stores is a programmer error and asserted in debug builds.
-		    Production builds tolerate the call but the entries will be
-		    unresolvable until the stores are bound. */
+		/** v2.2 H3d closing-CR MEDIUM finding 4 + R2.2: Direct sid push
+		    REQUIRES the caller to have already established both stores
+		    via either a prior `push_back(AtomPair)` (which captures
+		    stores at first push) or `bindStores(store_a, store_b)`
+		    below. Without a captured store, atomA(i)/atomB(i) cannot
+		    resolve the entries.
+
+		    Runtime guarded in BOTH debug AND release: throws
+		    Exception::InvalidArgument when called before stores are
+		    bound. (closing-CR R2.2: assert() alone is no-op under
+		    -DNDEBUG and would let null-store unresolvable entries
+		    accumulate silently in production.) */
 		void push_back(const SidPair& sp)
 		{
-			assert(store_a_ != nullptr && store_b_ != nullptr);
+			if (store_a_ == nullptr || store_b_ == nullptr)
+			{
+				throw Exception::InvalidArgument(__FILE__, __LINE__,
+					"AtomBijection::push_back(SidPair): both stores must "
+					"be bound (call bindStores() or push_back(AtomPair) "
+					"first) before pushing raw sid pairs; otherwise "
+					"atomA()/atomB() cannot resolve.");
+			}
 			pairs_.push_back(sp);
 		}
 
