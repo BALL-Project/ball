@@ -4,6 +4,7 @@
 
 #include <BALL/STRUCTURE/kekulizer.h>
 
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3d.A: D-H3.8 opt-in
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
@@ -204,11 +205,18 @@ bool Kekuliser::setup(Molecule& mol)
 
 	if (ok)
 	{
-		// set formal charges
-		HashMap<Atom*,Index>::Iterator hit = max_valence_.begin();
+		// set formal charges. max_valence_ is sid-keyed (D-H3.8);
+		// resolve each sid back through the captured kekuliser_store_.
+		HashMap<MoleculeStore::StableId, Index>::Iterator hit = max_valence_.begin();
 		for (; hit != max_valence_.end(); ++hit)
 		{
-			Atom* atom = hit->first;
+			Atom* atom = nullptr;
+			if (kekuliser_store_ != nullptr)
+			{
+				MoleculeStore::Index idx = kekuliser_store_->atom_idx_by_stable_id(hit->first);
+				if (idx != MoleculeStore::UNKNOWN_STABLE_ID) atom = kekuliser_store_->back_ptr(idx);
+			}
+			if (atom == nullptr) continue;
 			Size nr = 0;
 			AtomBondIterator bit = atom->beginBond();
 			for(;+bit;++bit)
@@ -336,12 +344,19 @@ bool Kekuliser::fixAromaticRings_()
 			}
 
 			// calculate the number of needed double bonds:
-			Index uncharged_double = max_valence_[&atom] - curr_valence;
+			// max_valence_ is sid-keyed (D-H3.8); look up via the
+			// captured kekuliser_store_.
+			MoleculeStore::StableId atom_sid = 0;
+			if (kekuliser_store_ != nullptr)
+			{
+				atom_sid = kekuliser_store_->stable_id(atom.getStoreIndex());
+			}
+			Index uncharged_double = max_valence_[atom_sid] - curr_valence;
 			if (uncharged_double < 0)
 			{
-				Log.error() << "Kekulizer: Could not calculate max number of needed double bonds for " 
+				Log.error() << "Kekulizer: Could not calculate max number of needed double bonds for "
 										<< atom.getFullName() << std::endl;
-				Log.error() << "Max: "  << max_valence_[&atom] << "  Curr:  " << curr_valence << std::endl;
+				Log.error() << "Max: "  << max_valence_[atom_sid] << "  Curr:  " << curr_valence << std::endl;
 				abort_this_ring = true;
 				ok = false;
 				break;
@@ -390,11 +405,16 @@ bool Kekuliser::fixAromaticRings_()
 
 		std::sort(atom_infos_.begin(), atom_infos_.end());
 
-		// map the AtomInfos to the atoms
-		HashMap<Atom*, Position> atom_to_id;
+		// map the AtomInfos to the atoms. v2.2 H3d.A: key the scratch
+		// map by StableId (forward-stable; passes the H3a.5 gate). All
+		// participating atoms come from kekuliser_store_ (captured in
+		// Kekuliser::setup); foreign-store partners are skipped.
+		HashMap<MoleculeStore::StableId, Position> atom_to_id;
 		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
-			atom_to_id[atom_infos_[p].atom] = p;
+			Atom* a = atom_infos_[p].atom;
+			if (a == nullptr || kekuliser_store_ == nullptr) continue;
+			atom_to_id[kekuliser_store_->stable_id(a->getStoreIndex())] = p;
 		}
 
 		for (Position p = 0; p < atom_infos_.size(); p++)
@@ -404,8 +424,10 @@ bool Kekuliser::fixAromaticRings_()
 			for (Position b = 0; b < ai.abonds.size(); b++)
 			{
 				Atom* partner = ai.abonds[b]->getPartner(*atom);
-				Position partnerp = atom_to_id[partner];
-				ai.partner_id.push_back(partnerp);
+				if (partner == nullptr || kekuliser_store_ == nullptr) continue;
+				MoleculeStore::StableId partner_sid = kekuliser_store_->stable_id(partner->getStoreIndex());
+				if (!atom_to_id.has(partner_sid)) continue;
+				ai.partner_id.push_back(atom_to_id[partner_sid]);
 			}
 		}
 
@@ -643,6 +665,11 @@ void Kekuliser::collectSystems_(Atom& atom)
 void Kekuliser::getMaximumValence_()
 {
 	max_valence_.clear();
+	// v2.2 H3d.A (D-H3.8): capture the molecule's MoleculeStore at first
+	// atom push; max_valence_ is sid-keyed (forward-stable). Foreign-
+	// store atoms (none expected in well-formed input but guarded) are
+	// silently skipped.
+	kekuliser_store_ = nullptr;
 
 	vector<set<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
@@ -652,7 +679,12 @@ void Kekuliser::getMaximumValence_()
 		{
 			Atom& atom = **hit;
 			Index max_valence = 0;
-			if (max_valence_.has(&atom)) continue;
+			MoleculeStore* s = atom.getStore();
+			if (s == nullptr) continue;
+			if (kekuliser_store_ == nullptr) kekuliser_store_ = s;
+			else if (s != kekuliser_store_) continue;
+			MoleculeStore::StableId sid = s->stable_id(atom.getStoreIndex());
+			if (max_valence_.has(sid)) continue;
 
 			Position atomic_number = atom.getElement().getAtomicNumber();
 
@@ -692,7 +724,7 @@ void Kekuliser::getMaximumValence_()
 				}
 			}
 
-			max_valence_[&atom] = max_valence;
+			max_valence_[sid] = max_valence;
 		}
 	}
 }

@@ -11,7 +11,9 @@
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 # include <BALL/DATATYPE/hashMap.h>
-#endif 
+#endif
+
+#include <BALL/KERNEL/moleculeStore.h>      // v2.2 H3d.A: StableId-keyed
 
 #include <set>
 
@@ -128,7 +130,20 @@ namespace BALL
 		// atoms that take part in an aromatic bond:
 		std::set<const Atom*> 		aromatic_atoms_;
 		std::set<const Atom*> 		all_aromatic_atoms_;
-		HashMap<Atom*, Index> 	max_valence_;
+		// v2.2 H3d.A (D-H3.8 + D-H3d.1-R2 A1): keyed on StableId so the
+		// per-atom max-valence record is forward-stable across slot
+		// recycling. Populated in getMaximumValence_() under setup()'s
+		// captured kekuliser_store_; resolved back to Atom* via
+		// MoleculeStore::back_ptr() at read time. All v0 set<Atom*>
+		// members above stay as v0 transient scratch: their lifetime
+		// is the synchronous Kekuliser::setup() invocation (cleared at
+		// start, no slot mutations happen during a setup), so the
+		// forward-stability concern that motivates D-H3.8 does not
+		// apply. Full sid migration of the v0 scratch is deferred per
+		// A1 (transient internals do NOT block H4); D-H3.8 covers them
+		// when their lifetime extends across mutations.
+		HashMap<MoleculeStore::StableId, Index> max_valence_;
+		MoleculeStore*            kekuliser_store_ = nullptr;
 
 		std::set<Atom*> 					current_aromatic_system_;
 
