@@ -10,6 +10,7 @@
 #include <BALL/STRUCTURE/peptides.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c Pattern B: D-H3.8 opt-in
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/forEach.h>
@@ -45,9 +46,13 @@ namespace BALL
 			residue1 = bond_it->getFirstAtom()->getResidue();
 			residue2 = bond_it->getSecondAtom()->getResidue();
 
-			// detect and assign
-			Atom* a1 = bond_it->getFirstAtom();  // dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getFirstAtom()));
-			Atom* a2 = bond_it->getSecondAtom(); // dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getSecondAtom()));
+			// detect and assign. v2.2 H3a.3b (D-H3.6): the legacy
+			// dynamic_cast<PDBAtom*> comment is stale -- PDBAtom origin is
+			// an attribute (AtomHandle::isPDBOrigin / origin_flags bit 0),
+			// not a class. The S-S detection here is purely element-based,
+			// so neither the cast nor the bit is needed.
+			Atom* a1 = bond_it->getFirstAtom();
+			Atom* a2 = bond_it->getSecondAtom();
 			if ((a1 != 0) && (a2 != 0)
 					&& (a1->getElement() == PTE[Element::S]) && (a2->getElement() == PTE[Element::S])
 					&& (residue1 != residue2)
