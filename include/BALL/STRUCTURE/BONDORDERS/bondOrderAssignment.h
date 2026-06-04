@@ -51,8 +51,20 @@ namespace BALL
 			//
 			int getQueueSize() const {return queue_size;}
 
-			// denotes whether the problem could be solved or not  
+			// denotes whether the problem could be solved or not
 			bool valid;
+
+			// v2.2 H3d.D (D-H3.8): bond_order_map +
+			// number_of_virtual_hydrogens are PURELY TRANSIENT result
+			// containers populated by the bond-order solver and consumed
+			// inside the same ABO::apply() invocation (bondOrderAssignment::
+			// apply() reads them, writes the results back to the molecule
+			// via setOrder() / inserts virtual H atoms, then ABO's start_()
+			// clears them at the next apply via solutions_.clear()). No
+			// external code observes them between apply calls. The D-H3.8
+			// forward-stability concern does NOT apply, mirroring the
+			// AssignBondOrderProcessor scratch carve-out (commit 7ca8384cd)
+			// and the Kekuliser scratch carve-out (commit ae46c8d8c).
 
 			// the result : the set of bond orders for _ALL_ original bonds
 			HashMap<Bond*, int> bond_order_map;

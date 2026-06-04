@@ -38,6 +38,13 @@ namespace BALL
 		protected:
 			bool valid_;
 
+			// v2.2 H3d.D (D-H3.8): index_to_free_bond_ is PURELY TRANSIENT
+			// scratch within a single ABO solver invocation -- populated by
+			// ILPBondOrderStrategy::computeNextSolution() at the start of
+			// each ILP run, consumed within the same run, and cleared by
+			// the parent ABO's start_() -> clear() before the next apply.
+			// No external code observes it between calls. Same carve-out
+			// as the AssignBondOrderProcessor scratch (commit 7ca8384cd).
 			// Vector for mapping from variable indices onto free bonds in the
 			// order used by the ILP
 			std::vector<Bond*> index_to_free_bond_;

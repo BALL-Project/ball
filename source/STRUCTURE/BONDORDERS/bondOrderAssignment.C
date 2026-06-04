@@ -1,4 +1,11 @@
 #include <BALL/STRUCTURE/BONDORDERS/bondOrderAssignment.h>
+// v2.2 H3d.D: file-level H3a.5 gate opt-in DEFERRED -- this TU holds
+// `HashMap<Bond*, int> tmp_bond_orders` + `HashMap<Atom*, int>
+// tmp_virtual_hydrogens` LOCAL scratch copies of bondOrderAssignment's
+// own (also-transient) bond_order_map / number_of_virtual_hydrogens at
+// apply() time. Opting in would flag those transient copies without
+// flagging any persistent leak. Same carve-out idiom as
+// ILPBondOrderStrategy.C above. H4 v0 retirement will fold these.
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>

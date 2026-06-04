@@ -1,4 +1,12 @@
 #include <BALL/STRUCTURE/BONDORDERS/ILPBondOrderStrategy.h>
+// v2.2 H3d.D: file-level H3a.5 gate opt-in DEFERRED -- this TU holds
+// `std::map<Bond*, Position> bond_map` LOCAL scratch inside
+// computeNextSolution() (lines 64 + 212), populated and consumed inside
+// the same call. Opting in would flag those transient sites without
+// flagging any persistent leak. Same carve-out idiom as the ABO main
+// scratch (commit 7ca8384cd) and the standardPredicates auxiliary
+// predicates (commit 328d3fa42). H4 v0 retirement will fold these
+// transient locals into the sid surface.
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 

@@ -1,4 +1,5 @@
 #include <BALL/STRUCTURE/BONDORDERS/partialBondOrderAssignment.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3d.D: D-H3.8 opt-in
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
