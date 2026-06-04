@@ -103,6 +103,7 @@ ENDIF()
 LIST(APPEND SOURCES_LIST
 	smartsMatcher.C
 	atomTyper.C
+	atomTyperBoundary.C
 	kekulizer.C
 	molecularSimilarity.C
 	ringAnalyser.C

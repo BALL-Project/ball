@@ -296,6 +296,30 @@ void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
 
 void MMFF94AtomTyper::assignTo(System& s)
 {
+	// v2.2 H3d.A (D-H3.8): aromatic_rings_ inherited from AtomTyper is now
+	// sid-keyed (HashSet<MoleculeStore::StableId>); resolve each sid back
+	// to an Atom* through the System's MoleculeStore. Single-store
+	// discipline: the typer's captured store must match s' molecules'
+	// store; foreign-store atoms are silently skipped.
+	MoleculeStore* mol_store = nullptr;
+	{
+		AtomIterator probe = s.beginAtom();
+		for (; +probe; ++probe)
+		{
+			MoleculeStore* st = probe->getStore();
+			if (st == nullptr) continue;
+			if (mol_store == nullptr) mol_store = st;
+			else if (st != mol_store) { /* foreign store atom; skip */ }
+		}
+	}
+	auto resolve = [mol_store](MoleculeStore::StableId sid) -> Atom*
+	{
+		if (mol_store == nullptr) return nullptr;
+		MoleculeStore::Index idx = mol_store->atom_idx_by_stable_id(sid);
+		if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+		return mol_store->back_ptr(idx);
+	};
+
 	// delete any previous marks about the aromaticity:
 	AtomIterator ait = s.beginAtom();
 	for (; +ait; ++ait)
@@ -306,17 +330,18 @@ void MMFF94AtomTyper::assignTo(System& s)
 	// Mark the aromatic atoms:
 	for (Position r = 0; r < aromatic_rings_.size(); r++)
 	{
-		const HashSet<Atom*>& ring = aromatic_rings_[r];
+		const HashSet<MoleculeStore::StableId>& ring = aromatic_rings_[r];
 
-		HashSet<Atom*>::ConstIterator ait = ring.begin();
-		for (; +ait; ++ait)
+		HashSet<MoleculeStore::StableId>::ConstIterator rit = ring.begin();
+		for (; +rit; ++rit)
 		{
-			Atom& atom = **ait;
-			atom.setProperty("IsAromatic", true); 
+			Atom* atom_ptr = resolve(*rit);
+			if (atom_ptr == nullptr) continue;
+			atom_ptr->setProperty("IsAromatic", true);
 		}
 	}
 
-	// assign the atom types of all atoms which are not 
+	// assign the atom types of all atoms which are not
 	// member of a heteroaromatic ring per SMARTS rules
 	AtomTyper::assignTo(s);
 
@@ -324,20 +349,22 @@ void MMFF94AtomTyper::assignTo(System& s)
 	// assign heterocyclic 5 ring members types:
 	// e.g. C5A C5B N5A N5B C5
 	//////////////////////////////////////////////////
-	
+
 	// iterate over all rings
 	for (Position r = 0; r < aromatic_rings_.size(); r++)
 	{
-		const HashSet<Atom*>& ring_atoms = aromatic_rings_[r];
-		HashSet<Atom*>::ConstIterator ait;
+		const HashSet<MoleculeStore::StableId>& ring_atoms = aromatic_rings_[r];
+		HashSet<MoleculeStore::StableId>::ConstIterator rit;
 
 		// in aromatic 6 ring systems make CB out of CNN+
 		if (ring_atoms.size() == 6)
 		{
-			ait = ring_atoms.begin();
-			for (; +ait; ++ait)
+			rit = ring_atoms.begin();
+			for (; +rit; ++rit)
 			{
-				Atom& atom = **ait;
+				Atom* atom_ptr = resolve(*rit);
+				if (atom_ptr == nullptr) continue;
+				Atom& atom = *atom_ptr;
 				if (atom.getTypeName() == "CNN+")
 				{
 					atom.setTypeName("CB");
@@ -367,10 +394,12 @@ void MMFF94AtomTyper::assignTo(System& s)
 		Atom* cation_atom = 0;
 		Atom* anion_atom = 0;
 
-		ait = ring_atoms.begin();
-		for (; +ait; ++ait)
+		rit = ring_atoms.begin();
+		for (; +rit; ++rit)
 		{
-			Atom& atom = **ait;
+			Atom* atom_ptr = resolve(*rit);
+			if (atom_ptr == nullptr) continue;
+			Atom& atom = *atom_ptr;
 			String element = atom.getElement().getSymbol();
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
@@ -400,12 +429,14 @@ void MMFF94AtomTyper::assignTo(System& s)
 		// we are only interested in hetero rings and charged rings
 		// no hetero atom and no charged atom? Then continue to next ring
 		if (atom_x == 0) continue;
-		
+
 		// iterate over all atoms of this ring:
-		ait = ring_atoms.begin();
-		for (; +ait; ++ait)
+		rit = ring_atoms.begin();
+		for (; +rit; ++rit)
 		{
-			Atom& atom = **ait;
+			Atom* atom_ptr = resolve(*rit);
+			if (atom_ptr == nullptr) continue;
+			Atom& atom = *atom_ptr;
 
 			Position L5 = 0;
 

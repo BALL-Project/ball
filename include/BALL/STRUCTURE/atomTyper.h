@@ -14,6 +14,7 @@
 #endif
 
 #include <vector>
+#include <BALL/KERNEL/moleculeStore.h>     // v2.2 H3d.A: StableId-keyed
 
 namespace BALL 
 {
@@ -58,11 +59,11 @@ namespace BALL
 		///
 		virtual void assignTo(System& s);
 		
-		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
-
-		///
-		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+		// v2.2 H3d.A: public API stays vector<HashSet<Atom*>>; impl
+		// translates to sid form at the boundary (defined in
+		// atomTyper.C). Forward-stable across reparent / recycle.
+		void setAromaticRings(const vector<HashSet<Atom*> >& rings);
+		void setRings(const vector<HashSet<Atom*> >& rings);
 
 		// just for debugging: computational times for the individual SMARTS expressions
 		static StringHashMap<float> rule_times;
@@ -89,10 +90,18 @@ namespace BALL
 		vector<vector<String> > fields_;
 		// number for fields per line in the config file
 		Size 															number_expected_fields_;
-		vector<HashSet<Atom*> > 					rings_;
-		vector<HashSet<Atom*> > 					aromatic_rings_;
-		StringHashMap<vector<Position> > 	element_to_rules_;
-		HashSet<Atom*> 										atoms_;
+		// v2.2 H3d.A (D-H3.8): internal SSSR + working sets keyed on
+		// StableId. setRings / setAromaticRings (public API) translate
+		// from the caller-provided vector<HashSet<Atom*>> at the boundary;
+		// store identity is captured at first push (single-store
+		// discipline; foreign-store atoms skipped). operator() walks
+		// the input atom container, stamps each atom's sid into
+		// atoms_, then uses the SmartsMatcher sid-keyed match overload.
+		vector<HashSet<MoleculeStore::StableId> > rings_;
+		vector<HashSet<MoleculeStore::StableId> > aromatic_rings_;
+		StringHashMap<vector<Position> >          element_to_rules_;
+		HashSet<MoleculeStore::StableId>          atoms_;
+		MoleculeStore*                            atom_typer_store_ = nullptr;
 	};
 
 } // namespace BALL
