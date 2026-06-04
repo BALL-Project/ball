@@ -436,10 +436,13 @@ namespace BALL
 
 	bool AddHydrogenProcessor::isRingAtom_(const Atom& atom) const
 	{
-		// v2.2 H3c Pattern B (D-H3.8): query via StableId; the bridge from
-		// v0 Atom is the only place pointer identity touches this lookup.
+		// v2.2 H3c Pattern B (D-H3.8) + Codex CR finding 2 fix: query via
+		// StableId AND verify the atom is in the SAME store the rings were
+		// recorded against. Cross-store false-match on bare sid is
+		// rejected.
 		MoleculeStore* store = atom.getStore();
 		if (store == nullptr) return false;
+		if (ring_atoms_store_ != nullptr && store != ring_atoms_store_) return false;
 		return ring_atoms_.has(store->stable_id(atom.getStoreIndex()));
 	}
 
@@ -597,10 +600,12 @@ namespace BALL
 
 	void AddHydrogenProcessor::setRings(const vector<vector<Atom*> >& rings)
 	{
-		// v2.2 H3c Pattern B (D-H3.8): translate at the public-API boundary.
-		// Callers continue to pass vector<vector<Atom*>>; internal storage
-		// is StableId-keyed so isRingAtom_ survives reparent / recycle.
+		// v2.2 H3c Pattern B (D-H3.8) + Codex CR finding 2 fix: translate
+		// at the public-API boundary, AND record the source store so
+		// isRingAtom_ can reject queries from a different store (would
+		// otherwise risk false-match on bare sid collision).
 		ring_atoms_.clear();
+		ring_atoms_store_ = nullptr;
 
 		for (Position i = 0; i < rings.size(); i++)
 		{
@@ -610,6 +615,8 @@ namespace BALL
 				if (a == nullptr) continue;
 				MoleculeStore* store = const_cast<Atom*>(a)->getStore();
 				if (store == nullptr) continue;
+				if (ring_atoms_store_ == nullptr) ring_atoms_store_ = store;
+				else if (store != ring_atoms_store_) continue;   // skip foreign-store ring atoms
 				ring_atoms_.insert(store->stable_id(a->getStoreIndex()));
 			}
 		}

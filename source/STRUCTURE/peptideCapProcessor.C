@@ -19,15 +19,29 @@ namespace BALL
 	{
 	}
 
-	float PeptideCapProcessor::computeDistance(const std::vector<Vector3>& a, const std::vector<Vector3>& b)
+	float PeptideCapProcessor::computeDistance(MoleculeStore* store,
+	                                           const std::vector<MoleculeStore::StableId>& a,
+	                                           const std::vector<MoleculeStore::StableId>& b)
 	{
-		float d = 0.0;
+		// Codex CR finding 1 fix: resolve LIVE atom positions per call.
+		// The cap atoms rotate between calls in optimizeCapPosition's
+		// torsion loop, so we cannot snapshot positions.
+		if (store == nullptr) return 0.0f;
 
+		auto pos_of = [store](MoleculeStore::StableId sid) -> Vector3
+		{
+			MoleculeStore::Index idx = store->atom_idx_by_stable_id(sid);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return Vector3(0,0,0);
+			return store->position(idx);
+		};
+
+		float d = 0.0;
 		for (Position i = 0; i < a.size(); ++i)
 		{
+			const Vector3 ai = pos_of(a[i]);
 			for (Position j = 0; j < b.size(); ++j)
 			{
-				d += (a[i] - b[j]).getSquareLength();
+				d += (ai - pos_of(b[j])).getSquareLength();
 			}
 		}
 		return d;
@@ -38,14 +52,12 @@ namespace BALL
 		Vector3 translation;
 		Atom* axis   = NULL;
 		Residue* cap = NULL;
-		// v2.2 H3c Pattern B (D-H3.8): the cap and reference atom sets feed
-		// computeDistance which only needs positions. Store the references
-		// as Vector3 directly -- no pointer identity required, and the
-		// position values are stable for the duration of this routine
-		// (no concurrent mutation under the project's single-thread
-		// per-System contract).
-		std::vector<Vector3> a;
-		std::vector<Vector3> b;
+		// v2.2 H3c Pattern B (D-H3.8) + Codex CR finding 1+2 fixes: sid
+		// vectors with single-store discipline. computeDistance resolves
+		// to live atom positions at each torsion step.
+		std::vector<MoleculeStore::StableId> a;
+		std::vector<MoleculeStore::StableId> b;
+		MoleculeStore* store = nullptr;   // captured at first push; rejects foreign-store inputs
 
 		Size nr = chain.countResidues();
 
@@ -60,13 +72,27 @@ namespace BALL
 					translation = it->getPosition();
 				}
 
-				b.push_back(it->getPosition());
+				{
+					MoleculeStore* s = it->getStore();
+					if (s != nullptr && (store == nullptr || store == s))
+					{
+						if (store == nullptr) store = s;
+						b.push_back(s->stable_id(it->getStoreIndex()));
+					}
+				}
 			}
 
 			cap = chain.getResidue(0);
 			for (AtomIterator it = cap->beginAtom(); +it; ++it)
 			{
-				a.push_back(it->getPosition());
+				{
+					MoleculeStore* s = it->getStore();
+					if (s != nullptr && (store == nullptr || store == s))
+					{
+						if (store == nullptr) store = s;
+						a.push_back(s->stable_id(it->getStoreIndex()));
+					}
+				}
 				if (it->getName() == "C")
 				{
 					axis = &*it;
@@ -83,13 +109,27 @@ namespace BALL
 					translation = it->getPosition();
 				}
 
-				b.push_back(it->getPosition());
+				{
+					MoleculeStore* s = it->getStore();
+					if (s != nullptr && (store == nullptr || store == s))
+					{
+						if (store == nullptr) store = s;
+						b.push_back(s->stable_id(it->getStoreIndex()));
+					}
+				}
 			}
 
 			cap = chain.getResidue(nr-1);
 			for (AtomIterator it = cap->beginAtom(); +it; ++it)
 			{
-				a.push_back(it->getPosition());
+				{
+					MoleculeStore* s = it->getStore();
+					if (s != nullptr && (store == nullptr || store == s))
+					{
+						if (store == nullptr) store = s;
+						a.push_back(s->stable_id(it->getStoreIndex()));
+					}
+				}
 				if (it->getName() == "N")
 				{
 					axis = &*it;
@@ -117,7 +157,7 @@ namespace BALL
 		{
 			cap->apply(tfp);
 
-			tmp_distance = computeDistance(a,b);
+			tmp_distance = computeDistance(store, a, b);
 
 			if (largest_distance < tmp_distance)
 			{

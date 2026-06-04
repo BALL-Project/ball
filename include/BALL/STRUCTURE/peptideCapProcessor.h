@@ -17,6 +17,10 @@
 # include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+# include <BALL/KERNEL/moleculeStore.h>     // v2.2 H3c Pattern B (D-H3.8)
+#endif
+
 #ifndef BALL_KERNEL_RESIDUE_H
 # include <BALL/KERNEL/residue.h>
 #endif
@@ -59,11 +63,15 @@ namespace BALL
 		protected:
 
 			//function to compute the distance of the cap atoms and the last residue.
-			// v2.2 H3c Pattern B (D-H3.8): takes positions directly -- the
-			// function never used pointer identity, only summed pair-wise
-			// distances. Callers build the two position vectors at iteration
-			// time. Forward-stable across reparent / recycle.
-			float computeDistance(const std::vector<Vector3>& a, const std::vector<Vector3>& b);
+			// v2.2 H3c Pattern B (D-H3.8) + Codex CR finding 1 fix: takes
+			// StableId sets + the source store; resolves to LIVE atom
+			// positions at each call. The cap atoms rotate between calls
+			// (cap->apply(tfp) in optimizeCapPosition), so positions must
+			// be read live, not snapshotted. Forward-stable across reparent
+			// / recycle.
+			float computeDistance(MoleculeStore* store,
+			                       const std::vector<MoleculeStore::StableId>& a,
+			                       const std::vector<MoleculeStore::StableId>& b);
 
 			//function to optimize cap position by rotation
 			void optimizeCapPosition(Chain& chain, bool start);

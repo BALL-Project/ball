@@ -203,9 +203,14 @@ namespace BALL
 			float getBondLength_(Position element) const;
 
 		private:
-			// v2.2 H3c Pattern B (D-H3.8): StableId-keyed; setRings() translates
-			// from the public-API Atom* input. Survives reparent / recycle.
+			// v2.2 H3c Pattern B (D-H3.8) + Codex CR finding 2 fix: StableId-
+			// keyed AND store-scoped. setRings captures the source store;
+			// isRingAtom_ verifies same-store before query, so a processor
+			// reused across different Systems can't false-match on bare
+			// sid collision. Survives reparent / recycle within the
+			// captured store.
 			HashSet<MoleculeStore::StableId> ring_atoms_;
+			MoleculeStore* ring_atoms_store_ = nullptr;   // captured by setRings
 			Position atom_nr_;
 			Atom* last_atom_;
 			Size nr_hydrogens_;

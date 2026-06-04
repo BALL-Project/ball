@@ -52,6 +52,19 @@ foreach(F IN LISTS KERNEL_SOURCES)
 		"(HashSet|HashMap|StringHashMap|std::set|std::map|std::unordered_set|std::unordered_map|std::vector)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
 		list(APPEND LEAKS "${F}")
 	endif()
+	# v2.2 H3c CR finding 3 (REGISTERED, deliberately scoped out):
+	# the regex above intentionally requires the std:: qualifier (or the
+	# BALL HashSet/HashMap forms). Unqualified `vector<Atom*>` appearing
+	# under `using namespace std` is NOT caught. Extending the regex to
+	# catch it would surface pre-existing transient scratch in several
+	# STRUCTURE files whose public API still takes vector<vector<Atom*>>
+	# (e.g. setRings, SmartsMatcher::setSSSR), forcing cascading breaks
+	# that are H3d-bounded (SmartsMatcher cluster) -- not H3c. The
+	# narrower gate is honest about WHAT it currently enforces (stored
+	# pointer-identity KEYS); the wider gate (transient scratch) is a
+	# follow-on after the SmartsMatcher/RingPerception public-API
+	# migration in H3d. Codex finding 3 is documented as "future
+	# tightening, accept incremental coverage now".
 endforeach()
 
 if(LEAKS)
