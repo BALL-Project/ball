@@ -14,7 +14,13 @@
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
-#include <BALL/MATHS/vector3.h> 
+#include <BALL/MATHS/vector3.h>
+#endif
+
+// v2.2 H3c Pattern B (D-H3.8 cleanup): ring_atoms_ is StableId-keyed,
+// not Atom*-keyed. Forward-stable across reparent / recycle.
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+# include <BALL/KERNEL/moleculeStore.h>
 #endif
 
 #include <vector>
@@ -197,7 +203,9 @@ namespace BALL
 			float getBondLength_(Position element) const;
 
 		private:
-			HashSet<const Atom*> ring_atoms_;
+			// v2.2 H3c Pattern B (D-H3.8): StableId-keyed; setRings() translates
+			// from the public-API Atom* input. Survives reparent / recycle.
+			HashSet<MoleculeStore::StableId> ring_atoms_;
 			Position atom_nr_;
 			Atom* last_atom_;
 			Size nr_hydrogens_;

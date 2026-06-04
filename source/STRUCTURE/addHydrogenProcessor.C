@@ -6,6 +6,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern B: D-H3.8 opt-in
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/matrix44.h>
@@ -435,7 +436,11 @@ namespace BALL
 
 	bool AddHydrogenProcessor::isRingAtom_(const Atom& atom) const
 	{
-		return (ring_atoms_.has(&atom));
+		// v2.2 H3c Pattern B (D-H3.8): query via StableId; the bridge from
+		// v0 Atom is the only place pointer identity touches this lookup.
+		MoleculeStore* store = atom.getStore();
+		if (store == nullptr) return false;
+		return ring_atoms_.has(store->stable_id(atom.getStoreIndex()));
 	}
 
 
@@ -592,13 +597,20 @@ namespace BALL
 
 	void AddHydrogenProcessor::setRings(const vector<vector<Atom*> >& rings)
 	{
+		// v2.2 H3c Pattern B (D-H3.8): translate at the public-API boundary.
+		// Callers continue to pass vector<vector<Atom*>>; internal storage
+		// is StableId-keyed so isRingAtom_ survives reparent / recycle.
 		ring_atoms_.clear();
 
 		for (Position i = 0; i < rings.size(); i++)
 		{
 			for (Position j = 0; j < rings[i].size(); j++)
 			{
-				ring_atoms_.insert(rings[i][j]);
+				const Atom* a = rings[i][j];
+				if (a == nullptr) continue;
+				MoleculeStore* store = const_cast<Atom*>(a)->getStore();
+				if (store == nullptr) continue;
+				ring_atoms_.insert(store->stable_id(a->getStoreIndex()));
 			}
 		}
 	}
