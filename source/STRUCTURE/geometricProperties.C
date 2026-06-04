@@ -5,6 +5,8 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern E: D-H3.8 opt-in
+#include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/MATHS/matrix44.h>
@@ -326,23 +328,39 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 
 	bool setTorsionAngle(const Atom& a1, const Atom& a2, Atom& a3, const Atom& a4, Angle angle)
 	{
+		// v2.2 H3c Pattern E (D-H3.8): the connected-component set is
+		// keyed on StableId, not raw Atom*. Resolution to v0 Atom* for
+		// the per-atom rotate happens at the apply step via
+		// store->back_ptr(idx). std::deque<Atom*> bfs_queue is kept
+		// (transient BFS scratch; the gate excludes std::deque) but its
+		// uniqueness check goes through `component` which IS sid-keyed.
+		MoleculeStore* store = a3.getStore();
+		if (store == nullptr) return false;
+		auto sid_of = [&](const Atom* p) -> MoleculeStore::StableId
+		{
+			return store->stable_id(p->getStoreIndex());
+		};
+
 		//We first need to determine the part of the molecule which needs to be
 		//rotated. this will be done by a simple BFS.
 		std::deque<Atom*> bfs_queue;
 
-		//This set containes the atoms which should be rotated
-		std::set<Atom*> component;
+		//This set contains the atoms which should be rotated (keyed by
+		//StableId per D-H3.8).
+		std::set<MoleculeStore::StableId> component;
 
 		//The starting point needs to be handled explicitly, as
 		//we may not consider a2
-		component.insert(&a3);
+		const MoleculeStore::StableId a2_sid = sid_of(&a2);
+		component.insert(sid_of(&a3));
 
 		for(unsigned int i = 0; i < a3.countBonds(); ++i)
 		{
-			if(a3.getPartnerAtom(i) != &a2)
+			Atom* partner = a3.getPartnerAtom(i);
+			if(sid_of(partner) != a2_sid)
 			{
-				component.insert(a3.getPartnerAtom(i));
-				bfs_queue.push_back(a3.getPartnerAtom(i));
+				component.insert(sid_of(partner));
+				bfs_queue.push_back(partner);
 			}
 		}
 
@@ -354,17 +372,19 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 
 			for(unsigned int i = 0; i < atom->countBonds(); ++i)
 			{
+				Atom* partner = atom->getPartnerAtom(i);
+				const MoleculeStore::StableId psid = sid_of(partner);
 				//If a2 is in the same connected component as a3, we cannot
 				//set the torision angle
-				if(atom->getPartnerAtom(i) == &a2)
+				if(psid == a2_sid)
 				{
 					return false;
 				}
 
-				if(component.find(atom->getPartnerAtom(i)) == component.end())
+				if(component.find(psid) == component.end())
 				{
-					component.insert(atom->getPartnerAtom(i));
-					bfs_queue.push_back(atom->getPartnerAtom(i));
+					component.insert(psid);
+					bfs_queue.push_back(partner);
 				}
 			}
 		}
@@ -384,9 +404,18 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 		rotation = trans * rotation;
 
 
-		for(std::set<Atom*>::iterator it = component.begin(); it != component.end(); ++it)
+		// Apply rotation: resolve each sid back to its current Atom*
+		// via the store reverse map (D-H3c.0-R3) and rotate. Stale
+		// sids skip silently (consistent with the H3c Pattern B
+		// "post-mutation defense-in-depth" rule).
+		for(std::set<MoleculeStore::StableId>::iterator it = component.begin();
+		    it != component.end(); ++it)
 		{
-			(*it)->setPosition(rotation * (*it)->getPosition());
+			MoleculeStore::Index idx = store->atom_idx_by_stable_id(*it);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+			Atom* p = store->back_ptr(idx);
+			if (p == nullptr) continue;
+			p->setPosition(rotation * p->getPosition());
 		}
 
 		return true;
