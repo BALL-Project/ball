@@ -6,6 +6,7 @@
 
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c Pattern A clean: D-H3.8 opt-in (forward gate coverage)
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashSet.h>

@@ -5,6 +5,7 @@
 
 #include <BALL/STRUCTURE/hybridisationProcessor.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H3c Pattern A clean: D-H3.8 opt-in (forward gate coverage)
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/residue.h>
