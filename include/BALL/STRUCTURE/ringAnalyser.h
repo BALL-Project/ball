@@ -8,6 +8,7 @@
 // v2.2 (PR-removal phase 6): the following were previously visible transitively
 // via the now-removed persistenceManager.h include chain.
 #include <BALL/DATATYPE/hashMap.h>
+#include <BALL/KERNEL/moleculeStore.h>      // v2.2 H3d.B (D-H3.8): atomSids()
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/common.h>
@@ -68,8 +69,18 @@ namespace BALL
 					/// The successor of atom i in the ring
 					Position successor(Position i) const;
 
-					/// the atoms of this ring
+					/// the atoms of this ring (v0; kept for back-compat
+					/// with sdGenerator + other consumers per H3d-R2
+					/// B.4.b decision -- sdGenerator stays v0)
 					std::vector<Atom*> atoms;
+
+					/// v2.2 H3d.B (D-H3.8): forward-stable parallel
+					/// accessor. Computes StableIds of `atoms` on demand.
+					/// Single-store discipline: foreign-store atoms
+					/// yield 0. Consumers wanting forward stability
+					/// across reparent/recycle call this instead of
+					/// indexing `atoms` directly.
+					std::vector<MoleculeStore::StableId> atomSids() const;
 
 					/// the type of this ring
 					RingType type;

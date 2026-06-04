@@ -31,6 +31,21 @@ namespace BALL
 	{
 	}
 
+	// v2.2 H3d.B (D-H3.8): forward-stable parallel accessor. Computes
+	// sids for each atom on demand; foreign-store / unbound atoms yield 0.
+	std::vector<MoleculeStore::StableId> RingAnalyser::Ring::atomSids() const
+	{
+		std::vector<MoleculeStore::StableId> out;
+		out.reserve(atoms.size());
+		for (Atom* a : atoms)
+		{
+			if (a == nullptr) { out.push_back(0); continue; }
+			MoleculeStore* s = a->getStore();
+			out.push_back(s ? s->stable_id(a->getStoreIndex()) : 0);
+		}
+		return out;
+	}
+
 	RingAnalyser::Ring::Ring(std::vector<Atom*> const& atoms_)
 		: PropertyManager(),
 		  atoms(atoms_),
