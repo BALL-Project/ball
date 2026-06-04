@@ -144,20 +144,39 @@ namespace BALL
 				// silently drop.
 				if (sssr_store_ != nullptr)
 				{
+					// v2.2 H3d.A Codex CR2.1 (HIGH): drop the WHOLE ring
+					// if any sid in it fails to resolve. A truncated
+					// ring is worse than a missing ring: ring-size and
+					// IN_NUM_RINGS predicates would treat surviving
+					// atoms as members of an impossible smaller ring.
 					sssr_.clear();
 					sssr_.reserve(sssr_sids_.size());
 					for (const auto& ring_sids : sssr_sids_)
 					{
 						std::vector<Atom*> ring;
 						ring.reserve(ring_sids.size());
+						bool ring_complete = true;
 						for (auto sid : ring_sids)
 						{
 							MoleculeStore::Index idx = sssr_store_->atom_idx_by_stable_id(sid);
-							if (idx == MoleculeStore::UNKNOWN_STABLE_ID) continue;
+							if (idx == MoleculeStore::UNKNOWN_STABLE_ID)
+							{
+								ring_complete = false;
+								break;
+							}
 							Atom* a = sssr_store_->back_ptr(idx);
-							if (a != nullptr) ring.push_back(a);
+							if (a == nullptr)
+							{
+								ring_complete = false;
+								break;
+							}
+							ring.push_back(a);
 						}
-						sssr_.push_back(std::move(ring));
+						if (ring_complete) sssr_.push_back(std::move(ring));
+						// else: ring dropped entirely; SMARTS will treat
+						// this as "no such ring" rather than a partial
+						// one. Caller can detect via has_user_sssr_ + a
+						// post-match audit if needed.
 					}
 				}
 				parser.setSSSR(sssr_);

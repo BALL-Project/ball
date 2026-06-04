@@ -330,6 +330,23 @@ void MMFF94AtomTyper::assignTo(System& s)
 		return mol_store->back_ptr(idx);
 	};
 
+	// v2.2 H3d.A Codex CR2.2 (HIGH): if this typer was previously fed
+	// rings on a DIFFERENT store (atom_typer_store_), resolving those
+	// sids against mol_store here would silently mark unrelated atoms
+	// IsAromatic (same numeric sid, different store). The base-class
+	// AtomTyper::assignTo() rebinds on mismatch -- but only AFTER the
+	// aromatic-marking loop below runs. Rebind eagerly HERE so the
+	// aromatic marking sees an empty aromatic_rings_ on store change
+	// rather than stale-cross-store interpretations.
+	if (atom_typer_store_ != nullptr && mol_store != nullptr &&
+	    atom_typer_store_ != mol_store)
+	{
+		rings_.clear();
+		aromatic_rings_.clear();
+		atom_typer_store_ = nullptr;
+	}
+	if (atom_typer_store_ == nullptr) atom_typer_store_ = mol_store;
+
 	// delete any previous marks about the aromaticity:
 	AtomIterator ait = s.beginAtom();
 	for (; +ait; ++ait)
