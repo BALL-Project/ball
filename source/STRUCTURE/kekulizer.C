@@ -215,8 +215,16 @@ bool Kekuliser::setup(Molecule& mol)
 	// fix aromatic rings
 	bool ok = fixAromaticRings_();
 
-	// recollect the remaining aromatic bonds:	
-	unassigned_bonds_.clear();
+	// recollect the remaining aromatic bonds. v2.2 H3d closing-CR
+	// round 3 HIGH: the pre-H3d original here was
+	// `unassigned_bonds_.clear()` followed by an append loop. That
+	// per-setup-call wipe silently discarded every molecule's
+	// unassigned bonds except the last one when MMFF94::setup()
+	// (MMFF94.C:207-213) loops setup() over multiple molecules and
+	// reads getUnassignedBonds() AFTER the whole loop. ACCUMULATE
+	// across the loop instead -- MMFF94 invokes Kekuliser::clear()
+	// (MMFF94.C:225) AFTER consuming getUnassignedBonds(), which is
+	// the right reset point for the public output vector.
 	AtomBondIterator bit;
 	AtomIterator ait;
 	BALL_FOREACH_BOND(mol, ait, bit)
