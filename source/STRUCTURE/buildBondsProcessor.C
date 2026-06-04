@@ -303,7 +303,13 @@ namespace BALL
 						++num_bonds;
 						Bond* const b = (**ait1).getBond(**ait2);
 						MoleculeStore* s = (**ait1).getStore();
-						if (s != nullptr)
+						// Codex final-CR finding 2 fix: reject foreign-store
+						// SIDs so mutate_each's bond_store-based resolution
+						// can't false-match. The aromaticity decision below
+						// (num_bonds/num_aro counters) doesn't read the sids,
+						// so skipping the insert is sufficient -- the local
+						// counters still see this bond.
+						if (s != nullptr && (bond_store == nullptr || s == bond_store))
 						{
 							if (bond_store == nullptr) bond_store = s;
 							// Find the bond's stable id via the atom's bond list.

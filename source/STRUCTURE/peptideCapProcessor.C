@@ -241,7 +241,9 @@ namespace BALL
 					if (chain.getResidue(0)->getName() == "PRO")
 					{
 						MoleculeStore* s = n_atom->getStore();
-						if (s != nullptr)
+						// Codex final-CR finding 1 fix: reject foreign-store
+						// pushes (parallel guard in the 2H/3H sites below).
+						if (s != nullptr && (to_remove_store == nullptr || s == to_remove_store))
 						{
 							if (to_remove_store == nullptr) to_remove_store = s;
 							to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
@@ -276,7 +278,10 @@ namespace BALL
 				{
 					h2Atom = n_atom->getPosition();
 					MoleculeStore* s = n_atom->getStore();
-					if (s != nullptr)
+					// Codex final-CR finding 1 fix: reject foreign-store pushes
+					// so delete-time resolution via to_remove_store can't
+					// false-match on coincidental sid collision.
+					if (s != nullptr && (to_remove_store == nullptr || s == to_remove_store))
 					{
 						if (to_remove_store == nullptr) to_remove_store = s;
 						to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
@@ -286,7 +291,10 @@ namespace BALL
 				{
 					h3Atom = n_atom->getPosition();
 					MoleculeStore* s = n_atom->getStore();
-					if (s != nullptr)
+					// Codex final-CR finding 1 fix: reject foreign-store pushes
+					// so delete-time resolution via to_remove_store can't
+					// false-match on coincidental sid collision.
+					if (s != nullptr && (to_remove_store == nullptr || s == to_remove_store))
 					{
 						if (to_remove_store == nullptr) to_remove_store = s;
 						to_remove.push_back(s->stable_id(n_atom->getStoreIndex()));
