@@ -3,6 +3,8 @@
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern B: D-H3.8 opt-in
+#include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -280,9 +282,14 @@ namespace BALL
 		vector<vector<Atom*> >::iterator it = sssr.begin();
 		for (; it!=sssr.end(); ++it)
 		{
-			// count bonds and aromatic bonds
+			// count bonds and aromatic bonds. v2.2 H3c Pattern B (D-H3.8):
+			// bond collection is keyed on StableId; mutation resolves back
+			// via the H3c Phase 0 reverse map. The captured store is
+			// captured at first push (every bond in this ring shares the
+			// same store under the single-thread-per-System contract).
 			Size num_bonds(0), num_aro(0);
-			HashSet<Bond*> bonds;
+			HashSet<MoleculeStore::StableId> bonds;
+			MoleculeStore* bond_store = nullptr;
 
 			vector<Atom*>::iterator ait1 = it->begin();
 			for (; ait1 != it->end(); ++ait1)
@@ -295,7 +302,19 @@ namespace BALL
 					{
 						++num_bonds;
 						Bond* const b = (**ait1).getBond(**ait2);
-						bonds.insert(b);
+						MoleculeStore* s = (**ait1).getStore();
+						if (s != nullptr)
+						{
+							if (bond_store == nullptr) bond_store = s;
+							// Find the bond's stable id via the atom's bond list.
+							// b's store-row idx isn't exposed on Bond; we walk
+							// the atom's bond CSR to find the matching stable id.
+							const std::uint32_t a_idx = (**ait1).getStoreIndex();
+							s->for_each_bond_of(a_idx, [&](std::uint32_t bidx) {
+								if (s->bond_back_ptr(bidx) == b)
+									bonds.insert(s->bond_stable_id(bidx));
+							});
+						}
 						if (b->isAromatic())
 						{
 							++num_aro;
@@ -304,24 +323,32 @@ namespace BALL
 				}
 			}
 
+			auto mutate_each = [&](void (*mutator)(Bond*))
+			{
+				if (bond_store == nullptr) return;
+				for (auto it_sid = bonds.begin(); +it_sid; ++it_sid)
+				{
+					std::uint32_t bidx = bond_store->bond_idx_by_stable_id(*it_sid);
+					if (bidx == ~std::uint32_t(0)) continue;
+					Bond* b = bond_store->bond_back_ptr(bidx);
+					if (b != nullptr) mutator(b);
+				}
+			};
+
 			// estimate if ring is aromatic or not
 			if (float(num_aro) / float(num_bonds) >= 0.5)
 			{
-				for (HashSet<Bond*>::Iterator bit = bonds.begin(); bit != bonds.end(); ++bit)
-				{
-					(*bit)->setOrder(Bond::ORDER__AROMATIC);
-				}
+				mutate_each(+[](Bond* b) { b->setOrder(Bond::ORDER__AROMATIC); });
 			}
 			else
 			{
-				for (HashSet<Bond*>::Iterator bit = bonds.begin(); +bit; ++bit)
-				{
-					if ((*bit)->isAromatic())
+				mutate_each(+[](Bond* b) {
+					if (b->isAromatic())
 					{
-						(*bit)->setOrder(Bond::ORDER__SINGLE);
-						(*bit)->clearProperty(Bond::IS_AROMATIC);
+						b->setOrder(Bond::ORDER__SINGLE);
+						b->clearProperty(Bond::IS_AROMATIC);
 					}
-				}
+				});
 			}
 		}
 	}
@@ -337,24 +364,39 @@ namespace BALL
 			const Size group = ait->getElement().getGroup();
 			if (group != 1 && group != 17) continue;
 
-			Bond* min_bond = 0;
+			// v2.2 H3c Pattern B (D-H3.8): collect bond sids via the store's
+			// bond CSR, identify the shortest, destroy the rest. Resolution
+			// to Bond* happens once per access via the H3c Phase 0 reverse
+			// map. (Bond::destroy goes through the v0 cascade which removes
+			// the bond from the store via remove_bond_unsafe_; the local
+			// `bonds` sid set stays stable for our iteration.)
+			MoleculeStore* s = ait->getStore();
+			if (s == nullptr) continue;
+
+			MoleculeStore::StableId min_bond_sid = 0;
 			float length= std::numeric_limits<float>::max();
-			HashSet<Bond*> bonds;
-			for (Atom::BondIterator bit = ait->beginBond(); +bit;++bit)
-			{
-				if (length > bit->getLength())
+			HashSet<MoleculeStore::StableId> bonds;
+			s->for_each_bond_of(ait->getStoreIndex(), [&](std::uint32_t bidx) {
+				Bond* b = s->bond_back_ptr(bidx);
+				if (b == nullptr) return;
+				const float blen = b->getLength();
+				const MoleculeStore::StableId b_sid = s->bond_stable_id(bidx);
+				if (blen < length)
 				{
-					min_bond = &*bit;
-					length = bit->getLength();
+					min_bond_sid = b_sid;
+					length = blen;
 				}
-				bonds.insert(&*bit);
-			}
+				bonds.insert(b_sid);
+			});
 
-			bonds.erase(min_bond);
+			bonds.erase(min_bond_sid);
 
-			for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
+			for (auto it = bonds.begin(); +it; ++it)
 			{
-				(*it)->destroy();
+				std::uint32_t bidx = s->bond_idx_by_stable_id(*it);
+				if (bidx == ~std::uint32_t(0)) continue;
+				Bond* b = s->bond_back_ptr(bidx);
+				if (b != nullptr) b->destroy();
 			}
 		}
 	}
