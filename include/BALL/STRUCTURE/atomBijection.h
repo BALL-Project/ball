@@ -42,8 +42,14 @@ namespace BALL
 			implemented.
 	\ingroup StructureMapping
 	*/
+	// v2.2 H3d-DR FLAW 6 fix (atomBijection extraction): the public
+	// inheritance from std::vector<std::pair<Atom*, Atom*>> is broken;
+	// AtomBijection now HAS-A PairVector. All public-facing access
+	// (operator[], size, push_back, begin/end, iterators, types) is
+	// preserved via forwarding declarations -- callers don't change.
+	// This commit is the preparatory refactor BEFORE the h3d.B
+	// atomBijection StableId-keyed migration.
 	class BALL_EXPORT AtomBijection
-		: public std::vector<std::pair<Atom*, Atom*> >
 	{
 		public:
 
@@ -53,8 +59,20 @@ namespace BALL
 		*/
 		typedef std::pair<Atom*, Atom*> AtomPair;
 		typedef std::vector<std::pair<Atom*, Atom*> > PairVector;
+
+		// v2.2 H3d: re-export the STL iterator types from the internal
+		// vector. Caller code that uses AtomBijection::iterator (e.g.,
+		// test/AtomBijection_test.C) continues to compile.
+		typedef PairVector::iterator                iterator;
+		typedef PairVector::const_iterator          const_iterator;
+		typedef PairVector::reverse_iterator        reverse_iterator;
+		typedef PairVector::const_reverse_iterator  const_reverse_iterator;
+		typedef PairVector::value_type              value_type;
+		typedef PairVector::size_type               size_type;
+		typedef PairVector::reference               reference;
+		typedef PairVector::const_reference         const_reference;
 		//@}
-		
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -180,22 +198,34 @@ namespace BALL
 		double calculateRMSD() const;
 		//@}
 
-		/**	@name STL container compliance */
+		/**	@name STL container compliance (v2.2 H3d: forwarders to pairs_)
+		 *  Caller code that does ab[i].first / ab[i].second / size() /
+		 *  push_back / begin/end / iteration continues to compile
+		 *  unchanged after the inheritance break.
+		 */
 		//@{
-		///
-		using PairVector::size;
-		///
-		using PairVector::push_back;
-		///
-		using PairVector::begin;
-		///
-		using PairVector::end;
-		///
-		using PairVector::rbegin;
-		///
-		using PairVector::rend;
+		size_type size() const { return pairs_.size(); }
+		bool empty() const { return pairs_.empty(); }
+		void clear() { pairs_.clear(); }
+		void push_back(const AtomPair& p) { pairs_.push_back(p); }
+		reference       operator[](size_type i)       { return pairs_[i]; }
+		const_reference operator[](size_type i) const { return pairs_[i]; }
+		iterator        begin()        { return pairs_.begin(); }
+		const_iterator  begin()  const { return pairs_.begin(); }
+		iterator        end()          { return pairs_.end(); }
+		const_iterator  end()    const { return pairs_.end(); }
+		reverse_iterator       rbegin()       { return pairs_.rbegin(); }
+		const_reverse_iterator rbegin() const { return pairs_.rbegin(); }
+		reverse_iterator       rend()         { return pairs_.rend(); }
+		const_reverse_iterator rend()   const { return pairs_.rend(); }
 		//@}
 
+		protected:
+		// v2.2 H3d-DR FLAW 6 fix: the extracted private member that
+		// replaces the prior public std::vector base class. Protected
+		// so subclasses (if any future ones land) can drop down to the
+		// raw vector for performance-critical paths.
+		PairVector pairs_;
 	};
 
 } // namespace BALL

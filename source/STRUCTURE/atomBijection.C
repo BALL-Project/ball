@@ -18,7 +18,7 @@ namespace BALL
 {
 
 	AtomBijection::AtomBijection(AtomContainer& A, AtomContainer& B, bool limit_to_selection)
-		: std::vector<std::pair<Atom*, Atom*> >()
+		: pairs_()           // v2.2 H3d-DR FLAW 6: extracted member, no more base init
 	{
 		assignByName(A, B, limit_to_selection);
 	}
