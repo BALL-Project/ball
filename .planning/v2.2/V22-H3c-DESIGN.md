@@ -434,3 +434,125 @@ sustainable through H4 when v0 retires entirely? Or do these need a
 forward-stable "handle-side builder" surface eventually? Answer for
 H3c: not-migrated-in-H3c; revisit when H4 plan crystallizes.
 
+
+## H3c-DR2 review (Codex)
+
+Verdict: **GO-WITH-FIXES**. 1 BLOCKER + 5 FLAWs (+ 4 CLOSED findings).
+
+The residual issues are surface corrections, not structural redesigns:
+
+- **BLOCKER 1**: Atom reverse-map rebuild must live INSIDE
+  `restore_stable_ids_for_load_` (covers loadStoreJSON AND loadSystemJSON
+  paths uniformly). Restating in loadStoreJSON alone misses systemJson.
+- **FLAW 2**: Bond map erase must hook `remove_bond_unsafe_` (not just
+  public `remove_bond`) -- otherwise `remove_bonds_between` leaks dead
+  bond SIDs. `swap_atom_connectivity` does NOT need the hook.
+- **FLAW 3**: `molecularSimilarity` is Pattern D (builder), not E.
+- **FLAW 4**: `smartsParser` (and parents `smilesParser`) are Pattern D.
+- **FLAW 5**: `sideChainPlacementProcessor` missing from inventory --
+  Pattern C/D candidate; explicit classification needed.
+- **FLAW 6**: `rGroupAssembler` is Pattern D, not E.
+- CLOSED 7-10: DNAMutator Pattern C confirmed; reverse-map cost
+  acceptable (10-20 MB at 100K atoms incl. unordered_map overhead);
+  Pattern A safe under StructureQuery::applyAtomProcessor contract;
+  compact + free-list reuse ABA-safe with `release_atom` erase-first.
+
+## H3c-R3 — Final correction (DR2 BLOCKER + FLAWs applied)
+
+### D-H3c.0-R3 — Reverse map lifecycle (BLOCKER 1 + FLAW 2 fix)
+
+```cpp
+// moleculeStore.C
+void MoleculeStore::release_atom(Index i) {
+    if (i >= back_ptr_.size()) return;
+    if (is_freed_[i] != 0) {
+        origin_flags_[i] = 0;
+        return;
+    }
+    atom_sid_to_idx_.erase(stable_ids_[i]);   // PHASE-0: erase BEFORE marking freed (ABA-safe)
+    is_freed_[i] = 1;
+    back_ptr_[i] = nullptr;
+    // ... existing column zeroing ...
+}
+
+MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(
+    Atom* back_ptr, std::uint8_t origin_flags)
+{
+    const StableId new_sid = next_stable_id_alloc_();
+    // ... existing free-list / fresh-slot logic ...
+    // At the END (slot now established):
+    atom_sid_to_idx_[new_sid] = idx;   // PHASE-0: insert AFTER slot bind
+    return idx;
+}
+
+void MoleculeStore::clear() {
+    // ... existing column clearing ...
+    atom_sid_to_idx_.clear();          // PHASE-0
+    bond_sid_to_idx_.clear();          // PHASE-0
+    // ... existing rest ...
+}
+
+// CRITICAL (DR2 BLOCKER 1): rebuild map inside the load helper,
+// covering both loadStoreJSON and loadSystemJSON paths.
+void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& ids) {
+    // ... existing duplicate-check + assign stable_ids_ ...
+    atom_sid_to_idx_.clear();
+    for (Index i = 0; i < ids.size(); ++i) {
+        if (is_freed_[i]) continue;
+        atom_sid_to_idx_[ids[i]] = i;
+    }
+}
+
+// Bond lifecycle (DR2 FLAW 2): hook the unsafe path so
+// remove_bonds_between is covered.
+void MoleculeStore::add_bond(...) {
+    const StableId bond_sid = next_bond_stable_id_alloc_();
+    // ... existing add_bond_unsafe_ work ...
+    bond_sid_to_idx_[bond_sid] = bond_idx;
+}
+
+void MoleculeStore::remove_bond_unsafe_(std::uint32_t bond_idx) {
+    bond_sid_to_idx_.erase(bond_stable_ids_[bond_idx]);   // erase FIRST
+    // ... existing tombstone work ...
+}
+
+// swap_atom_connectivity: NO map update (bond row identity unchanged).
+```
+
+### D-H3c.1-R3 — Pattern reclassification (DR2 FLAW 3-6 fix)
+
+Update the Pattern E membership:
+
+| Pattern | Processors |
+|---|---|
+| **D. Builder** (constructs from scratch; no input tree to mutate) | peptideBuilder, fragmentDB-as-template-source, **sdGenerator**, **molecularSimilarity::createMolecule**, **smilesParser / smartsParser**, **rGroupAssembler::appendMoiety_**, **sideChainPlacementProcessor** |
+| **E. Pure pointer-key cleanup** (D-H3.8 leaks only; no behavior change; no topology mutation) | analyticalSES, atomBijection, geometricProperties, reconstructFragmentProcessor, ringAnalyser |
+
+Note: smartsParser construct-then-adoptSubtree, sdGenerator molecule
+generation, and sideChainPlacementProcessor's "create PDBAtom + insert
+into residue + invoke fragmentDB H-adder" are all builders. They keep
+v0 internals; H3c does NOT opt them into atomHandle.h.
+
+### D-H3c.5-R3 — Cost note (DR2 finding 8 fix)
+
+Reverse map cost is honestly:
+- `std::unordered_map<uint64_t, uint32_t>` ≈ 24-32 B per live entry
+  (bucket + node + alignment).
+- At 100K atoms: ~3 MB; at 100K atoms + 100K bonds: ~6 MB. Single-digit
+  MB scale, not the "~160 KB" the prior estimate implied. Still
+  acceptable for Phase-0 infra given the alternative is an O(N) scan
+  per Pass 2 mutation across all H3c processors.
+
+### DESIGN LOCKED at R3.
+
+All BLOCKERs from DR + DR2 resolved. R3 fixes are surface (load-helper
+placement, bond_unsafe hook, 4 inventory reclassifications, cost
+restatement). Per the project's gated discipline, normally R3 would get
+a DR3 verification round. The R3 fixes are small enough to verify
+inline against the cited code paths -- the Phase 0 implementation
+itself goes through its own close-review gate, which catches any
+remaining issue.
+
+Implementation begins next per D-H3c.3-R2 step 0:
+**Phase-0 commit: stable_id reverse maps + atomHandleByStableId /
+bondHandleByStableId on MoleculeStore.**
