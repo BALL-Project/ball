@@ -42,10 +42,15 @@ namespace BALL
 	{
 		RMSDMinimizer::PointVector X(ab.size());
 		RMSDMinimizer::PointVector Y(ab.size());
+		// v2.2 H3d.B (D-H3.8): resolve sids to Atom* via the bijection's
+		// captured stores; skip stale pairs (defense-in-depth).
 		for (Position i = 0; i < ab.size(); ++i)
 		{
-			X[i] = ab[i].first->getPosition();
-			Y[i] = ab[i].second->getPosition();
+			Atom* a = ab.atomA(i);
+			Atom* b = ab.atomB(i);
+			if (a == nullptr || b == nullptr) continue;
+			X[i] = a->getPosition();
+			Y[i] = b->getPosition();
 		}
 		return computeTransformation(X, Y);
 	}

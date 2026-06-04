@@ -298,15 +298,16 @@ CHECK(void calculateDefaultBijection())
 		TEST_EQUAL(sm.getBijection().size(), 4)
 		ABORT_IF(sm.getBijection().size() != 4)
 
+		// v2.2 H3d.B: resolve via atomA/atomB (the bijection now stores sids).
 		const AtomBijection& b = sm.getBijection();
-		TEST_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
-		TEST_NOT_EQUAL(b[0].first, b[0].second)
-		TEST_EQUAL(b[1].first->getFullName(), b[1].second->getFullName())
-		TEST_NOT_EQUAL(b[1].first, b[1].second)
-		TEST_EQUAL(b[2].first->getFullName(), b[2].second->getFullName())
-		TEST_NOT_EQUAL(b[2].first, b[2].second)
-		TEST_EQUAL(b[3].first->getFullName(), b[3].second->getFullName())
-		TEST_NOT_EQUAL(b[3].first, b[3].second)
+		TEST_EQUAL(b.atomA(0)->getFullName(), b.atomB(0)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(0), b.atomB(0))
+		TEST_EQUAL(b.atomA(1)->getFullName(), b.atomB(1)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(1), b.atomB(1))
+		TEST_EQUAL(b.atomA(2)->getFullName(), b.atomB(2)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(2), b.atomB(2))
+		TEST_EQUAL(b.atomA(3)->getFullName(), b.atomB(3)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(3), b.atomB(3))
 	}
 
 	{
@@ -356,18 +357,18 @@ CHECK(void calculateDefaultBijection())
 		ABORT_IF(sm.getBijection().size() != 4)
 
 		const AtomBijection& b = sm.getBijection();
-		TEST_EQUAL(b[0].first->getName(), b[0].second->getName())
-		TEST_NOT_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
-		TEST_NOT_EQUAL(b[0].first, b[0].second)
-		TEST_EQUAL(b[1].first->getName(), b[1].second->getName())
-		TEST_NOT_EQUAL(b[1].first->getFullName(), b[1].second->getFullName())
-		TEST_NOT_EQUAL(b[1].first, b[1].second)
-		TEST_EQUAL(b[2].first->getName(), b[2].second->getName())
-		TEST_NOT_EQUAL(b[2].first->getFullName(), b[2].second->getFullName())
-		TEST_NOT_EQUAL(b[2].first, b[2].second)
-		TEST_EQUAL(b[3].first->getName(), b[3].second->getName())
-		TEST_NOT_EQUAL(b[3].first->getFullName(), b[3].second->getFullName())
-		TEST_NOT_EQUAL(b[3].first, b[3].second)
+		TEST_EQUAL(b.atomA(0)->getName(), b.atomB(0)->getName())
+		TEST_NOT_EQUAL(b.atomA(0)->getFullName(), b.atomB(0)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(0), b.atomB(0))
+		TEST_EQUAL(b.atomA(1)->getName(), b.atomB(1)->getName())
+		TEST_NOT_EQUAL(b.atomA(1)->getFullName(), b.atomB(1)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(1), b.atomB(1))
+		TEST_EQUAL(b.atomA(2)->getName(), b.atomB(2)->getName())
+		TEST_NOT_EQUAL(b.atomA(2)->getFullName(), b.atomB(2)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(2), b.atomB(2))
+		TEST_EQUAL(b.atomA(3)->getName(), b.atomB(3)->getName())
+		TEST_NOT_EQUAL(b.atomA(3)->getFullName(), b.atomB(3)->getFullName())
+		TEST_NOT_EQUAL(b.atomA(3), b.atomB(3))
 	}
 
 	// test for unnamed atoms -- they should be mapped by order only.
@@ -406,14 +407,14 @@ CHECK(void calculateDefaultBijection())
 		ABORT_IF(sm.getBijection().size() != 4)
 
 		const AtomBijection& b = sm.getBijection();
-		TEST_EQUAL(b[0].first->getName(), "A1")
-		TEST_EQUAL(b[0].second->getName(), "B4")
-		TEST_EQUAL(b[1].first->getName(), "A2")
-		TEST_EQUAL(b[1].second->getName(), "B3")
-		TEST_EQUAL(b[2].first->getName(), "A3")
-		TEST_EQUAL(b[2].second->getName(), "B2")
-		TEST_EQUAL(b[3].first->getName(), "A4")
-		TEST_EQUAL(b[3].second->getName(), "B1")
+		TEST_EQUAL(b.atomA(0)->getName(), "A1")
+		TEST_EQUAL(b.atomB(0)->getName(), "B4")
+		TEST_EQUAL(b.atomA(1)->getName(), "A2")
+		TEST_EQUAL(b.atomB(1)->getName(), "B3")
+		TEST_EQUAL(b.atomA(2)->getName(), "A3")
+		TEST_EQUAL(b.atomB(2)->getName(), "B2")
+		TEST_EQUAL(b.atomA(3)->getName(), "A4")
+		TEST_EQUAL(b.atomB(3)->getName(), "B1")
 	}
 
 RESULT

@@ -3,6 +3,7 @@
 //
 
 #include <BALL/STRUCTURE/atomBijection.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3d.B: D-H3.8 opt-in
 // v2.2 (PR-removal phase 6): formerly visible via the removed persistenceManager.h include chain
 #include <BALL/DATATYPE/stringHashMap.h>
 
@@ -30,14 +31,21 @@ namespace BALL
 
 		if (!empty())
 		{
+			// v2.2 H3d.B: resolve sids via atomA/atomB; skip stale entries.
+			Size live = 0;
 			for (Size i = 0; i < size(); ++i)
 			{
-				Vector3& r(operator [] (i).first->getPosition());
-				sum_of_squares += r.getSquareDistance(operator [] (i).second->getPosition());
+				Atom* a = atomA(i);
+				Atom* b = atomB(i);
+				if (a == nullptr || b == nullptr) continue;
+				++live;
+				const Vector3& r(a->getPosition());
+				sum_of_squares += r.getSquareDistance(b->getPosition());
 			}
 
 			// calculate mean square deviation
-			sum_of_squares = sqrt(sum_of_squares / (double)size());
+			if (live > 0)
+				sum_of_squares = sqrt(sum_of_squares / (double)live);
 		}
 
 		// return RMSD
@@ -49,54 +57,75 @@ namespace BALL
 		// Clear old bijection.
 		clear();
 
-		// Remember the names of A and their atom pointers.
-		StringHashMap<Atom*> A_names;
+		// v2.2 H3d.B (D-H3.8): name -> StableId index instead of Atom*
+		// keys. Resolution back to Atom* happens at push time via the
+		// store's reverse map.
+		StringHashMap<MoleculeStore::StableId> A_names;
+		MoleculeStore* store_A = nullptr;
 		for (AtomIterator ai = A.beginAtom(); +ai; ++ai)
 		{
-			A_names.insert(std::pair<String, Atom*>(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID), &*ai));
+			MoleculeStore* s = ai->getStore();
+			if (s == nullptr) continue;
+			if (store_A == nullptr) store_A = s;
+			else if (s != store_A) continue;   // single-store discipline
+			A_names.insert(std::pair<String, MoleculeStore::StableId>(
+				ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID),
+				s->stable_id(ai->getStoreIndex())));
 		}
 
-		// Iterate over all atoms of B and try to find an 
+		// Iterate over all atoms of B and try to find an
 		// atom in A identical names.
+		auto resolve_A = [&](MoleculeStore::StableId sid) -> Atom*
+		{
+			if (store_A == nullptr) return nullptr;
+			MoleculeStore::Index idx = store_A->atom_idx_by_stable_id(sid);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+			return store_A->back_ptr(idx);
+		};
 		for (AtomIterator ai = B.beginAtom(); +ai; ++ai)
 		{
-			if (A_names.has(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)))
+			const String full = ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID);
+			if (A_names.has(full))
 			{
+				Atom* a_atom = resolve_A(A_names[full]);
+				if (a_atom == nullptr) { A_names.erase(full); continue; }
 				if (   !limit_to_selection
-						|| (ai->isSelected() || A_names[ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)]->isSelected()))
+						|| (ai->isSelected() || a_atom->isSelected()))
 				{
-					// We found two matching atoms. Remember them.
-					push_back(AtomPair(A_names[ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)], &*ai));
+					push_back(AtomPair(a_atom, &*ai));
 				}
-				// Throw away the hash map entry in order to avoid
-				// 1:n mappings.
-				A_names.erase(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID));
+				A_names.erase(full);
 			}
 		}
 
-		// Check whether we could map anything. 
+		// Check whether we could map anything.
 		// If not, try to map by atom name alone.
 		if (size() == 0)
 		{
-			// Next stage: try to map by atom name only.
+			// v2.2 H3d.B: Stage 2 with sid-keyed StringHashMap.
 			A_names.clear();
+			store_A = nullptr;
 			for (AtomIterator ai = A.beginAtom(); +ai; ++ai)
 			{
-				A_names.insert(std::pair<String, Atom*>(ai->getName(), &*ai));
+				MoleculeStore* s = ai->getStore();
+				if (s == nullptr) continue;
+				if (store_A == nullptr) store_A = s;
+				else if (s != store_A) continue;
+				A_names.insert(std::pair<String, MoleculeStore::StableId>(
+					ai->getName(), s->stable_id(ai->getStoreIndex())));
 			}
 			clear();
 			for (AtomIterator ai = B.beginAtom(); +ai; ++ai)
 			{
 				if (A_names.has(ai->getName()))
 				{
+					Atom* a_atom = resolve_A(A_names[ai->getName()]);
+					if (a_atom == nullptr) { A_names.erase(ai->getName()); continue; }
 					if (   !limit_to_selection
-							|| (ai->isSelected() || A_names[ai->getName()]->isSelected()))
+							|| (ai->isSelected() || a_atom->isSelected()))
 					{
-						// We found two matching atoms. Remember them.
-						push_back(std::pair<Atom*, Atom*>(A_names[ai->getName()], &*ai));
+						push_back(AtomPair(a_atom, &*ai));
 					}
-					// Throw away the hash map entry in order to avoid
-					// 1:n mappings.
 					A_names.erase(ai->getName());
 				}
 			}

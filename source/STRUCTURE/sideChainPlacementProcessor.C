@@ -326,12 +326,13 @@ cout << true << " chain:" << !chain << " " << (rit->getChain() == chain)
 					// iterate over the mapping and update the side chains
 					for (Size i=0; i<mapper.size(); ++i)
 					{
-						Atom* orig_atom = mapper[i].first;
-						Atom* scwrled_atom = mapper[i].second;
+						// v2.2 H3d.B: resolve sids via the bijection.
+						Atom* orig_atom = mapper.atomA(i);
+						Atom* scwrled_atom = mapper.atomB(i);
 						if (orig_atom && scwrled_atom)
 						{
 							orig_atom->setPosition(scwrled_atom->getPosition());
-							// mark atom as handled 
+							// mark atom as handled
 							scwrled_atom->setProperty("SideChainPlacementProcessor::ALREADY_UPDATED", true);
 						}
 					}
@@ -427,8 +428,10 @@ cout << "SideChainPlacementProcessor: Mutate " << res_it_ori->getName() << " to 
 						// iterate over the mapping and update the atoms
 						for (Size i=0; i<res_mapper.size(); ++i)
 						{
-							Atom* orig_atom    = res_mapper[i].first;
-							Atom* scwrled_atom = res_mapper[i].second;
+							// v2.2 H3d.B: resolve sids via the bijection.
+							Atom* orig_atom    = res_mapper.atomA(i);
+							Atom* scwrled_atom = res_mapper.atomB(i);
+							if (!orig_atom || !scwrled_atom) continue;
 							// then move
 							orig_atom->setPosition(scwrled_atom->getPosition());
 							// mark these atoms

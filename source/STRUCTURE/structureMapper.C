@@ -83,21 +83,23 @@ namespace BALL
 
 		if (transform)
 		{
-			// Compute the RMSD we would get *after* applying the transformation.
+			// v2.2 H3d.B: resolve sids via atomA/atomB.
 			for(Size i = 0; i < bijection_.size(); i++)
 			{
-				const Vector3& r(transformation_ * bijection_[i].first->getPosition());
-				square_deviation += r.getSquareDistance(bijection_[i].second->getPosition());
+				Atom* a = bijection_.atomA(i); Atom* b = bijection_.atomB(i);
+				if (!a || !b) continue;
+				const Vector3& r(transformation_ * a->getPosition());
+				square_deviation += r.getSquareDistance(b->getPosition());
 			}
 		}
 		else
 		{
-			// Compute the RMSD we have right now, as the transformation is just the
-			// identity matrix.
 			for(Size i = 0; i < bijection_.size(); i++)
 			{
-				const Vector3& r(bijection_[i].first->getPosition());
-				square_deviation += r.getSquareDistance(bijection_[i].second->getPosition());
+				Atom* a = bijection_.atomA(i); Atom* b = bijection_.atomB(i);
+				if (!a || !b) continue;
+				const Vector3& r(a->getPosition());
+				square_deviation += r.getSquareDistance(b->getPosition());
 			}
 		}
 
@@ -192,6 +194,24 @@ namespace BALL
 		AtomBijection tmp_bijection = bijection_;
 	  bijection_ = fragment_bijection;
 
+		// v2.2 H3d.B: precompute position pairs (sid resolution lifted
+		// out of the O(N^3) loop). Skip-positions for stale sids stay
+		// (0,0,0) which match the prior null-deref UB behaviour but
+		// converted to skippable values.
+		std::vector<Vector3> pos_a(size), pos_b(size);
+		std::vector<bool>    pos_valid(size, false);
+		for (Size m = 0; m < size; ++m)
+		{
+			Atom* a = fragment_bijection.atomA(m);
+			Atom* b = fragment_bijection.atomB(m);
+			if (a && b)
+			{
+				pos_a[m] = a->getPosition();
+				pos_b[m] = b->getPosition();
+				pos_valid[m] = true;
+			}
+		}
+
 		// calculate all triangles from the bijection
 		Size i, j, k;
 		double square_distance;
@@ -200,26 +220,24 @@ namespace BALL
 
 		for (k = 0; k < size; k++)
 		{
+			if (!pos_valid[k]) continue;
 			for (j = 0; j < size; j++)
 			{
-				square_distance =	fragment_bijection[k].first->getPosition().getSquareDistance(fragment_bijection[j].first->getPosition());
+				if (!pos_valid[j]) continue;
+				square_distance = pos_a[k].getSquareDistance(pos_a[j]);
 				if ((j != k) &&(square_distance >(lower_bound * lower_bound))
 						&&(square_distance <(upper_bound * upper_bound)))
 				{
 					for (i = 0; i < size; i++)
 					{
-						square_distance = fragment_bijection[k].first->getPosition().getSquareDistance
-								(fragment_bijection[i].first->getPosition());
+						if (!pos_valid[i]) continue;
+						square_distance = pos_a[k].getSquareDistance(pos_a[i]);
 
 						if ((i != k) &&(i != j) && (square_distance > (lower_bound * lower_bound))
 								&& (square_distance < (upper_bound * upper_bound)))
 						{
-							transformation_ = matchPoints(fragment_bijection[k].first->getPosition(),
-																						fragment_bijection[j].first->getPosition(),
-																						fragment_bijection[i].first->getPosition(),
-																						fragment_bijection[k].second->getPosition(),
-																						fragment_bijection[j].second->getPosition(),
-																						fragment_bijection[i].second->getPosition());
+							transformation_ = matchPoints(pos_a[k], pos_a[j], pos_a[i],
+							                              pos_b[k], pos_b[j], pos_b[i]);
 							rmsd = calculateRMSD();
 							if (rmsd < min_rmsd)
 							{

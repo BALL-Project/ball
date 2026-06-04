@@ -13,7 +13,11 @@
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
 
-namespace BALL 
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+#	include <BALL/KERNEL/moleculeStore.h>     // v2.2 H3d.B: StableId-keyed
+#endif
+
+namespace BALL
 {
 
 	/**	Atom bijection.
@@ -55,10 +59,16 @@ namespace BALL
 
 		/** @name Type definitions */
 		//@{
-		/** A struct for representing an atom pair of the mapping.
+		/** Legacy AtomPair (raw Atom*) -- INPUT-only via push_back. Internal
+		    storage is SidPair (StableId-keyed); access goes through
+		    atomA(i) / atomB(i) accessors that resolve at read time.
 		*/
 		typedef std::pair<Atom*, Atom*> AtomPair;
-		typedef std::vector<std::pair<Atom*, Atom*> > PairVector;
+		/** v2.2 H3d.B (D-H3.8): internal pair element is a pair of
+		    StableIds. .first is the sid in store_a_; .second is the sid
+		    in store_b_. */
+		typedef std::pair<MoleculeStore::StableId, MoleculeStore::StableId> SidPair;
+		typedef std::vector<SidPair> PairVector;
 
 		// v2.2 H3d: re-export the STL iterator types from the internal
 		// vector. Caller code that uses AtomBijection::iterator (e.g.,
@@ -198,16 +208,34 @@ namespace BALL
 		double calculateRMSD() const;
 		//@}
 
-		/**	@name STL container compliance (v2.2 H3d: forwarders to pairs_)
-		 *  Caller code that does ab[i].first / ab[i].second / size() /
-		 *  push_back / begin/end / iteration continues to compile
-		 *  unchanged after the inheritance break.
-		 */
+		/**	@name STL container compliance (v2.2 H3d.B: SidPair storage) */
 		//@{
 		size_type size() const { return pairs_.size(); }
 		bool empty() const { return pairs_.empty(); }
-		void clear() { pairs_.clear(); }
-		void push_back(const AtomPair& p) { pairs_.push_back(p); }
+		void clear() { pairs_.clear(); store_a_ = nullptr; store_b_ = nullptr; }
+
+		/** Legacy push_back: translates Atom* -> StableId. Captures the
+		    source stores at first push; subsequent pushes from foreign
+		    stores are silently SKIPPED (per the H3c "store-captured-at-
+		    first-push + reject-foreign" pattern). */
+		void push_back(const AtomPair& p)
+		{
+			MoleculeStore* sa = p.first  ? p.first->getStore()  : nullptr;
+			MoleculeStore* sb = p.second ? p.second->getStore() : nullptr;
+			if (sa == nullptr || sb == nullptr) return;
+			if (store_a_ == nullptr) store_a_ = sa;
+			else if (store_a_ != sa) return;
+			if (store_b_ == nullptr) store_b_ = sb;
+			else if (store_b_ != sb) return;
+			pairs_.push_back(SidPair(
+				sa->stable_id(p.first->getStoreIndex()),
+				sb->stable_id(p.second->getStoreIndex())));
+		}
+
+		/** Direct sid push (assumes single-store discipline already
+		    established or being established). */
+		void push_back(const SidPair& sp) { pairs_.push_back(sp); }
+
 		reference       operator[](size_type i)       { return pairs_[i]; }
 		const_reference operator[](size_type i) const { return pairs_[i]; }
 		iterator        begin()        { return pairs_.begin(); }
@@ -218,14 +246,37 @@ namespace BALL
 		const_reverse_iterator rbegin() const { return pairs_.rbegin(); }
 		reverse_iterator       rend()         { return pairs_.rend(); }
 		const_reverse_iterator rend()   const { return pairs_.rend(); }
+
+		/** v2.2 H3d.B (D-H3.8): resolved-Atom* accessors. Resolve the
+		    stored sid to the current owner of that slot via the H3c
+		    Phase 0 reverse map. Returns nullptr if the slot was
+		    released (ABA-safe). */
+		Atom* atomA(size_type i) const
+		{
+			if (store_a_ == nullptr) return nullptr;
+			MoleculeStore::Index idx = store_a_->atom_idx_by_stable_id(pairs_[i].first);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+			return store_a_->back_ptr(idx);
+		}
+		Atom* atomB(size_type i) const
+		{
+			if (store_b_ == nullptr) return nullptr;
+			MoleculeStore::Index idx = store_b_->atom_idx_by_stable_id(pairs_[i].second);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+			return store_b_->back_ptr(idx);
+		}
+
+		/** Source stores. nullptr until first push. */
+		MoleculeStore* storeA() const { return store_a_; }
+		MoleculeStore* storeB() const { return store_b_; }
 		//@}
 
 		protected:
-		// v2.2 H3d-DR FLAW 6 fix: the extracted private member that
-		// replaces the prior public std::vector base class. Protected
-		// so subclasses (if any future ones land) can drop down to the
-		// raw vector for performance-critical paths.
-		PairVector pairs_;
+		// v2.2 H3d.B (D-H3.8): StableId-keyed pair storage + the two
+		// source stores captured at first push.
+		PairVector     pairs_;
+		MoleculeStore* store_a_ = nullptr;
+		MoleculeStore* store_b_ = nullptr;
 	};
 
 } // namespace BALL

@@ -18,11 +18,14 @@
 using namespace BALL;
 String dumpBijection(AtomBijection& ab)
 {
+	// v2.2 H3d.B: iterator now yields SidPair; resolve via atomA/atomB.
 	String s;
-	AtomBijection::iterator it(ab.begin());
-	for (; it != ab.end(); ++it)
+	for (AtomBijection::size_type i = 0; i < ab.size(); ++i)
 	{
-		s += " - " + it->first->getFullName() + " - " + it->second->getFullName() + "\n";
+		Atom* a = ab.atomA(i);
+		Atom* b = ab.atomB(i);
+		if (a && b)
+			s += " - " + a->getFullName() + " - " + b->getFullName() + "\n";
 	}
 	return s;
 }
