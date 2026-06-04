@@ -10,6 +10,7 @@
 
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern C: D-H3.8 opt-in (forward gate coverage; full Pattern C three-phase rewrite per D-H3c.1-R3 deferred)
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
