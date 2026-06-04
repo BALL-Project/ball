@@ -6,6 +6,14 @@
 
 #include <BALL/KERNEL/standardPredicates.h>
 
+// v2.2 H3d.A (D-H3.8): file-level H3a.5 gate opt-in deferred -- this TU
+// also holds ConnectedToPredicate / InRingPredicate / RingFinder, whose
+// DFS scratch (HashSet<const Bond*> visited) is transient-local v0 (not
+// a forward-stability concern). Opting the file in would flag those
+// transient sites without flagging any persistent leak; SMARTSPredicate
+// (the only persistent-state predicate in this TU, last_molecule_ +
+// matches_ cache) is migrated to sid-keyed matches_ +
+// last_match_store_ on its own merits regardless of gate scope.
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
@@ -1750,11 +1758,19 @@ namespace BALL
 
 	bool SMARTSPredicate::operator () (const Atom& atom) const
 	{
+		// v2.2 H3d.A (D-H3.8): matches_ + last_match_store_ key on
+		// MoleculeStore::StableId so a slot recycle between calls
+		// cannot turn a cache hit into a stale-pointer dereference.
 		Molecule* mol = (Molecule*) atom.getAncestor(dummy_molecule_);
 		if (mol == 0) return false;
-		if (last_molecule_ == mol)
+		MoleculeStore* atom_store = atom.getStore();
+		MoleculeStore::StableId query_sid = (atom_store != nullptr)
+			? atom_store->stable_id(atom.getStoreIndex())
+			: 0;
+
+		if (last_molecule_ == mol && last_match_store_ == atom_store && atom_store != nullptr)
  		{
-			return matches_.has((Atom*)&atom);
+			return matches_.has(query_sid);
  		}
 
 		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
@@ -1769,6 +1785,7 @@ namespace BALL
 
 		matches_.clear();
 		last_molecule_ = mol;
+		last_match_store_ = atom_store;
 		vector<std::set<const Atom*> > result;
 
 		try
@@ -1786,11 +1803,18 @@ namespace BALL
 			std::set<const Atom*>::const_iterator it = result[p].begin();
 			for (; it != result[p].end(); ++it)
 			{
-				matches_.insert((Atom*)*it);
+				const Atom* a = *it;
+				if (a == nullptr) continue;
+				MoleculeStore* s = a->getStore();
+				if (s == nullptr) continue;
+				if (last_match_store_ == nullptr) last_match_store_ = s;
+				else if (s != last_match_store_) continue;
+				matches_.insert(s->stable_id(a->getStoreIndex()));
 			}
 		}
 
-		return matches_.has((Atom*)&atom);
+		if (last_match_store_ == nullptr) return false;
+		return matches_.has(query_sid);
 	}
 
 #endif // BALL_COLLAPSE_KERNEL_ONLY

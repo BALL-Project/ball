@@ -936,7 +936,15 @@ namespace BALL
 		// when was the aromaticity lastly calculated for a given molecule:
 		static HashMap<Molecule*, TimeStamp> call_time_map_;
 		static Molecule dummy_molecule_;
-		mutable HashSet<Atom*> matches_;
+		// v2.2 H3d.A (D-H3.8): matches_ is a per-call cache survival
+		// across the (last_molecule_ + mod-time) test; key by
+		// MoleculeStore::StableId so a slot recycle between calls
+		// (compact() / atom release) cannot turn a cache hit into a
+		// stale-pointer dereference. last_match_store_ pairs with
+		// matches_ -- captured at populate time, used to resolve sids
+		// back during lookup.
+		mutable HashSet<MoleculeStore::StableId> matches_;
+		mutable MoleculeStore* last_match_store_ = nullptr;
 	};
 #endif // BALL_COLLAPSE_KERNEL_ONLY
 
