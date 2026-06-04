@@ -10,7 +10,8 @@
 
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern C: D-H3.8 opt-in (forward gate coverage; full Pattern C three-phase rewrite per D-H3c.1-R3 deferred)
+#include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern C: D-H3.8 opt-in
+#include <BALL/KERNEL/moleculeStore.h>   // v2.2 H3d.E: Pattern C three-phase rewrite
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
@@ -131,51 +132,97 @@ namespace BALL
 
 	void DNAMutator::mutateSingleBase_(Residue* res, const String& basename) const
 	{
+		// v2.2 H3d.E Pattern C (D-H3c.1-R3): five-phase rewrite per the
+		// per-sid validity table in V22-H3d-DESIGN.md R2 (D-H3d.3-R2 /
+		// h3d.E). The original v0 code held raw Atom* captures across
+		// multiple topology mutations (destroyBond, removeHavingProperty,
+		// splice, delete frag, createBond). The rewrite captures
+		// StableIds, prevalidates them once, then re-resolves to Atom*
+		// at each mutation step. Stale sids skip silently if the resolve
+		// returns nullptr -- the structural prevalidation guarantees
+		// no skip can happen pre-Phase 2.
+
+		// PHASE 0 (Fragment fetch + sanity checks)
 		Fragment* frag = db_->getFragmentCopy(basename);
 
-		//If we did not get a valid fragment it is not present in the Fragment DB.
-		//Time to bail out.
 		if(!frag) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not find the specified base, please check your FragmentDB.");
 		}
-
-		//See if the fragment has the NUCLEOTIDE property set.
 		if(!frag->hasProperty(Nucleotide::PROPERTY__NUCLEOTIDE)) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "The specified base is not a nucleotide.");
 		}
 
-		//Get everything needed from the input residue
+		// PHASE 1 (identify): capture sids for all 4 reference atoms +
+		// the two connection vectors. NO topology mutation.
 		Atom* res_at = markBaseAtoms_(res);
 		if(!res_at) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not select the base. Did you specify a valid nucleotide?");
 		}
-
 		Atom* res_connection_at = getConnectionAtom_(res_at);
 		if(!res_connection_at) {
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not find the C1 carbon of the specified residue.");
 		}
-
-		res_at->destroyBond(*res_connection_at);
-		Vector3 res_connection = res_connection_at->getPosition() - res_at->getPosition();
-
-		//Get everything needed from the output fragment
 		Atom* frag_at = markBaseAtoms_(frag);
 		if(!frag_at) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not select the base in the new nucleotide.");
 		}
-
 		const Atom* frag_connection_at = getConnectionAtom_(frag_at);
 		if(!frag_connection_at) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not find the C1 carbon of the new base. Check your FragmentDB.");
 		}
 
+		// Single-store discipline: res_at + res_connection_at share a
+		// store (the input residue's), frag_at + frag_connection_at
+		// share a store (the fragment copy's). They may differ; that's
+		// OK because the resolve happens against the matching store.
+		MoleculeStore* res_store  = res_at->getStore();
+		MoleculeStore* frag_store = frag_at->getStore();
+
+		const MoleculeStore::StableId res_at_sid =
+			(res_store ? res_store->stable_id(res_at->getStoreIndex()) : 0);
+		const MoleculeStore::StableId res_connection_at_sid =
+			(res_store ? res_store->stable_id(res_connection_at->getStoreIndex()) : 0);
+		const MoleculeStore::StableId frag_at_sid =
+			(frag_store ? frag_store->stable_id(frag_at->getStoreIndex()) : 0);
+		const MoleculeStore::StableId frag_connection_at_sid =
+			(frag_store ? frag_store->stable_id(frag_connection_at->getStoreIndex()) : 0);
+
+		// Connection vectors are CAPTURED here (live positions). No
+		// further sid resolution needed for these.
+		Vector3 res_connection  = res_connection_at->getPosition() - res_at->getPosition();
 		Vector3 frag_connection = frag_connection_at->getPosition() - frag_at->getPosition();
+
+		// PHASE 1.5 (prevalidate): all 4 sids resolve. If a Pass 1.5
+		// prevalidation fails the mutation hasn't started; abort cleanly.
+		auto resolve_atom = [](MoleculeStore* s, MoleculeStore::StableId sid) -> Atom*
+		{
+			if (s == nullptr || sid == 0) return nullptr;
+			MoleculeStore::Index idx = s->atom_idx_by_stable_id(sid);
+			if (idx == MoleculeStore::UNKNOWN_STABLE_ID) return nullptr;
+			return s->back_ptr(idx);
+		};
+		if (resolve_atom(res_store,  res_at_sid)              == nullptr
+		 || resolve_atom(res_store,  res_connection_at_sid)   == nullptr
+		 || resolve_atom(frag_store, frag_at_sid)             == nullptr
+		 || resolve_atom(frag_store, frag_connection_at_sid)  == nullptr)
+		{
+			delete frag;
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"DNAMutator: Pass 1.5 prevalidation -- one or more reference atoms unresolvable");
+		}
+
+		// PHASE 2 (remove old bonds): destroyBond ×2. After this, all
+		// 4 sids are still valid (atoms unbonded but not deleted).
+		res_at->destroyBond(*res_connection_at);
 		frag_at->destroyBond(*frag_connection_at);
 
-		//We do not need the atoms of the sugar backbone any longer, this is important
-		//for the RMSDMinimizer to work
-
-		frag->removeNotHavingProperty(prop_);
+		// PHASE 3 (geometric transforms): operate on captured Vector3
+		// connection vectors. No sid resolution needed -- we still hold
+		// the cached res_at / frag_at pointers from Phase 1, which are
+		// guaranteed valid at this point (no atoms deleted yet).
+		// (R2 validity table: res_at_sid and frag_at_sid both still
+		// valid through Phase 3.)
+		frag->removeNotHavingProperty(prop_);   // removes frag's sugar backbone; frag_at and frag_connection_at REMAIN (both are base atoms or frag_connection_at is on the splice path)
 
 		if(isPurine_(*frag_at) == isPurine_(*res_at))
 		{
@@ -184,7 +231,6 @@ namespace BALL
 		else
 		{
 			alignBases_(frag, frag_connection, res_connection, frag_at);
-
 			if(matching_mode_ == MINIMUM_ANGLE)
 			{
 				rotateBasesMinAngle_(frag, res_connection, frag_at, res_at);
@@ -195,14 +241,38 @@ namespace BALL
 			}
 		}
 
-		//Now it is save to delete the base atoms of the input residue
+		// PHASE 4a (remove input base): res->removeHavingProperty(prop_)
+		// removes the prop_-marked base atoms in `res`. res_at_sid now
+		// becomes INVALID (base atom deleted). res_connection_at_sid
+		// stays valid (C1 not prop_-marked).
 		res->removeHavingProperty(prop_);
 		res->setName(frag->getName());
 
+		// PHASE 4b (splice): reparent frag's atoms into res. frag_at_sid
+		// remains valid -- splice moves the atom but the slot identity
+		// is unchanged (the atom's store binding stays put).
 		static_cast<Fragment*>(res)->splice(*frag);
-		delete frag;
 
-		frag_at->createBond(*res_connection_at);
+		// PHASE 4c (rebond): re-resolve both endpoints. Per R2 validity
+		// table both should resolve (res_connection_at_sid was never
+		// invalidated; frag_at_sid survived splice). If either fails,
+		// we're in a partial-state world the v0 code would have also
+		// hit (best-effort no-rollback contract per D-H3c.5-R2).
+		Atom* res_conn_now = resolve_atom(res_store, res_connection_at_sid);
+		Atom* frag_at_now  = resolve_atom(frag_store, frag_at_sid);
+		if (res_conn_now == nullptr || frag_at_now == nullptr)
+		{
+			// Defense-in-depth: shouldn't happen per the validity table.
+			delete frag;
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"DNAMutator: Phase 4c connection atom no longer resolvable -- partial mutation; tree may be in inconsistent state");
+		}
+		frag_at_now->createBond(*res_conn_now);
+
+		// PHASE 5 (cleanup): delete frag. frag_connection_at_sid becomes
+		// invalid here (frag's atoms freed). All bonds already touch
+		// res's now-resident atoms; no surviving sid reference.
+		delete frag;
 	}
 
 	void DNAMutator::mark_(AtomContainer* atoms) const
