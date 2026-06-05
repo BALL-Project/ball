@@ -64,6 +64,10 @@ IF(BALL_COLLAPSE_KERNEL_ONLY)
 		CompiledExpression_test
 		SideTableParity_test
 		HierarchyParity_test
+		# v2.2 H4 commit 1 (2026-06-04): table-only topology invariant
+		# test (D-H4.3 R6). Replaces HierarchyParity_test post-flip;
+		# uses only the public MoleculeStore container_* accessors.
+		H4TableTopologyInvariant_test
 		ContainerHandle_test
 		StructureQuery_test
 		AtomHandle_test
@@ -134,6 +138,11 @@ ELSEIF(BALL_CORE_ONLY)
 		# orphan->System migration), and asserts the mirror reproduces the
 		# tree. Store-side only; v0 tree stays source of truth (D60).
 		HierarchyParity_test
+		# v2.2 H4 commit 1 (2026-06-04): table-only topology invariant
+		# test (D-H4.3 R6). Replaces HierarchyParity_test post-flip;
+		# uses only the public MoleculeStore container_* accessors so
+		# it survives the v0 hierarchy deletion in commits 8-11.
+		H4TableTopologyInvariant_test
 		# v2.2 H1b (2026-05-20): container value-handle TYPES reading the
 		# container table via MoleculeStore scalar accessors. Exercises
 		# getters, null/stale semantics, parent/child nav, as<>() narrow.
