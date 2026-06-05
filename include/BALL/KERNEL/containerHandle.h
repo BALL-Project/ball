@@ -260,6 +260,33 @@ namespace BALL
 			return c ? c->countBonds() : 0;
 		}
 
+		/** v2.2 H4 commit 7b.6 (D-H4.15 R3 predicates cluster):
+		    `isSubAtomContainerOf` mirrors AtomContainer::isSubAtomContainerOf.
+		    Compares container_idx + ancestry through the table-side parent
+		    walk; bridges to v0 only if the other handle is itself a
+		    container row in the same store. */
+		bool isSubAtomContainerOf(const ContainerHandleBase& other) const
+		{
+			if (!isValid() || !other.isValid()) return false;
+			if (store_ != other.store_) return false;
+			// Walk up the parent chain from this row; if we hit other's
+			// row, this is a sub-container of other.
+			std::uint32_t cur = idx_;
+			while (cur != MoleculeStore::CONTAINER_NONE)
+			{
+				if (cur == other.idx_) return true;
+				cur = store_->container_parent_(cur);
+			}
+			return false;
+		}
+
+		/** v2.2 H4 commit 7b.6 (D-H4.15 R3 predicates cluster):
+		    `isSuperAtomContainerOf` is the dual of isSubAtomContainerOf. */
+		bool isSuperAtomContainerOf(const ContainerHandleBase& other) const
+		{
+			return other.isSubAtomContainerOf(*this);
+		}
+
 		protected:
 
 		void assertValid_() const
