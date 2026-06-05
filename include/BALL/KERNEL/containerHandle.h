@@ -308,6 +308,28 @@ namespace BALL
 			return c ? c->getAtom(position) : nullptr;
 		}
 
+		/** v2.2 H4 commit 7b.7 (D-H4.15 R3 bond-application cluster):
+		    `applyIntraBond(processor)` mirrors AtomContainer::applyIntraBond
+		    -- apply a UnaryProcessor<Bond> to each bond whose endpoints
+		    are both within this container's atom set. */
+		bool applyIntraBond(UnaryProcessor<Bond>& processor) const
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->applyIntraBond(processor) : false;
+		}
+
+		/** v2.2 H4 commit 7b.7 (D-H4.15 R3 bond-application cluster):
+		    `applyInterBond(processor)` mirrors AtomContainer::applyInterBond
+		    -- apply a UnaryProcessor<Bond> to each bond whose endpoints
+		    straddle this container's boundary. */
+		bool applyInterBond(UnaryProcessor<Bond>& processor) const
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->applyInterBond(processor) : false;
+		}
+
 		protected:
 
 		void assertValid_() const
