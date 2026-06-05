@@ -255,6 +255,49 @@ caught and updated in one go, not over time. Codex H3b close-review FLAW 2.
 
 ---
 
+## Class L (H4) — v0 class deletions + canonical-name reconciliation
+
+H4 (the flip) deletes the v0 `Composite`-derived molecular classes
+and renames the `*Handle` types to their canonical names per the
+D63 audit. Each row in this section is a break that lands at a
+specific H4 commit per the V22-H4-DESIGN.md R7 plan; reverse
+aliases (`[[deprecated]] using OldName = NewName;`) keep
+spelling-only consumers compiling through v2.3 with removal at
+v2.4 per D-H4.2.
+
+| v0 spelling | Post-H4 spelling | Reverse alias? | Lands at | Status |
+|---|---|---|---|---|
+| `class Atom : public Composite, public PropertyManager, public Selectable` | `class Atom { ... };` (was `AtomHandle`) | `[[deprecated]] using AtomHandle = Atom;` through v2.3, remove v2.4 | commit 8 | PLANNED |
+| `class Bond` (orphan + bond_back_ptr-backed) | `class Bond { ... };` (was `BondHandle`) | `[[deprecated]] using BondHandle = Bond;` through v2.3, remove v2.4 | commit 9 | PLANNED |
+| `class Fragment : public AtomContainer` | `class Fragment { ... };` (was `FragmentHandle`) | `[[deprecated]] using FragmentHandle = Fragment;` through v2.3, remove v2.4 | commit 10a | PLANNED |
+| `class SecondaryStructure : public AtomContainer` | annotation on Residue rows (D-HC4) — no top-level class; `SecondaryStructureHandle` becomes range query | `[[deprecated]] using SecondaryStructure = ...` evaluated at commit 10a | commit 10a | PLANNED |
+| `class Residue : public Fragment` | `class Residue { ... };` (was `ResidueHandle`) | `[[deprecated]] using ResidueHandle = Residue;` through v2.3, remove v2.4 | commit 10b | PLANNED |
+| `class Nucleotide : public Fragment` | `class Nucleotide { ... };` (was `NucleotideHandle`) | `[[deprecated]] using NucleotideHandle = Nucleotide;` through v2.3, remove v2.4 | commit 10b | PLANNED |
+| `class Chain : public AtomContainer` | `class Chain { ... };` (was `ChainHandle`) | `[[deprecated]] using ChainHandle = Chain;` through v2.3, remove v2.4 | commit 10c | PLANNED |
+| `class Protein : public Molecule` | `class Protein { ... };` (was `ProteinHandle`; alias post-HCP-2 shrink) | `[[deprecated]] using ProteinHandle = Molecule;` through v2.3 | commit 10c | PLANNED |
+| `class NucleicAcid : public Molecule` | `class NucleicAcid { ... };` (was `NucleicAcidHandle`; alias post-HCP-2 shrink) | `[[deprecated]] using NucleicAcidHandle = Molecule;` through v2.3 | commit 10c | PLANNED |
+| `class Molecule : public AtomContainer` | `class Molecule { ... };` (was `MoleculeHandle`) | `[[deprecated]] using MoleculeHandle = Molecule;` through v2.3, remove v2.4 | commit 10c | PLANNED |
+| `class System : public AtomContainer, public Composite` | `class System { ... };` (no longer Composite-derived; remains C++ store owner per D-H4.11) | system survives, no reverse alias needed | commit 11 | PLANNED |
+| `Composite::child_`, `parent_`, `next_sibling_`, `previous_sibling_` (inline tree state) | removed; container table = sole source per D-H4.5 | n/a (private state) | commits 8-11 | PLANNED |
+| `PropertyManager` base on molecular classes | removed per D-H4.6; storage moved to `property_columns_` + sparse bag | n/a (private layout) | commits 8-11 | PLANNED |
+| `Selectable` base on molecular classes | removed per D-H4.6; storage moved to `selected_bits_` atomic bitmap | n/a (private layout) | commits 8-11 | PLANNED |
+| `NamedProperty&` / `BitVector&` mutable-reference surface | DELETED per D-H4.6 R2; replaced by `eachProperty(visitor)` + `propertyNames()` visitor pattern | n/a (HARD BREAK; D49/D52) | commit 6 | PLANNED |
+| `Composite::apply<T>()` free template entry point | DELETED per D-H4.12; callers use `StructureQuery::apply` on handles (already shipped in H2c/HCP-2) | n/a | commit 3 | PLANNED |
+| `CompositeIteratorTraits`-backed iterators (`AtomIterator`, `MoleculeIterator`, `AtomContainerIterator`, ...) | Replaced by handle/table-backed iterators yielding handles by value per D-H4.12; 159 deref-to-reference call-site edits per CR-R5 audit | spellings preserved; deref semantics change (`Atom& a = *it;` → `Atom a = *it;` where Atom is a 24 B handle) | commit 4b | PLANNED |
+| `AtomContainer` heavy base class | Collapsed per D-H4.15; public methods move to role-handle members + `StructureQuery::` free functions across 245-file / 1493-line surface | `[[deprecated]] using AtomContainer = ...` evaluated at commit 7b ledger | commits 7a/7b | PLANNED |
+| `MoleculeStore::back_ptr(Index)` / `bond_back_ptr(uint32)` / `bond_idx_of(const Bond*)` / `bond_sid_of(const Bond*)` (dual-existence bridge) | DELETED per D-H4.4 R4 — bridge users migrated in commit 11.5 audit + edit per 5-category classification | n/a (HARD BREAK; bridge was always internal-to-v2.2 dual existence) | commit 12 | PLANNED |
+| `HierarchyParity_test` | RETIRED per D-H4.3 R6 — replaced by `H4TableTopologyInvariant_test` (commit 1 LANDED 2026-06-04, commit `44486b12c`) + table-only invariants | n/a (test surface) | commit 7.5 | PLANNED |
+| `detail::compositeAsAtom_` + D41.1 CI grep gate | DELETED per D-H4.8 — premise dissolves when Atom no longer inherits Composite | n/a (internal helper) | commit 13 | PLANNED |
+| `dynamic_cast<Atom*>(c)` | DELETED — D-H4.7 sizeof gate enforces non-polymorphic Atom; no RTTI at H4 | n/a (HARD BREAK) | commit 13 | PLANNED |
+
+Per the D-H4.9 atomic-commit cadence: each row above lands at the
+named commit and is independently green (build + ctest +
+HandleKeyLeakGate + AssignBondOrder_bench within 5%). The plan
+sequence per V22-H4-DESIGN.md R7 covers 21 working commits + 1
+closing CR ≈ 22 implementation commits across the H4 cycle.
+
+---
+
 ## Sign-off log
 
 | Commit | Break classes landed | Codex round | Verdict |
