@@ -37,6 +37,14 @@ becomes a **null handle** (`{store=nullptr}`, `bool`-testable via
 | `Protein::getResidueByID` / `Chain::getNTerminal` / `getCTerminal` | `Residue*` | `Residue` | H3 | PLANNED |
 | `Residue::getPDBAtom(name)` | `PDBAtom*` | `Atom`/`PDBAtom` handle | H3 | PLANNED |
 | `System::getMolecule(Position)` and the typed `getProtein`/… | `Molecule*`/… | value handle | H3 | PLANNED |
+| `extractors.h: PDBAtomList PDBAtoms(...)` | `std::list<PDBAtom*>` | `std::vector<Atom>` | H4 (D-H4.14 R5) | PLANNED |
+| `Residue/Chain/Protein/SecondaryStructure::countPDBAtoms()` | `Size` | unchanged signature; impl filters Atom rows by `hasPDBOrigin()` | H4 (D-H4.14 R5) | PLANNED |
+| `Residue/Chain/Protein/SecondaryStructure::beginPDBAtom() / endPDBAtom()` | `PDBAtomIterator` | filtered handle iterator yielding `Atom` by value | H4 (D-H4.14 R5) | PLANNED |
+| `Residue::prepend/append/insert/remove(PDBAtom&)` | mutator on PDBAtom | StructureQuery free function on `ResidueHandle` + `Atom` with `setPDBOrigin(...)` | H4 (D-H4.14 R5) | PLANNED |
+| `PDBAtomList` typedef | `std::list<PDBAtom*>` | `[[deprecated]] using PDBAtomList = std::vector<Atom>;` (kept through v2.3, removed v2.4) | H4 (D-H4.14 R5) | PLANNED |
+| `PDBAtomIterator` typedef | typed-on-`KernelPredicate<PDBAtom>` Composite iterator | `[[deprecated]] using PDBAtomIterator = FilteredHandleIterator<Atom, hasPDBOrigin>;` (kept through v2.3) | H4 (D-H4.14 R5) | PLANNED |
+| `dynamic_cast<PDBAtom*>(&atom)` | non-null on PDB-origin atoms | replaced by `atom.hasPDBOrigin()` predicate + accessor (`atom.getPDBSerial()` etc.) | H4 (D-H4.14 R5) | PLANNED |
+| `for (auto* p : extractors::PDBAtoms(c))` | dereference `PDBAtom*` | `for (Atom a : StructureQuery::pdbAtoms(c))` — by-value iteration | H4 (D-H4.14 R5) | PLANNED |
 
 **Migration note:** `if (Residue* r = a.getResidue()) r->getName();`
 → `if (Residue r = a.getResidue()) r->getName();` compiles unchanged in

@@ -1,11 +1,12 @@
 # V22-H4-DESIGN — The Flip (v0 retirement + canonical-name reconciliation)
 
-**Status:** DRAFT-R5 (post-Codex H4-DR round 4 NOT-GO findings applied).
+**Status:** DRAFT-R6 (post-Codex H4-DR round 5 GO-WITH-FIXES applied).
 **Authored:** 2026-06-04 immediately post-H3d closing-CR round 4 GO at
 `4e71e63f4`.
 **Predecessor:** H3d (closed); see `V22-H3d-DESIGN.md` + D-H3d.CLOSE.
 **Companion:** `.planning/v2.x/V2X-ROADMAP.md` §2 H4 row.
-**DR needed:** YES — Codex H4-DR round 5 against this R5 draft.
+**DR needed:** YES — Codex H4-DR round 6 (closing gate, expected GO)
+against this R6 draft.
 
 **Surface note:** Standing v2.2 protocol triggers maintainer surface
 on 3 NOT-GO rounds. R3, R4 both returned NOT-GO with GO-WITH-FIXES
@@ -568,10 +569,11 @@ per commit" without pre-committing to the exact count.
 | 3 | apply replacement | Replace `Composite::apply<T>` molecular callers with `StructureQuery::apply` on handles (D-H4.12) |
 | 4a | Iterator-consumer audit | Write `V22-H4-ITERATOR-CONSUMER-AUDIT.md` with the 159 deref-to-reference sites + 234-file iterator surface (D-H4.12 R3) |
 | 4b | Iterator migration | Replace Composite-backed molecular iterators with handle/table-backed ones; apply the per-site edits from the 4a ledger |
-| 5a | PDB-consumer audit | Write `V22-H4-PDB-CONSUMER-AUDIT.md` with 3 categories: (I) construction/cast in FORMAT, (II) KERNEL public API surface (residue.h, PDBAtomIterator.h, extractors.h, chain.C, protein.C, secondaryStructure.C), (III) iterator-traits + extractor types (D-H4.14 R4) |
-| 5b | JSON + PDB construction rewrite | JSON load/save off `back_ptr`/`bond_back_ptr` (D-H4.13); FORMAT files (PDBFile/HINFile/dockResultFile) route through store-slot factories; PDB-origin payload on atom-row columns (D-H4.14 R4 category I) |
-| 5c | PDB KERNEL public API migration | Residue/Chain/Protein/SecondaryStructure PDB accessors → StructureQuery free functions on Atom + hasPDBOrigin() predicate; deprecated reverse aliases for PDBAtomList through v2.3 (D-H4.14 R4 category II) |
-| 5d | PDB iterator + extractor collapse | PDBAtomIterator typedef'd to filtered handle iterator on Atom with predicate hasPDBOrigin(); PDBAtomList → vector<Atom> with deprecated alias (D-H4.14 R4 category III) |
+| 5a | PDB-consumer audit | Write `V22-H4-PDB-CONSUMER-AUDIT.md` covering ALL FIVE R5 categories: (I) FORMAT construction (PDBFile/HINFile/dockResultFile), (II) KERNEL public API surface (residue.h/PDBAtomIterator.h/extractors.h/chain.C/protein.C/secondaryStructure.C), (III) iterator-traits + extractor types, (IV) STRUCTURE/SOLVATION non-FORMAT production (peptideBuilder, sideChainPlacement, disulfidBond, poissonBoltzmann), (V) APPLICATIONS code (clip_protein_around_ligand, AMBER/files). Audit predicate: `rg -tcpp '\bPDBAtom\b|\bPDBAtomIterator\b|\bPDBAtomList\b' include source` with VIEW/PYTHON excluded (D-H4.14 R5) |
+| 5b | JSON + PDB construction rewrite | JSON load/save off `back_ptr`/`bond_back_ptr` (D-H4.13); FORMAT files (PDBFile/HINFile/dockResultFile) route through store-slot factories; PDB-origin payload on atom-row columns (D-H4.14 R5 category I) |
+| 5c | PDB KERNEL public API migration | Residue/Chain/Protein/SecondaryStructure PDB accessors → StructureQuery free functions on Atom + hasPDBOrigin() predicate; deprecated reverse aliases for PDBAtomList through v2.3 (D-H4.14 R5 category II) |
+| 5d | PDB iterator + extractor collapse | PDBAtomIterator typedef'd to filtered handle iterator on Atom with predicate hasPDBOrigin(); PDBAtomList unified to `std::vector<Atom>` with deprecated alias; per-site consumer rewrite from 5a's ledger (D-H4.14 R5 category III) |
+| 5e | PDB non-FORMAT production + APPLICATIONS migration | Apply 5a ledger categories (IV) + (V) per-site rewrites: STRUCTURE/SOLVATION + APPLICATIONS PDBAtom* construction sites → store-slot factories or regular Atom; PDBAtomIterator users → filtered handle iterator (D-H4.14 R5 categories IV + V) |
 | 6 | Property persistence | PropertyManager& removal from JSON + bag serialization; visitor + propertyNames() API (D-H4.6 b) |
 | 7a | AtomContainer inventory ledger | `V22-H4-ATOMCONTAINER-AUDIT.md` enumerates every public method + every call site (245 files / 1493 lines per CR R2). Classify by destination (D-H4.15 R3) |
 | 7b | AtomContainer API migration | Per-method-cluster migration in dependency order: read-side → mutation → property/bond → constructor/dtor. May span several commits depending on ledger scope |
@@ -640,41 +642,43 @@ splits one commit (10) into three sub-commits.
 13. **Commit 10 atomicity (CR R2-Q5)** — split into 10a (leaves) +
     10b (mid) + 10c (top), bottom-up.
 
-## Open questions for Codex H4-DR round 5
+## Open questions for Codex H4-DR round 6 (if needed)
 
-(seeded by what's still uncertain in R3)
+(R5 returned GO-WITH-FIXES per Codex round 5; the R5→R6 fixes are
+consistency only. Open questions retained for the next round of
+review, but R6 is expected to lock GO.)
 
-1. **PDBAtom* removal blast radius (D-H4.14 R3)** — once the audit
-   ledger lands (commit 5a), are there VIEW-only references that
-   creep into FORMAT/STRUCTURE through indirect includes? If so,
-   the H4/H7 boundary needs a finer split.
-2. **PropertyManager& break compatibility shim (D-H4.6 R2)** —
-   downstream code that took `NamedProperty&` mutable references
-   has no migration path through the visitor; is a single-cycle
-   read-only shim (`NamedPropertyRef` that triggers a write on
-   destruction) worth introducing, or accept the break as a hard
-   one per D49/D52?
+1. **VIEW indirect-include creep** — once commit 5a's audit ledger
+   lands, do VIEW-side PDBAtom references creep into FORMAT/STRUCTURE
+   through indirect includes? If yes, the H4/H7 boundary needs a
+   finer split. Audit predicate already excludes the VIEW
+   directory, but transitive header dependencies may still pull
+   the symbol in.
+2. **PropertyManager& compatibility shim (D-H4.6 R2)** — downstream
+   code that took `NamedProperty&` mutable references has no
+   migration path through the visitor; is a single-cycle read-only
+   shim (`NamedPropertyRef` that triggers a write on destruction)
+   worth introducing, or accept the hard break per D49/D52?
 3. **AtomContainer cluster boundary (D-H4.15 R3 commit 7b)** —
    does the audit ledger surface a method that crosses clusters
-   (e.g. is both read-side and mutation)? If yes, commit 7b's
-   per-cluster commit boundary needs further refinement.
-4. **Iterator audit completeness (D-H4.12 R3 commit 4a)** — the 159
-   number from Codex H4-DR R2 was a quick grep. A more thorough
-   audit may surface more sites (or fewer). Should commit 4a's
+   (both read-side and mutation)? If yes, commit 7b's per-cluster
+   boundary needs further refinement.
+4. **Iterator audit ±20% tolerance** — the 159 deref-to-reference
+   number from Codex R2 was a quick grep. Should commit 4a's
    ledger include a tolerance band (e.g. ±20% spread acceptable
    without re-DR) or strict count match?
-5. **Commit 11.5 bridge-consumer audit scope** — CR R2 identified
-   29 files referencing the bridge. A more thorough audit may
-   classify those into (a) handle accessors that can inline the
-   table lookup, (b) production code that needs migration to the
-   sid-keyed sites added in H3a-d, and (c) test code that exercises
-   the bridge specifically. Commit 11.5's ledger needs to make
-   the (a)/(b)/(c) split explicit.
+5. **Bridge audit category drift** — the rg predicate-based audit
+   counts current tree state; if commits 1-11 land BEFORE 11.5,
+   the bridge-reference count will drift. Should the ledger
+   regenerate at commit 11.5 prep time AND verify counts haven't
+   exploded vs. the round-5 baseline (34 files / 119-156 lines)?
 
 ---
 
 *Authored 2026-06-04 as pre-DR draft R1; revised to R2 same day
 after Codex H4-DR round 1 NOT-GO; revised to R3 same day after
-Codex H4-DR round 2 NOT-GO. Codex H4-DR round 3 is the gate to
-implementation. Per standing v2.2 surface protocol: ≤3 NOT-GO
-rounds before maintainer surface.*
+Codex H4-DR round 2 NOT-GO; revised to R4 same day after Codex
+H4-DR round 3 NOT-GO; revised to R5 same day after Codex H4-DR
+round 4 NOT-GO; revised to R6 (post-fixes) same day after Codex
+H4-DR round 5 GO-WITH-FIXES. Codex H4-DR round 6 is the closing
+gate, expected to lock GO.*
