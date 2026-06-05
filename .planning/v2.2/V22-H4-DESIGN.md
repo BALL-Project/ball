@@ -1,18 +1,55 @@
 # V22-H4-DESIGN — The Flip (v0 retirement + canonical-name reconciliation)
 
-**Status:** DRAFT-R4 (post-Codex H4-DR round 3 NOT-GO findings applied).
+**Status:** DRAFT-R5 (post-Codex H4-DR round 4 NOT-GO findings applied).
 **Authored:** 2026-06-04 immediately post-H3d closing-CR round 4 GO at
 `4e71e63f4`.
 **Predecessor:** H3d (closed); see `V22-H3d-DESIGN.md` + D-H3d.CLOSE.
 **Companion:** `.planning/v2.x/V2X-ROADMAP.md` §2 H4 row.
-**DR needed:** YES — Codex H4-DR round 4 against this R4 draft.
+**DR needed:** YES — Codex H4-DR round 5 against this R5 draft.
 
 **Surface note:** Standing v2.2 protocol triggers maintainer surface
-on 3 NOT-GO rounds. R3 returned NOT-GO on PDBAtom KERNEL public API
-scope + bridge audit count specification — both concrete and
-addressable inline. Applying R4 inline keeps the productive cycle
-intact rather than surfacing on findings that are clearly
-GO-WITH-FIXES quality. If R4 returns NOT-GO, the surface fires.
+on 3 NOT-GO rounds. R3, R4 both returned NOT-GO with GO-WITH-FIXES
+quality findings (concrete CRITICAL/HIGH with file:line + scope).
+Applying inline preserves the productive cycle. The pattern: each
+DR round localizes the scope further — R3 named KERNEL public API,
+R4 named non-FORMAT production code (STRUCTURE/SOLVATION/
+APPLICATIONS), R5 widens the audit predicate from named files to
+symbol sweep with explicit VIEW/PYTHON exclusions. If R5 returns
+NOT-GO with another fixable finding, R6 stays inline; if R5
+surfaces a structural blocker (not just additional scope), the
+surface fires.
+
+## R4 -> R5 change summary
+
+Codex H4-DR round 4 returned NOT-GO with 1 CRITICAL + 2 HIGH + 1
+MEDIUM:
+
+- CR-R4.1 (CRITICAL): D-H4.14 R4 named FORMAT (PDBFile/HINFile/
+  dockResultFile) + KERNEL public API but missed non-FORMAT
+  production: peptideBuilder.C, sideChainPlacementProcessor.C,
+  disulfidBondProcessor.C, poissonBoltzmann.C, plus APPLICATIONS
+  code (clip_protein_around_ligand.C, AMBER/files.C).
+- CR-R4.2 (HIGH): PDBAtomIterator consumer rewrite needed beyond
+  type alias — production users (peptideBuilder, sideChain) have
+  logic expecting PDBAtom semantics.
+- CR-R4.3 (HIGH): PDBAtomList contract was internally
+  inconsistent (prose said `std::list<Atom>`, plan said
+  `vector<Atom>`).
+- CR-R4.4 (MEDIUM): stale "29 files" bridge counts in execution
+  sections + open questions still targeted round 3.
+
+R5 changes:
+
+- D-H4.14 R5: audit predicate widened to symbol sweep
+  (`rg -tcpp '\bPDBAtom\b|\bPDBAtomIterator\b|\bPDBAtomList\b'`)
+  with explicit VIEW/PYTHON exclusion. New categories (IV)
+  STRUCTURE/SOLVATION production consumers and (V) APPLICATIONS
+  code, joining (I)/(II)/(III). PDBAtomIterator consumer-rewrite
+  ledger explicit. PDBAtomList unified to `std::vector<Atom>`
+  (hard break enumerated in V22-API-BREAK-LEDGER.md per D-H4.2).
+- Stale 29-file references replaced with predicate-based prose +
+  current tree counts (34 files / 119-156 lines).
+- Open questions section refreshed for round 5 (was round 3).
 
 ## R3 -> R4 change summary
 
@@ -356,11 +393,41 @@ store-table values directly:
   preserves compatibility).
 - A JSON round-trip test (D-H4.3) catches any wire-format drift.
 
-### D-H4.14 (R4) — PDBAtom + FORMAT + KERNEL public API finalization
+### D-H4.14 (R5) — PDBAtom + all non-VIEW production finalization
 
-Codex H4-DR R3 CRITICAL: R3's "audit construction + dynamic_cast"
-scope was still incomplete. Audit found PDBAtom exposed in CORE
-KERNEL public API, not just FORMAT construction:
+Codex H4-DR R4 CRITICAL: R4's "FORMAT + KERNEL public API" scope was
+still incomplete. PDBAtom is constructed/used in non-FORMAT
+production code (STRUCTURE, SOLVATION, APPLICATIONS):
+
+- `source/STRUCTURE/peptideBuilder.C:263` constructs PDBAtom*;
+  `peptideBuilder.C:615` uses PDBAtomIterator
+- `source/STRUCTURE/sideChainPlacementProcessor.C:344,345,370`
+  use PDBAtomIterator + PDBAtom*
+- `source/STRUCTURE/disulfidBondProcessor.C:268` uses PDBAtom
+- `source/SOLVATION/poissonBoltzmann.C:1743` uses PDBAtom
+- `source/APPLICATIONS/UTILITIES/clip_protein_around_ligand.C:325,
+  545,589` uses PDBAtomIterator
+- `source/APPLICATIONS/AMBER/files.C:197` uses PDBAtomIterator
+
+These break at commit 8 unless the commit-5 cluster covers them.
+
+R5 widens the audit predicate from a fixed file list to a symbol
+sweep: `rg -tcpp '\bPDBAtom\b|\bPDBAtomIterator\b|\bPDBAtomList\b'
+include source` at commit-5a prep time, EXCLUDING VIEW/PYTHON
+namespaces (those are H7 / pyBALL-v2's job per
+V2X-ROADMAP § standing invariants and §4a). The ledger then
+classifies each hit by category:
+
+  (I)   FORMAT construction (PDBFile / HINFile / dockResultFile)
+  (II)  KERNEL public API surface (residue/chain/protein/SS/extractors)
+  (III) Iterator-traits + extractor type definitions
+  (IV)  **NEW**: STRUCTURE / SOLVATION production consumer code
+  (V)   **NEW**: APPLICATIONS code (CLI tools, AMBER/files, etc.)
+
+VIEW and PYTHON are explicitly OUT-OF-SCOPE for H4 per existing
+boundary (D37 / pyBALL v2 rebaseline per V2X-ROADMAP §4a).
+
+Audit found PDBAtom exposed in CORE KERNEL public API:
 
 - `include/BALL/KERNEL/residue.h:247`: `getPDBAtom()`,
   `countPDBAtoms()`, `prepend/append/insert/remove(PDBAtom&)`,
@@ -404,18 +471,49 @@ R4 expands the PDB finalization scope to cover three categories:
      }
      ```
 
-     Reverse aliases (`[[deprecated]] using PDBAtomList = std::list<
+     **R5 list vs vector unification**: PDBAtomList contract is
+     **`std::vector<Atom>`** post-H4 (was `std::list<PDBAtom*>`).
+     Justification: `std::list<PDBAtom*>` is the legacy v0 spelling
+     (pointer-keyed list), but post-handle-flip `Atom` is a 24 B
+     value handle and `std::vector` is the correct cache-friendly
+     container for handle sequences. This IS a hard API break, not
+     a transparent typedef — downstream code that iterated via
+     `PDBAtomList::iterator` and dereferenced to get `PDBAtom*`
+     must update to vector iteration yielding `Atom` by value.
+     The reverse alias provides the spelling but the underlying
+     contract changes — this break is enumerated explicitly in
+     V22-API-BREAK-LEDGER.md per D-H4.2.
+
+     Reverse aliases (`[[deprecated]] using PDBAtomList = std::vector<
      Atom>;`) cover transition through v2.3, removed v2.4 (same
      policy as the *Handle aliases per D-H4.2 R2).
 
-(III) **ITERATOR TRAITS** (NEW in R4): `PDBAtomIterator` becomes
-      a filtered-handle iterator over the role-handle's
+(III) **ITERATOR TRAITS** (R4, expanded in R5): `PDBAtomIterator`
+      becomes a filtered-handle iterator over the role-handle's
       atom-CSR view that yields atoms where
       `Atom::hasPDBOrigin()`. The iterator-traits type becomes
       `HandleIteratorTraits<Atom>` filtered by predicate
       `[](const Atom& a){ return a.hasPDBOrigin(); }`. No new
       type is introduced — `PDBAtomIterator` is a `using` alias
       for the filtered handle iterator.
+
+      **R5 expansion**: type-aliasing is necessary but not
+      sufficient. PDBAtomIterator consumers use the iterator in
+      logic that expects PDBAtom semantics
+      (e.g. peptideBuilder.C:615, sideChainPlacementProcessor.C:344).
+      Commit 5d's audit ledger enumerates each consumer site +
+      the per-site rewrite (most cases: `it->getPDBProperty(...)`
+      becomes `it->getPDBProperty(...)` unchanged because the
+      methods exist on the handle; rare cases: `dynamic_cast`
+      probes are replaced by `hasPDBOrigin()` predicates).
+
+(IV)  **NON-FORMAT PRODUCTION CONSUMERS** (NEW in R5):
+      STRUCTURE / SOLVATION / APPLICATIONS code that constructs
+      PDBAtom* or uses PDBAtomIterator outside of FORMAT.
+      Migration pattern is the same as (II) + (III): use the
+      regular Atom handle with `hasPDBOrigin()` predicate +
+      PDB-origin accessors. The audit ledger lists each site +
+      replacement.
 
 The pre-commit-5 audit ledger
 (`.planning/v2.2/V22-H4-PDB-CONSUMER-AUDIT.md`, NEW in R3) is
@@ -516,7 +614,10 @@ splits one commit (10) into three sub-commits.
    commit 7.5 right before first v0 deletion (per CR R2-Q2:
    semantic equality, not binary).
 4. **Bridge timing** — commit 12, AFTER pre-commit-11.5 audit +
-   migration of the 29 bridge-reference files (per CR R2-Q1).
+   migration of the bridge-reference set defined by symbol grep
+   (rg over back_ptr/bond_back_ptr/bond_idx_of/bond_sid_of; current
+   tree state ~34 files / 119-156 lines, but the audit ledger
+   regenerates the count at commit-prep time per D-H4.4 R4).
 5. **`sizeof` budget** — 32 B at H4 (no looser).
 6. **AssignBondOrder regression** — keep 5%.
 7. **Atom deletion atomicity** — single commit 8 stays viable
@@ -539,7 +640,7 @@ splits one commit (10) into three sub-commits.
 13. **Commit 10 atomicity (CR R2-Q5)** — split into 10a (leaves) +
     10b (mid) + 10c (top), bottom-up.
 
-## Open questions for Codex H4-DR round 3
+## Open questions for Codex H4-DR round 5
 
 (seeded by what's still uncertain in R3)
 
