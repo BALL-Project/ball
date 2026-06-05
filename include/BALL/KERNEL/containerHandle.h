@@ -330,6 +330,54 @@ namespace BALL
 			return c ? c->applyInterBond(processor) : false;
 		}
 
+		/** v2.2 H4 commit 6.a (D-H4.6 R2): property setter cluster.
+		    Mirrors AtomHandle's set/has/clearProperty surface (atomHandle.h
+		    lines 310-322) for containers. Dispatches through the
+		    container_back_ptr bridge during dual existence; post-H4 the
+		    setProperty writes to property_columns_ + sparse bag
+		    directly. */
+		bool hasProperty(const String& n) const
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->hasProperty(n) : false;
+		}
+		void setProperty(const String& n)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n);
+		}
+		void setProperty(const String& n, bool v)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n, v);
+		}
+		void setProperty(const String& n, int v)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n, v);
+		}
+		void setProperty(const String& n, float v)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n, v);
+		}
+		void setProperty(const String& n, double v)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n, v);
+		}
+		void setProperty(const String& n, const String& v)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(n, v);
+		}
+		void clearProperty(const String& n)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clearProperty(n);
+		}
+
 		protected:
 
 		void assertValid_() const
