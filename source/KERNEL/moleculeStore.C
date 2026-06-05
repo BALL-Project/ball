@@ -849,7 +849,35 @@ std::size_t MoleculeStore::container_table_size_() const
 
 std::uint32_t MoleculeStore::container_create_(ContainerKind kind)
 {
-	return side_tables_->container_table_.allocate(kind);
+	const std::uint32_t row = side_tables_->container_table_.allocate(kind);
+	// v2.2 H4 commit 6.a (D-H4.6 R2): keep container_back_ptr_ sized
+	// in lock-step with the container_table_ row index space. New rows
+	// start unbound (nullptr); the v0 AtomContainer::setContainerRowBinding_
+	// path populates them at bind time.
+	if (row >= container_back_ptr_.size())
+	{
+		container_back_ptr_.resize(static_cast<std::size_t>(row) + 1, nullptr);
+	}
+	return row;
+}
+
+// v2.2 H4 commit 6.a (D-H4.6 R2): container-row → v0 Composite bridge
+// implementations. Used by ContainerHandleBase to reach the v0
+// PropertyManager bag through the dual-existence window.
+AtomContainer* MoleculeStore::container_back_ptr(std::uint32_t idx) const
+{
+	if (idx == 0 || idx >= container_back_ptr_.size()) return nullptr;
+	return container_back_ptr_[idx];
+}
+
+void MoleculeStore::set_container_back_ptr(std::uint32_t idx, AtomContainer* p)
+{
+	if (idx == 0) return;
+	if (idx >= container_back_ptr_.size())
+	{
+		container_back_ptr_.resize(static_cast<std::size_t>(idx) + 1, nullptr);
+	}
+	container_back_ptr_[idx] = p;
 }
 
 void MoleculeStore::container_set_name_(std::uint32_t idx, const String& s)

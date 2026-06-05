@@ -411,7 +411,16 @@ namespace BALL
 		MoleculeStore* getContainerRowStore_() const override { return container_row_store_; }
 		std::uint32_t  getContainerRow_() const override      { return container_row_idx_; }
 		void setContainerRowBinding_(MoleculeStore* store, std::uint32_t row) override
-		{ container_row_store_ = store; container_row_idx_ = row; }
+		{
+			container_row_store_ = store;
+			container_row_idx_   = row;
+			// v2.2 H4 commit 6.a (D-H4.6 R2): populate the container-row →
+			// v0 Composite bridge so ContainerHandleBase's eachProperty /
+			// propertyNames can reach this AtomContainer's PropertyManager
+			// bag through the dual-existence window. Unbinding (store==0)
+			// clears the back-pointer.
+			if (store != 0) store->set_container_back_ptr(row, this);
+		}
 
 		// v2.2 HCP-1b: re-push this container's scalar identity (name + the
 		// subtype id/insertion-code/SS-type/ResidueKind) to its row. Defined

@@ -44,6 +44,13 @@
 #endif
 
 #include <cstdint>
+#include <vector>
+
+// v2.2 H4 commit 6.a (D-H4.6 R2): for eachProperty + propertyNames inline
+// implementations that bridge to the v0 PropertyManager bag.
+#include <BALL/DATATYPE/string.h>
+#include <BALL/CONCEPT/property.h>
+#include <BALL/KERNEL/atomContainer.h>      // for the container_back_ptr bridge
 
 // D54/D65: handle-validity checks compile in BALL_DEBUG builds AND the
 // Python wrapper layer; zero cost in release C++ (documented UB on misuse,
@@ -180,6 +187,41 @@ namespace BALL
 				return T(*store_, idx_);
 			}
 			return T();
+		}
+
+		/** v2.2 H4 commit 6.a (D-H4.6 R2): names of all NamedProperties on
+		    this container (by value, safe across mutation). Mirrors the
+		    AtomHandle::propertyNames() API at atomHandle.h:329 so consumer
+		    code that uses the visitor pattern works uniformly across atoms
+		    AND containers. Reaches the v0 PropertyManager bag through the
+		    container_back_ptr dual-existence bridge; H4 commit 12 removes
+		    the bridge and this method backs onto the store's
+		    property_columns_ + sparse bag directly. */
+		std::vector<String> propertyNames() const
+		{
+			std::vector<String> out;
+			if (!isValid()) return out;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			if (c == nullptr) return out;
+			Size n = c->countNamedProperties();
+			out.reserve(n);
+			for (Size i = 0; i < n; ++i)
+				out.push_back(String(c->getNamedProperty(i).getName()));
+			return out;
+		}
+
+		/** v2.2 H4 commit 6.a (D-H4.6 R2): visit each NamedProperty on
+		    this container as `const NamedProperty&`. Mirrors
+		    AtomHandle::eachProperty at atomHandle.h:346. */
+		template <typename Visitor>
+		void eachProperty(Visitor&& visit) const
+		{
+			if (!isValid()) return;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			if (c == nullptr) return;
+			Size n = c->countNamedProperties();
+			for (Size i = 0; i < n; ++i)
+				visit(static_cast<const NamedProperty&>(c->getNamedProperty(i)));
 		}
 
 		protected:

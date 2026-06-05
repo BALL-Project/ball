@@ -46,6 +46,7 @@
 namespace BALL
 {
 	class Atom;
+	class AtomContainer; // v2.2 H4 commit 6.a (D-H4.6): container_back_ptr bridge
 	class Bond;
 	class MoleculeStore;
 	class System;
@@ -520,6 +521,18 @@ namespace BALL
 		bool               container_is_freed_(std::uint32_t idx) const;
 		std::size_t        container_table_size_() const;
 
+		// v2.2 H4 commit 6.a (D-H4.6 R2): dual-existence bridge from a
+		// container row back to its v0 Composite (= AtomContainer or
+		// System). Populated by AtomContainer/System::setContainerRowBinding_.
+		// Returns nullptr for unbound rows (orphan or freed). Used by
+		// ContainerHandleBase::eachProperty / propertyNames to reach the
+		// v0 PropertyManager bag during the H4 dual-existence window.
+		// At H4 commit 12 this bridge is REMOVED alongside the atom-side
+		// back_ptr / bond_back_ptr / bond_idx_of / bond_sid_of cluster
+		// per D-H4.4 R4.
+		AtomContainer*     container_back_ptr(std::uint32_t idx) const;
+		void               set_container_back_ptr(std::uint32_t idx, AtomContainer* p);
+
 		// Sentinel returned by container_parent_ for a root / detached
 		// container (mirrors ContainerRow::NONE; kept public so handles can
 		// test for "no parent" without the internal type).
@@ -667,6 +680,17 @@ namespace BALL
 		std::vector<BondRecord>   bonds_;
 		std::vector<Bond*>        bond_back_ptr_;
 		std::vector<StableId>     bond_stable_ids_;   // v2.2 H3a (D-H3.8): parallel to bonds_
+
+		// v2.2 H4 commit 6.a (D-H4.6 R2): container-row → v0 Composite
+		// bridge. Parallel to container_table_'s row index space (grown
+		// in lock-step on container_create_). Populated by
+		// AtomContainer/System::setContainerRowBinding_ during the
+		// dual-existence window; consumed by ContainerHandleBase::
+		// eachProperty / propertyNames to reach the v0 PropertyManager
+		// bag (the container-side equivalent of the atom-side back_ptr_
+		// at line 665). DELETED at H4 commit 12 alongside the rest of
+		// the dual-existence bridge cluster per D-H4.4 R4.
+		std::vector<AtomContainer*> container_back_ptr_;
 
 		// v2.2 H3c Phase 0 (D-H3c.0-R3): reverse-map state. Insert on
 		// allocate_atom / add_bond after slot/row bind. Erase on
