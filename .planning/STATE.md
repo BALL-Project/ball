@@ -1,33 +1,49 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.6.2
-milestone_name: · 2026-05-16)
-status: pre-tag-regression-fix
-stopped_at: Awaiting CI run 25982872250 (c9d8de38) — cold-cache Windows verification of BALL_EXPORT regression fix (9042af07) before v1.6.2 tag
-last_updated: "2026-05-17T05:55:00Z"
-last_activity: 2026-05-17 — caught cb392cc4 BALL_EXPORT vector3.C regression masked by 999.17 cache; fix in 9042af07; cache key bumped v1→v2 in c9d8de38; 999.36 backlog stub filed; waiting on cold Windows verification before tag
+milestone: v2.2
+milestone_name: "Handle redesign — store-backed value handles + collapsed molecular hierarchy"
+status: H3d-closed; H4 (the flip) is the next design lock
+stopped_at: 2026-06-04 — H3d closing-CR round 4 GO at 4e71e63f4; v2.2 cluster H4-H8 remains
+last_updated: "2026-06-04T18:00:00Z"
+last_activity: 2026-06-04 — H3d STRUCTURE public-API cluster + remaining migrations CLOSED; closing-CR 4 rounds (7+2+1+0 findings, round 4 GO); D-H3d.CLOSE recorded in V22-DECISIONS; MILESTONE-CONTEXT-v2.2.md authored
 progress:
-  total_phases: 53
-  completed_phases: 18
-  total_plans: 53
-  completed_plans: 54
-  percent: 34
+  total_phases: 69
+  completed_phases: 69
+  total_plans: 69
+  completed_plans: 69
+  percent: 100
+  note: "Phase-list reflects the task tracker (#1-#69 all completed). v2.2's H4-H8 are tracked separately via V2X-ROADMAP.md not the task-tracker count."
 ---
 
-# STATE: BALLView 1.6 Modernization
+# STATE: BALL 2.x kernel modernization (active) + BALLView 1.6 modernization (parked)
 
 ## Project Reference
 
-**Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
+**Core Value (BALLView 1.6 track):** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** v1.6.2 pre-tag — content-complete (all 12 REQs) BUT caught a Windows link regression at the tag boundary: cb392cc4 removed BALL_EXPORT from vector3.C TVector3<float> instantiation (MSVC dllexport contract). ci.yml masked it via Phase 999.17 cmake-tree cache (key doesn't hash sources); release.yml exposed it (different cache scope). Fixed in 9042af07 + GCC -Wattributes pragma scope. Cache key bumped v1→v2 in c9d8de38 to force cold rebuild. Follow-up Phase 999.36 filed for source-aware cache key. RELEASE-NOTES-v1.6.2.md updated with full regression+fix narrative. Tag pending cold Windows green.
+**Core Value (BALL 2.x kernel track, currently active):** Handle the v2.2 redesign — replace the `Atom`/`Bond`/molecular-container `Composite` hierarchy with store-backed value handles + a flat container metadata table; close the D13 sizeof/footprint gate.
+
+**Current Focus:** v2.2 H3d **CLOSED** at HEAD `4e71e63f4`. STRUCTURE consumer cluster migration done (SmartsMatcher / atomTyper / MMFF94 cascade / kekulizer / SMARTSPredicate / DNAMutator / atomBijection / reconstructFragmentProcessor / ringAnalyser / analyticalSES / ABO + BONDORDERS). 289/289 ctest GREEN; HandleKeyLeakGate clean; AssignBondOrder benchmark within ±0.3% of D-H3d.D.BASELINE.
 
 ## Current Position
 
-Phase: v1.6.2 release-tag pre-flight regression fix
-Plan: 1 of 1 (inline)
-Status: Waiting on CI run 25982872250 (in_progress, cold cmake-tree cache by design)
-Last activity: 2026-05-17
+Track: v2.2 kernel handle redesign (the active engineering track since the 2026-05-20 v2.1.0 tag)
+Phase: H3d → CLOSED 2026-06-04
+Next phase: H4 (the flip — delete `Atom : Composite` + molecular container inline tree state; retire dual-existence + parity test)
+Status: Awaiting H4 design lock + Codex DR before implementation
+Last activity: 2026-06-04 — H3d closing-CR round 4 GO; MILESTONE-CONTEXT-v2.2.md authored; STATE.md refreshed to reflect the actual active track.
+
+## Parked tracks
+
+- **BALLView 1.6 modernization**: stalled at v1.6.2 pre-tag CI verification
+  (CI run 25982872250 from 2026-05-17). The cold Windows green is
+  presumably long since landed; if a CI re-check confirms, v1.6.2 can be
+  tagged. Distinct from the v2.x kernel track which has been the
+  exclusive engineering focus since v2.0.0 tagged 2026-05-19.
+- **v1.7 / v2.0 BALLView phases**: blocked behind v1.6.2 tag. Most v1.7
+  scope items in ROADMAP.md are `TBD (promote with /gsd-review-backlog
+  when v1.7 cycle opens)` — i.e., not actionable until the BALLView
+  track resumes.
 
 ## Performance Metrics
 

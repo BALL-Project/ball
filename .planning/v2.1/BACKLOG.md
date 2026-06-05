@@ -6,32 +6,31 @@ gets a tracking ID, current status, and target milestone.
 ## Active backlog (closed by v2.1.0 if possible; otherwise documented as
 v2.1.x or v2.2 follow-up)
 
-### V21-MSVC-CI-PORTABILITY
+### V21-MSVC-CI-PORTABILITY — RE-PLACED on v2.2 H7 (2026-06-04)
 
-**Status:** Open. Non-blocking v2.1.0 per D34d.
+**Status:** No longer a v2.1 backlog item. Tracked authoritatively
+in V2X-ROADMAP.md §2 H7 row and §3 backlog placement table. Listed
+here for history.
+
 **Source:** R21 P21-11 / R21-F3, formalised in R21b P21b-7.
-
-Add a Windows MSVC + vcpkg GHA job to `.github/workflows/ci-v2.yml`
-that runs the CORE_ONLY build + ctest sweep. Currently the codebase
-has never been built on Windows; vcpkg setup is part of Phase 4
-(BALLView 1.6 modernization), not v2.1's kernel work.
-
-D34d demoted this from v2.1.0-rc1 prep (D34c original) to v2.2 P0/P2
+Demoted from v2.1.0-rc1 prep (D34c original) to v2.2 P0/P2 by D34d
 because D40 dropped the `sizeof(Atom) ≤ 32 B` target from v2.1.
-Without that target, MSVC EBO verification is no longer a release
-gate.
+The target re-applies at v2.2 H8 with MSVC explicitly required, so
+MSVC + vcpkg CI must be standing before H8 closes.
 
-**v2.1 status:** non-blocking. Apple Clang macOS arm64 remains the
-sole enforced CI target.
-**v2.2 status:** required before v2.2's inheritance flip claims
-`sizeof(Atom) ≤ 32 B` (BALL_EMPTY_BASES needs MSVC verification then).
+**v2.2 placement:** H7 (VIEW + MSVC); bring-up may start in parallel
+after H2 once the build shape is stable. H7 is also where the 54
+VIEW Atom-RTTI sites land (V21-VIEW-RTTI / D37) and the VIEW-side
+V21-COMPOSITEASATOM-REMOVAL completion.
 
-Scope when implemented:
+Scope when implemented (unchanged):
 1. vcpkg manifest for Qt5 + Boost + Eigen3 + flex + bison + cmake
 2. CMakeLists adjustments for MSVC link flags (`/EHsc`,
    `_USE_MATH_DEFINES`)
 3. Resolution of any MSVC source incompatibilities
 4. CI matrix expansion to include `windows-2022`
+5. `sizeof(BALL::Atom) ≤ 32 B` + `sizeof(BALL::Bond) ≤ 32 B`
+   assertions on MSVC (H8 D13 acceptance specifically names MSVC).
 
 ---
 
