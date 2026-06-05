@@ -24,6 +24,9 @@
 #include <BALL/KERNEL/_moleculeStoreInternal.h>   // build the table by hand
 #include <BALL/KERNEL/containerKind.h>
 #include <BALL/KERNEL/containerHandle.h>
+// v2.2 H4 commit 6.a coverage: need the v0 classes for the visitor test.
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/molecule.h>
 #include <unordered_map>
 
 // HCP-2a: this test intentionally exercises the [[deprecated]] legacy single-kind
@@ -257,6 +260,71 @@ CHECK(HCP-2a -- role-aware MoleculeHandle / FragmentHandle over the role columns
 	TEST_EQUAL((bool)base_na.as<ProteinHandle>(), false)
 	TEST_EQUAL((bool)base_na.as<NucleicAcidHandle>(), true)
 	TEST_EQUAL(ProteinHandle::KIND == ContainerKind::PROTEIN, true)   // legacy KIND preserved
+RESULT
+
+
+CHECK(H4 commit 6.a -- ContainerHandleBase::propertyNames + eachProperty)
+	// v2.2 H4 commit 6.a (D-H4.6 R2): the visitor surface on the
+	// container handle goes through the container_back_ptr bridge
+	// to reach the v0 PropertyManager bag. This test exercises the
+	// happy path (set props on v0, observe via handle).
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	// Set two NamedProperties on the v0 molecule.
+	mol->setProperty("foo", String("bar"));
+	mol->setProperty("baz", 42);
+
+	auto& store = sys.getStore();
+	std::uint32_t mol_idx = mol->getContainerRow_();
+	ContainerHandleBase h(store, mol_idx);
+
+	// propertyNames returns the keys by value.
+	auto names = h.propertyNames();
+	TEST_EQUAL(names.size(), 2)
+	bool has_foo = false, has_baz = false;
+	for (auto& n : names)
+	{
+		if (n == "foo") has_foo = true;
+		if (n == "baz") has_baz = true;
+	}
+	TEST_EQUAL(has_foo, true)
+	TEST_EQUAL(has_baz, true)
+
+	// eachProperty visits each property exactly once.
+	int visited = 0;
+	h.eachProperty([&visited](const NamedProperty& p)
+	{
+		(void)p;
+		++visited;
+	});
+	TEST_EQUAL(visited, 2)
+RESULT
+
+
+CHECK(H4 commit 6.a -- empty container yields empty visitor)
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	auto& store = sys.getStore();
+	ContainerHandleBase h(store, mol->getContainerRow_());
+
+	auto names = h.propertyNames();
+	TEST_EQUAL(names.size(), 0)
+
+	int visited = 0;
+	h.eachProperty([&visited](const NamedProperty&) { ++visited; });
+	TEST_EQUAL(visited, 0)
+RESULT
+
+
+CHECK(H4 commit 6.a -- null handle visitor surface is a safe no-op)
+	ContainerHandleBase null_handle;
+	auto names = null_handle.propertyNames();
+	TEST_EQUAL(names.size(), 0)
+	int visited = 0;
+	null_handle.eachProperty([&visited](const NamedProperty&) { ++visited; });
+	TEST_EQUAL(visited, 0)
 RESULT
 
 END_TEST
