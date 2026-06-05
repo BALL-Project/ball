@@ -635,3 +635,67 @@ H3d officially CLOSED. Next: H4 reconciliation (per design D63 audit)
 or unrelated work.
 
 *H3d closure recorded 2026-06-04.*
+
+---
+
+# H4 design LOCKED (2026-06-04)
+
+## D-H4.LOCK — H4 design locked; implementation begins at commit 1
+
+V22-H4-DESIGN.md R7 at HEAD `3c70adc1f` passed Codex H4-DR round 8
+with verdict **GO. LOCKED.** "Per the stated protocol: metadata-only
+round-number/copy drift is accepted as degenerate review churn, not
+an open design question. H4 design is locked for implementation
+commit 1."
+
+DR cycle progression:
+- R1 → R2: round 1 NOT-GO 3 CRITICAL + 3 HIGH + 2 MEDIUM + 1 LOW
+  (architectural — System refactor not deletion; iterator/apply
+  enablers; bridge removal late; PropertyManager break decision;
+  HierarchyParity replacement; reverse-alias extended)
+- R2 → R3: round 2 NOT-GO 2 CRITICAL + 2 HIGH (scope — bridge audit
+  predicate; PDBAtom KERNEL public API; iterator call-site
+  migration via ledger; AtomContainer inventory ledger)
+- R3 → R4: round 3 NOT-GO 1 CRITICAL + 1 HIGH (scope — PDB widening
+  to KERNEL public API + iterators + extractors; bridge audit
+  predicate)
+- R4 → R5: round 4 NOT-GO 1 CRITICAL + 2 HIGH + 1 MEDIUM (scope —
+  PDB to non-FORMAT production + APPLICATIONS; PDBAtomIterator
+  consumer rewrite; PDBAtomList unified to vector<Atom>)
+- R5 → R6: round 5 **GO-WITH-FIXES** 2 HIGH + 1 MEDIUM (consistency
+  — commit-table 5-category alignment; PDB API-break ledger entries;
+  stale R3 provenance scrubbed)
+- R6 → R7: round 6 GO-WITH-FIXES 2 HIGH + 1 MEDIUM (consistency —
+  commit-plan header + row 0 + estimate still R3-era; D-H4.14
+  prose still described 3 categories; top R5 conditional stale)
+- R7 → R8: round 7 GO-WITH-FIXES 1 MEDIUM (metadata only — round
+  number references still pointed at 6 instead of 7/8)
+- R8: **GO. LOCKED.** Degenerate metadata round-number churn
+  acknowledged as not an open design question.
+
+The convergence pattern from NOT-GO (architectural) → NOT-GO
+(scope) → GO-WITH-FIXES (consistency) → GO-WITH-FIXES (metadata)
+→ GO is the canonical productive DR cycle and is recorded for the
+next milestone's planning template.
+
+H4 commit-1 = test scaffolding (table-only topology invariant +
+JSON semantic round-trip) is the next implementation step.
+Implementation cycle estimate from V22-H4-DESIGN.md R7: **21
+working commits** + the H4-DR cycle (8 rounds, closed) + 1
+closing CR ≈ 22 implementation commits remaining.
+
+Open H4 carry-over questions (non-blocking) per V22-H4-DESIGN.md
+§Open questions for Codex H4-DR round 8 (if any):
+
+1. VIEW indirect-include creep into FORMAT/STRUCTURE — H4/H7
+   boundary refinement may be needed.
+2. PropertyManager& compatibility shim vs. hard break per D49/D52.
+3. AtomContainer cluster boundary at commit 7b — cross-cluster
+   methods in the ledger.
+4. Iterator audit ±20% tolerance vs. strict count match.
+5. Bridge audit drift across the implementation cycle.
+
+These five are surfaced for resolution as commits 1-14 land; none
+blocks commit 1.
+
+*H4 design LOCK recorded 2026-06-04.*
