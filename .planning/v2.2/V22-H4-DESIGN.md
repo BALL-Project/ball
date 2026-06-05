@@ -11,14 +11,12 @@ against this R6 draft.
 **Surface note:** Standing v2.2 protocol triggers maintainer surface
 on 3 NOT-GO rounds. R3, R4 both returned NOT-GO with GO-WITH-FIXES
 quality findings (concrete CRITICAL/HIGH with file:line + scope).
-Applying inline preserves the productive cycle. The pattern: each
-DR round localizes the scope further — R3 named KERNEL public API,
-R4 named non-FORMAT production code (STRUCTURE/SOLVATION/
-APPLICATIONS), R5 widens the audit predicate from named files to
-symbol sweep with explicit VIEW/PYTHON exclusions. If R5 returns
-NOT-GO with another fixable finding, R6 stays inline; if R5
-surfaces a structural blocker (not just additional scope), the
-surface fires.
+Applying inline preserved the productive cycle. The pattern was
+convergent — each DR round localized the scope further (R3 KERNEL
+public API → R4 non-FORMAT production → R5 widened to symbol-sweep
+audit predicate). **R5 returned GO-WITH-FIXES** (first non-NOT-GO);
+R6 closes consistency fixes only (no structural finding remains).
+Implementation begins at commit 1 after R6 locks GO.
 
 ## R4 -> R5 change summary
 
@@ -74,7 +72,8 @@ R4 changes:
   KERNEL public API migration to StructureQuery free functions
   on Atom + reverse-aliases for PDBAtomList through v2.3, (III)
   iterator-traits + extractor type collapse. Commit 5 expands
-  from 5a+5b to 5a/5b/5c/5d for the three categories.
+  from 5a+5b to 5a/5b/5c/5d for the three categories (later widened
+  to 5a/5b/5c/5d/5e in R5 for five categories).
 - D-H4.4 R4 (HIGH): bridge audit scope defined by rg predicate +
   5-category classification (handle-accessor inline /
   production migration / test-specific use / definition site /
@@ -446,7 +445,9 @@ Audit found PDBAtom exposed in CORE KERNEL public API:
 This is the KERNEL public surface. Deleting the class without
 migrating these APIs would leave commit 8 broken.
 
-R4 expands the PDB finalization scope to cover three categories:
+R5 expands the PDB finalization scope to cover **five** categories
+(R4 introduced 3; R5 widened to 5 after Codex R4 surfaced non-FORMAT
+production):
 
 (I) **CONSTRUCTION + CAST sites** (R3 scope, retained):
     PDBFileDetails.C, HINFile.C, dockResultFile.C → store-slot
@@ -518,12 +519,18 @@ R4 expands the PDB finalization scope to cover three categories:
 
 The pre-commit-5 audit ledger
 (`.planning/v2.2/V22-H4-PDB-CONSUMER-AUDIT.md`, NEW in R3) is
-expanded in R4 to enumerate three categories: (I) construction,
-(II) KERNEL public API surface, (III) iterator-traits + extractor
-type. Each category's edits land in separate commits within the
-commit-5 cluster (5a audit ledger + 5b construction/JSON + new
-**5c KERNEL public API migration** + new **5d iterator/extractor
-collapse**).
+expanded in R5 to enumerate **five categories**: (I) FORMAT
+construction (PDBFile/HINFile/dockResultFile), (II) KERNEL public
+API surface (residue.h/PDBAtomIterator.h/extractors.h/chain.C/
+protein.C/secondaryStructure.C), (III) iterator-traits + extractor
+type definitions, (IV) STRUCTURE/SOLVATION non-FORMAT production
+consumer code (peptideBuilder, sideChainPlacement, disulfidBond,
+poissonBoltzmann), (V) APPLICATIONS code (clip_protein_around_ligand,
+AMBER/files). Each category's edits land in separate commits
+within the commit-5 cluster: **5a audit ledger** + **5b
+construction/JSON (cat I)** + **5c KERNEL public API migration
+(cat II)** + **5d iterator/extractor collapse (cat III)** + **5e
+non-FORMAT production + APPLICATIONS migration (cat IV + V)**.
 
 `PDBAtom` itself is DELETED in commit 8 alongside `Atom`.
 
@@ -559,11 +566,11 @@ Commit 7b is potentially several smaller commits depending on
 ledger scope; the design commits to "one logical method cluster
 per commit" without pre-committing to the exact count.
 
-## Revised commit plan (R3)
+## Revised commit plan (R6)
 
 | # | Commit | Description |
 |---|---|---|
-| 0 | DR-R3 prep | Codex H4-DR round 3 + iterate to GO |
+| 0 | DR-R6 prep | Codex H4-DR round 6 closing gate (lock GO) |
 | 1 | Test scaffolding | Table-only topology invariant + JSON round-trip tests with semantic equality (D-H4.3 replacement of parity oracle; CR R2-Q2 answer) |
 | 2 | API-break ledger | Enumerate every H4 break in V22-API-BREAK-LEDGER.md with migration notes + reverse-alias policy (D-H4.2); deprecate aliases through v2.3, remove v2.4 |
 | 3 | apply replacement | Replace `Composite::apply<T>` molecular callers with `StructureQuery::apply` on handles (D-H4.12) |
@@ -589,8 +596,9 @@ per commit" without pre-committing to the exact count.
 | 13 | sizeof asserts + helper retire | static_asserts in atom.h + bond.h; `compositeAsAtom_` + D41.1 CI gate retired (D-H4.7, D-H4.8) |
 | 14 | H4 close-CR | Codex H4-close-review; iterate to GO |
 
-Estimate: 18 working commits (was 14) + 1 design DR (round 3) + 1
-closing CR ≈ 20 commits across the H4 cycle. The growth is real:
+Estimate: **21 working commits** + the H4-DR cycle (6 rounds) + 1
+closing CR ≈ 28 commits across the H4 cycle. The growth across the
+DR cycle is real:
 R3 surfaces three new audit-ledger commits (4a, 5a, 7a, 11.5) +
 splits one commit (10) into three sub-commits.
 
