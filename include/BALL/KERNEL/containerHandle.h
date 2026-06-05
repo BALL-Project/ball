@@ -287,6 +287,27 @@ namespace BALL
 			return other.isSubAtomContainerOf(*this);
 		}
 
+		/** v2.2 H4 commit 7b.2 (D-H4.15 R3 atom-lookup cluster):
+		    `getAtom(name)` mirrors AtomContainer::getAtom(const String&).
+		    Returns v0 Atom* during dual existence; at H4 commit 8 Atom
+		    is renamed to AtomHandle and the return value becomes the
+		    handle by value (D63). No cycle introduced because the
+		    return type is the v0 pointer, not AtomHandle. */
+		Atom* getAtom(const String& name) const
+		{
+			if (!isValid()) return nullptr;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->getAtom(name) : nullptr;
+		}
+
+		/** v2.2 H4 commit 7b.2: `getAtom(position)` index-based lookup. */
+		Atom* getAtom(Position position) const
+		{
+			if (!isValid()) return nullptr;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->getAtom(position) : nullptr;
+		}
+
 		protected:
 
 		void assertValid_() const
