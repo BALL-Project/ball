@@ -690,3 +690,33 @@ H4-DR round 3 NOT-GO; revised to R5 same day after Codex H4-DR
 round 4 NOT-GO; revised to R6 (post-fixes) same day after Codex
 H4-DR round 5 GO-WITH-FIXES. Codex H4-DR round 7 is the closing
 gate, expected to lock GO (R6 returned GO-WITH-FIXES, only metadata drift remained).*
+
+---
+
+## Implementation note (2026-06-04)
+
+Commit 1 (test scaffolding) requires careful API-surface scoping. A
+first draft of `H4TableTopologyInvariant_test.C` was sketched
+2026-06-04 but discarded because it reached into the
+`_moleculeStoreInternal.h` PImpl `ContainerTable` directly — that
+violates the D31b/D66a encapsulation gate, which is a v2.2 standing
+invariant.
+
+The valid commit-1 test must build invariants from the PUBLIC
+MoleculeStore + ContainerHandle surface only:
+- Use the public read-only accessors (`container(idx)` / role-
+  filtered iteration / `ContainerHandleBase` validity / role enum).
+- Verify parent/child consistency through the handle-yielding
+  `apply` already shipped in HCP-2c.
+- The JSON semantic round-trip half of commit 1 uses the existing
+  `SystemJson_test.C` patterns + randomized fixture construction.
+
+This note exists so the next-session implementor starts with the
+right API-surface constraint, not the first-pass internal-API
+reach-in.
+
+The H4 design LOCK is unaffected: the lock is over the decisions +
+sequence + audit-ledger contracts, not the specific test code shape.
+Commit 1 implementation cycle is a normal plan-code-verify-commit
+loop within the lock; this note records the false start so the
+next iteration converges fast.
