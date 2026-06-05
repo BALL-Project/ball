@@ -1,13 +1,43 @@
 # V22-H4-DESIGN — The Flip (v0 retirement + canonical-name reconciliation)
 
-**Status:** DRAFT-R2 (post-Codex H4-DR round 1 NOT-GO findings applied).
+**Status:** DRAFT-R3 (post-Codex H4-DR round 2 NOT-GO findings applied).
 **Authored:** 2026-06-04 immediately post-H3d closing-CR round 4 GO at
 `4e71e63f4`.
 **Predecessor:** H3d (closed); see `V22-H3d-DESIGN.md` + D-H3d.CLOSE.
 **Companion:** `.planning/v2.x/V2X-ROADMAP.md` §2 H4 row.
-**DR needed:** YES — Codex H4-DR round 2 against this R2 draft.
+**DR needed:** YES — Codex H4-DR round 3 against this R3 draft. Per
+the standing v2.2 surface protocol, round 3 NOT-GO is the surface
+threshold.
 
-## R1 -> R2 change summary
+## R2 -> R3 change summary
+
+R2 was still under-scoped on four counts: bridge users span 29 files
+(not the smaller R2 gating list); PDBAtom is constructed beyond
+PDBFile (HINFile, dockResultFile); iterator replacement needs 159
+deref-to-reference call-site edits not just a type swap; AtomContainer
+collapse touches 245 files / 1493 lines and needs an inventory
+ledger. Codex H4-DR round 2 findings folded in:
+
+- D-H4.4 R3: new commit 11.5 (bridge-consumer audit + migration).
+  V22-H4-BRIDGE-CONSUMER-AUDIT.md enumerates 29 files.
+- D-H4.14 R3: PDBAtom DELETED, not facaded. Audit ledger
+  V22-H4-PDB-CONSUMER-AUDIT.md covers PDBFile + HINFile +
+  dockResultFile. PDB-origin payload on atom-row columns from HCP-1.
+- D-H4.12 R3: iterator migration via call-site edits, not proxy.
+  Audit ledger V22-H4-ITERATOR-CONSUMER-AUDIT.md enumerates 159
+  deref-to-reference sites + 234-file iterator surface. Commit 4
+  splits into 4a (audit) + 4b (edit).
+- D-H4.15 R3: AtomContainer inventory ledger first
+  (V22-H4-ATOMCONTAINER-AUDIT.md), per-cluster migration second.
+  Commit 7 splits into 7a (ledger) + 7b (per-cluster edits).
+- Commit 10 split into 10a/10b/10c (leaf → mid → top) per CR R2-Q5.
+- CR R2-Q2 JSON test answer: semantic equality, not binary.
+- CR R2-Q3 PDB determinism answer: parse-order-stable slot
+  allocation.
+- Plan grows from 15 to 18 working commits + 1 design DR + 1
+  closing CR ≈ 20 commits.
+
+## R1 -> R2 change summary (retained for history)
 
 R1 was structurally wrong on three counts: System cannot be "deleted",
 Atom cannot be deleted in one commit, and bridge removal at commit 13
@@ -106,7 +136,24 @@ Replacement plan:
   first v0 class is deleted (i.e. just before commit 8 in the new
   plan).
 
-### D-H4.4 (R2) — Dual-existence bridge removal at the end
+### D-H4.4 (R3) — Dual-existence bridge removal at the end
+
+Codex H4-DR R2 CRITICAL: R2's gating list missed that
+`atomHandle.h` + `bondHandle.h` accessors themselves still call
+`back_ptr`/`bond_back_ptr` (atomHandle.h:120, bondHandle.h:120),
+and STRUCTURE production code resolves through the bridge
+(atomTyper.C:180, buildBondsProcessor.C:319, HBondProcessor.C:150).
+Total: 29 files reference the bridge.
+
+R3 adds a pre-commit bridge-consumer migration gate:
+
+- Commit 11.5 (NEW): bridge-consumer migration. Audit + edit all
+  29 bridge references to operate on sid/handle directly (or to
+  inline the table lookup at the call site). The audit ledger is
+  written first as `.planning/v2.2/V22-H4-BRIDGE-CONSUMER-AUDIT.md`;
+  the audit ledger lists every (file, line, replacement-pattern)
+  triple BEFORE the edit commit.
+- Commit 12 then drops the bridge methods themselves.
 
 The bridge methods (`MoleculeStore::back_ptr(i)`, `bond_back_ptr(i)`,
 `bond_idx_of(const Bond*)`, `bond_sid_of(const Bond*)`) are removed
@@ -116,6 +163,7 @@ in commit 12, AFTER:
 - Property bag persistence rewritten (D-H4.6 + commit 6)
 - `AtomContainer` shared surface collapsed (D-H4.15 + commit 7)
 - All v0 classes deleted (commits 8-11)
+- **R3 NEW:** Bridge-consumer audit + migration (commit 11.5)
 
 ### D-H4.5 — Inline tree state deletion
 
@@ -204,19 +252,33 @@ System survives H4 with:
 
 Commit 11 (in the new plan) is "System base strip" — not deletion.
 
-### D-H4.12 (NEW per CR R1) — Iterator + apply replacement
+### D-H4.12 (R3) — Iterator + apply replacement
 
-Codex H4-DR R1 CRITICAL: Atom cannot be deleted while
-`CompositeIteratorTraits`, `AtomIterator`, `PDBAtomIterator`,
-`AtomContainerIterator`, etc. are still `Composite*`/`Composite&`
-backed.
+Codex H4-DR R2 HIGH: R2 wording "spelling stays" was misleading.
+Real audit: 234 files / 1104 iterator-related lines / **159
+dereference-to-reference lines** (`Atom& a = *it`, `&*it`, postfix
+pointer use). Each of those is a call-site edit, not a no-op.
 
-Decision: in commits 3-4 of the new plan, replace
-`CompositeIteratorTraits`-backed iterators with handle/table-backed
-iterators that yield `AtomHandle` / `MoleculeHandle` / etc. by
-value. The iterator categories survive (input-iterator semantics
-match the handle case). Callers that used `*it` to get a reference
-get a handle by value instead — type changes but spelling stays.
+R3 decision: **call-site migration, NOT compatibility proxy.**
+
+Rationale: a proxy that yielded `Atom&` on `*it` while the backing
+representation is the handle/table would resurrect the v0 reference-
+identity contract — exactly what H4 is trying to retire. Better to
+land the 159 deref-to-reference sites as a single migration commit
+(commit 4) with the audit ledger
+(`.planning/v2.2/V22-H4-ITERATOR-CONSUMER-AUDIT.md`, NEW in R3)
+that enumerates each site + its replacement pattern. The audit
+ledger lands BEFORE the edit, so the diff is reviewable
+mechanically.
+
+Patterns:
+- `Atom& a = *it;` → `Atom a = *it;` (Atom is now a handle, copy
+  is cheap)
+- `Atom* p = &*it;` → DELETED (cannot take address of a handle
+  through this path; consumer must use sid/AtomHandle directly)
+- `for (AtomIterator it = ...; +it; ++it) { it->foo(); }` →
+  unchanged (arrow operator forwards through the handle)
+- `it->setX(...)` → unchanged (handle write methods exist)
 
 `Composite::apply<T>()` as the free template entry point dies when
 the molecular classes drop their Composite base. Migrated callers
@@ -241,62 +303,98 @@ store-table values directly:
   preserves compatibility).
 - A JSON round-trip test (D-H4.3) catches any wire-format drift.
 
-### D-H4.14 (NEW per CR R1) — PDBAtom + FORMAT finalization
+### D-H4.14 (R3) — PDBAtom + FORMAT finalization
 
-Codex H4-DR R1 HIGH: PDBAtom + FORMAT/PDBFile dispatch was deferred
-from H3 to H4 and not covered in R1.
+Codex H4-DR R2 CRITICAL: R2 stated PDBFile goes through systemJson,
+which is factually wrong. Audit found `PDBAtom` constructed in:
+- `source/FORMAT/PDBFileDetails.C:366` and `:1526` (PDBFile loader)
+- `source/FORMAT/HINFile.C:461`
+- `source/FORMAT/dockResultFile.C:2016`
 
-Decision: commit 5 (same commit as D-H4.13's JSON rewrite, since
-the FORMAT/PDBFile loader goes through systemJson) converts:
-- `PDBAtom` v0 constructors that materialized typed instances → 
-  store-slot factories that populate atom-row PDB-origin columns
-  (already present from HCP-1).
-- `PDBFile` load path stops producing `PDBAtom*` instances and
-  produces store atoms with PDB-origin payload set.
-- `PDBFile` save path reads PDB-origin payload from atom-row columns.
+R3 makes PDBAtom's fate explicit:
 
-The 54 VIEW Atom-RTTI sites that test for `PDBAtom` specifically
-remain out of scope (V21-VIEW-RTTI / D37; H7's job).
+**PDBAtom is DELETED** in commit 8 (alongside `Atom`) — there is no
+`PDBAtom` class post-H4. The PDB-origin payload (record type
+ATOM/HETATM, serial, alt-loc, occupancy, temp factor, segment
+identifier, charge string) is stored in atom-row columns that
+HCP-1 already added.
 
-### D-H4.15 (NEW per CR R1) — AtomContainer collapse
+A handle-role-facade `PDBAtomView` is NOT introduced — there is no
+need for a distinct type because the PDB-origin payload is just
+extra atom-row columns. Callers that did
+`if (auto* p = dynamic_cast<PDBAtom*>(&atom)) p->getSerial();`
+become `if (atom.hasPDBOrigin()) atom.getPDBSerial();` — a
+predicate + accessor on the regular Atom handle.
 
-Codex H4-DR R1 HIGH: AtomContainer is the heavy shared base. Either
-its public API needs `ContainerHandleBase` / role-handle methods or
-a compatibility wrapper.
+The pre-commit-5 audit ledger
+(`.planning/v2.2/V22-H4-PDB-CONSUMER-AUDIT.md`, NEW in R3) lists
+every PDBAtom* construction and dynamic_cast site with the
+replacement pattern, then commit 5 applies the edits.
 
-Decision: AtomContainer's public methods (the ones called via
-`AtomContainer&` in production code) get equivalent free functions
-in the `StructureQuery::` namespace OR member methods on the role
-handles (`MoleculeHandle::countAtoms()`, `FragmentHandle::beginAtom()`,
-etc.). Commit 7 lands this collapse before any v0 container class
-is deleted. The `: public AtomContainer` base disappears in the
-per-class deletion commits (8-11).
+The 54 VIEW Atom-RTTI sites remain out of scope (V21-VIEW-RTTI /
+D37; H7's job). The CORE_ONLY scope of H4 covers FORMAT/STRUCTURE
+PDBAtom sites including HINFile and dockResultFile.
 
-## Revised 15-commit plan
+### D-H4.15 (R3) — AtomContainer collapse with inventory ledger
+
+Codex H4-DR R2 HIGH: 245 files / 1493 lines reference
+`AtomContainer`. R2's "moves to handles/free functions" wording
+glossed over the scoping. The class has 9 method clusters per the
+audit: construction/copy, parent/child access, atom lookup, counts,
+mutation, splice/remove, predicates, bond application, iterators,
+property behavior, and mirror hooks (atomContainer.h:29, :166, :251).
+
+R3 splits commit 7 into two sub-commits:
+
+- **Commit 7a (NEW): AtomContainer inventory ledger**
+  `.planning/v2.2/V22-H4-ATOMCONTAINER-AUDIT.md` enumerates every
+  public method on `AtomContainer`, classifies it by destination
+  (role-handle member, StructureQuery free function, DELETED,
+  retained-on-System), and lists every external call site (245
+  files / 1493 lines).
+- **Commit 7b: AtomContainer API migration**
+  Per-method migration in dependency order: read-side first
+  (lookup, counts, predicates, iterators), then mutation
+  (insert, remove, splice), then property/bond behavior, then
+  constructor/copy/destructor (the latter only at commits 8-11
+  when the v0 class itself dies). Each method's migration is a
+  reviewable diff against the ledger.
+
+Commit 7b is potentially several smaller commits depending on
+ledger scope; the design commits to "one logical method cluster
+per commit" without pre-committing to the exact count.
+
+## Revised commit plan (R3)
 
 | # | Commit | Description |
 |---|---|---|
-| 0 | DR-R2 prep | Codex H4-DR round 2 + iterate to GO |
-| 1 | Test scaffolding | Table-only topology invariant + JSON round-trip tests (D-H4.3 replacement of parity oracle) |
-| 2 | API-break ledger | Enumerate every H4 break in V22-API-BREAK-LEDGER.md with migration notes + reverse-alias policy (D-H4.2) |
+| 0 | DR-R3 prep | Codex H4-DR round 3 + iterate to GO |
+| 1 | Test scaffolding | Table-only topology invariant + JSON round-trip tests with semantic equality (D-H4.3 replacement of parity oracle; CR R2-Q2 answer) |
+| 2 | API-break ledger | Enumerate every H4 break in V22-API-BREAK-LEDGER.md with migration notes + reverse-alias policy (D-H4.2); deprecate aliases through v2.3, remove v2.4 |
 | 3 | apply replacement | Replace `Composite::apply<T>` molecular callers with `StructureQuery::apply` on handles (D-H4.12) |
-| 4 | Iterator replacement | Replace Composite-backed molecular iterators (`AtomIterator`, `MoleculeIterator`, `PDBAtomIterator`, `AtomContainerIterator`) with handle/table-backed ones (D-H4.12) |
-| 5 | JSON + PDB rewrite | JSON load/save off `back_ptr`/`bond_back_ptr`; PDBAtom + PDBFile route through store-slot factories (D-H4.13 + D-H4.14) |
+| 4a | Iterator-consumer audit | Write `V22-H4-ITERATOR-CONSUMER-AUDIT.md` with the 159 deref-to-reference sites + 234-file iterator surface (D-H4.12 R3) |
+| 4b | Iterator migration | Replace Composite-backed molecular iterators with handle/table-backed ones; apply the per-site edits from the 4a ledger |
+| 5a | PDB-consumer audit | Write `V22-H4-PDB-CONSUMER-AUDIT.md` covering PDBFile + HINFile + dockResultFile PDBAtom sites (D-H4.14 R3) |
+| 5b | JSON + PDB rewrite | JSON load/save off `back_ptr`/`bond_back_ptr` (D-H4.13); PDBFile + HINFile + dockResultFile route through store-slot factories; PDB-origin payload on atom-row columns (D-H4.14) |
 | 6 | Property persistence | PropertyManager& removal from JSON + bag serialization; visitor + propertyNames() API (D-H4.6 b) |
-| 7 | AtomContainer collapse | Public AtomContainer API moves to role handles + StructureQuery free functions (D-H4.15) |
+| 7a | AtomContainer inventory ledger | `V22-H4-ATOMCONTAINER-AUDIT.md` enumerates every public method + every call site (245 files / 1493 lines per CR R2). Classify by destination (D-H4.15 R3) |
+| 7b | AtomContainer API migration | Per-method-cluster migration in dependency order: read-side → mutation → property/bond → constructor/dtor. May span several commits depending on ledger scope |
 | 7.5 | Parity retire | Drop HierarchyParity_test immediately before first v0 deletion (D-H4.3) |
-| 8 | Delete v0 Atom | `Atom : Composite, PropertyManager, Selectable` → `class Atom { ... };` canonical from AtomHandle; reverse alias `[[deprecated]] using AtomHandle = Atom` |
-| 9 | Delete v0 Bond | Same shape |
-| 10 | Delete v0 containers | Bottom-up molecular containers (Fragment, Residue, Chain, Protein, Nucleotide, NucleicAcid, SecondaryStructure, Molecule) — *may need sub-commits per CR R1 atomicity concern* |
+| 8 | Delete v0 Atom + PDBAtom | `Atom : Composite, PropertyManager, Selectable` → `class Atom { ... };` canonical from AtomHandle; reverse alias `[[deprecated]] using AtomHandle = Atom`. PDBAtom v0 class DELETED (D-H4.14 R3); PDB-origin payload lives on atom-row columns |
+| 9 | Delete v0 Bond | Same shape as Atom |
+| 10a | Delete v0 leaf containers | Fragment, SecondaryStructure (leaf role containers per CR R2-Q5) |
+| 10b | Delete v0 mid containers | Residue, Nucleotide (chain/strand-level) |
+| 10c | Delete v0 top containers | Chain, Protein, NucleicAcid, Molecule (bottom-up sequence per CR R2-Q5) |
 | 11 | System base strip | Strip `System : AtomContainer, Composite` (System survives as store owner per D-H4.11) |
+| 11.5 | Bridge-consumer audit + migration | Write `V22-H4-BRIDGE-CONSUMER-AUDIT.md` covering 29 bridge-reference files (handle accessors + STRUCTURE production); apply per-site edits to operate on sid/handle directly (D-H4.4 R3) |
 | 12 | Drop bridge | `back_ptr`/`bond_back_ptr`/`bond_idx_of`/`bond_sid_of` removed (D-H4.4) |
 | 13 | sizeof asserts + helper retire | static_asserts in atom.h + bond.h; `compositeAsAtom_` + D41.1 CI gate retired (D-H4.7, D-H4.8) |
 | 14 | H4 close-CR | Codex H4-close-review; iterate to GO |
 
-Estimate: 14 working commits + 1 design DR (round 2) + 1 closing CR =
-~16 commits across the H4 cycle. Commit 10 may sub-divide depending
-on actual blast radius per Codex H4-DR R1 finding 7 (Atom deletion
-atomicity probe applies equally to multi-container deletion).
+Estimate: 18 working commits (was 14) + 1 design DR (round 3) + 1
+closing CR ≈ 20 commits across the H4 cycle. The growth is real:
+R3 surfaces three new audit-ledger commits (4a, 5a, 7a, 11.5) +
+splits one commit (10) into three sub-commits.
 
 ## Out of scope for H4 (unchanged)
 
@@ -308,55 +406,76 @@ atomicity probe applies equally to multi-container deletion).
 - **`sizeof ≤ 32 B` cross-compiler verification**: H8's job.
 - **100k-atom store-footprint test**: H8's job.
 
-## Open questions resolved by CR R1
+## Open questions resolved by CR R1 + R2
 
-1. **Container order** — neither pure bottom-up nor top-down; correct
-   order is: shared surfaces first (commits 3, 4, 5, 6, 7), THEN
-   role-specific containers bottom-up (commit 10), then System
-   base strip (commit 11) where System SURVIVES as the store owner.
-2. **Reverse-alias lifetime** — deprecate through v2.3 release window
-   (with `[[deprecated]]`); remove at v2.4 cycle open.
-3. **HierarchyParity timing** — replace with table invariants + JSON
-   round-trip in commit 1; retire in commit 7.5 right before first
-   v0 deletion.
-4. **Bridge timing** — commit 12, AFTER all v0 classes are deleted
-   AND JSON / PDB / property persistence are rewritten.
+1. **Container order** — shared surfaces first (commits 3, 4a-b, 5a-b,
+   6, 7a-b), THEN role-specific containers in 3 sub-commits per
+   CR R2-Q5 (leaf → mid → top), then System base strip (commit 11).
+2. **Reverse-alias lifetime** — deprecate through v2.3 release
+   window with `[[deprecated]]`; remove at v2.4 cycle open.
+3. **HierarchyParity timing** — replace with table invariants +
+   JSON semantic-equality round-trip in commit 1; retire in
+   commit 7.5 right before first v0 deletion (per CR R2-Q2:
+   semantic equality, not binary).
+4. **Bridge timing** — commit 12, AFTER pre-commit-11.5 audit +
+   migration of the 29 bridge-reference files (per CR R2-Q1).
 5. **`sizeof` budget** — 32 B at H4 (no looser).
-6. **AssignBondOrder regression** — keep 5% (D-H3d.D.BASELINE
-   threshold).
-7. **Atom deletion atomicity** — Atom v0 deletion is commit 8 of a
-   pre-sliced sequence (commits 3-7 land the enablers first). May
-   still sub-divide if the test surface exposes too much churn.
-8. **AtomContainer** — D-H4.15 NEW. Public API moves to role
-   handles + StructureQuery free functions; base disappears in
-   per-class deletion commits.
+6. **AssignBondOrder regression** — keep 5%.
+7. **Atom deletion atomicity** — single commit 8 stays viable
+   after enablers (3-7) land; the 159 deref-to-reference sites
+   are migrated in commit 4b, not at atom deletion time.
+8. **AtomContainer** — D-H4.15 R3 splits into 7a (inventory
+   ledger) + 7b (per-cluster migration). 245-file scope acknowledged.
+9. **Iterator magnitude (CR R2-Q1)** — 159 obvious deref-to-reference
+   sites + broader 234-file/1104-line iterator API surface; D-H4.12
+   R3 calls for call-site migration, not compatibility proxy.
+10. **JSON wire-format vs. semantic test (CR R2-Q2)** — semantic
+    equality over randomized/store-invariant round trips with
+    optional canonical JSON comparison. Binary equality is too
+    brittle for object ordering.
+11. **PDB determinism (CR R2-Q3)** — parse-order-stable allocation.
+    ATOM/HETATM records map to store slots in parse order;
+    serial-to-handle mapping is preserved for CONECT records.
+12. **AtomContainer inventory (CR R2-Q4)** — commit 7a writes the
+    ledger BEFORE commit 7b applies the edits.
+13. **Commit 10 atomicity (CR R2-Q5)** — split into 10a (leaves) +
+    10b (mid) + 10c (top), bottom-up.
 
-## Open questions for Codex H4-DR round 2
+## Open questions for Codex H4-DR round 3
 
-(seeded by what's still uncertain in R2)
+(seeded by what's still uncertain in R3)
 
-1. **D-H4.12 iterator-replacement signature**: callers used `*it` to
-   get `Atom&`. Replacements yield `AtomHandle` by value. Source
-   files that did `Atom& a = *it; a.setX(...);` now compile against
-   handle write methods — this is a controlled break. Magnitude
-   audit: how many sites?
-2. **D-H4.13 JSON wire format equality**: JSON round-trip test
-   verifies binary equality of the produced JSON before/after the
-   rewrite. Acceptable, or should the test verify SEMANTIC equality
-   (round-trip a randomized System, compare via store invariants)?
-3. **D-H4.14 PDB load determinism**: store-slot factory order vs.
-   the v0 PDBFile parse order — does the store assign the same
-   `Index` sequence as the v0 path did, or do we need a parse-order-
-   stable allocation policy?
-4. **D-H4.15 AtomContainer public API**: an audit of which methods
-   need migration (count + name + frequency). Do we have a full
-   inventory yet, or does commit 7 need its own scoping pass?
-5. **Commit 10 atomicity**: 8 container classes deleted in one
-   commit OR a sub-sequence? Risk: bisect cost vs. tree-green
-   cadence.
+1. **PDBAtom* removal blast radius (D-H4.14 R3)** — once the audit
+   ledger lands (commit 5a), are there VIEW-only references that
+   creep into FORMAT/STRUCTURE through indirect includes? If so,
+   the H4/H7 boundary needs a finer split.
+2. **PropertyManager& break compatibility shim (D-H4.6 R2)** —
+   downstream code that took `NamedProperty&` mutable references
+   has no migration path through the visitor; is a single-cycle
+   read-only shim (`NamedPropertyRef` that triggers a write on
+   destruction) worth introducing, or accept the break as a hard
+   one per D49/D52?
+3. **AtomContainer cluster boundary (D-H4.15 R3 commit 7b)** —
+   does the audit ledger surface a method that crosses clusters
+   (e.g. is both read-side and mutation)? If yes, commit 7b's
+   per-cluster commit boundary needs further refinement.
+4. **Iterator audit completeness (D-H4.12 R3 commit 4a)** — the 159
+   number from Codex H4-DR R2 was a quick grep. A more thorough
+   audit may surface more sites (or fewer). Should commit 4a's
+   ledger include a tolerance band (e.g. ±20% spread acceptable
+   without re-DR) or strict count match?
+5. **Commit 11.5 bridge-consumer audit scope** — CR R2 identified
+   29 files referencing the bridge. A more thorough audit may
+   classify those into (a) handle accessors that can inline the
+   table lookup, (b) production code that needs migration to the
+   sid-keyed sites added in H3a-d, and (c) test code that exercises
+   the bridge specifically. Commit 11.5's ledger needs to make
+   the (a)/(b)/(c) split explicit.
 
 ---
 
 *Authored 2026-06-04 as pre-DR draft R1; revised to R2 same day
-after Codex H4-DR round 1 NOT-GO. Codex H4-DR round 2 is the gate
-to implementation.*
+after Codex H4-DR round 1 NOT-GO; revised to R3 same day after
+Codex H4-DR round 2 NOT-GO. Codex H4-DR round 3 is the gate to
+implementation. Per standing v2.2 surface protocol: ≤3 NOT-GO
+rounds before maintainer surface.*
