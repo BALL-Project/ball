@@ -327,4 +327,27 @@ CHECK(H4 commit 6.a -- null handle visitor surface is a safe no-op)
 	TEST_EQUAL(visited, 0)
 RESULT
 
+
+CHECK(H4 commit 7b.3 -- ContainerHandleBase::countAtoms)
+	// v2.2 H4 commit 7b.3 (D-H4.15 R3 counts cluster). Mirrors
+	// AtomContainer::countAtoms through the container_back_ptr bridge.
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	Atom* a3 = new Atom;
+	mol->insert(*a1);
+	mol->insert(*a2);
+	mol->insert(*a3);
+
+	auto& store = sys.getStore();
+	ContainerHandleBase h(store, mol->getContainerRow_());
+	TEST_EQUAL(h.countAtoms(), 3)
+
+	// Null handle: 0.
+	ContainerHandleBase null_h;
+	TEST_EQUAL(null_h.countAtoms(), 0)
+RESULT
+
 END_TEST

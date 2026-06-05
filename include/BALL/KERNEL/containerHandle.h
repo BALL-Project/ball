@@ -224,6 +224,22 @@ namespace BALL
 				visit(static_cast<const NamedProperty&>(c->getNamedProperty(i)));
 		}
 
+		/** v2.2 H4 commit 7b.3 (D-H4.15 R3 counts cluster):
+		    `countAtoms()` mirrors AtomContainer::countAtoms but reads
+		    through the container_back_ptr dual-existence bridge. The
+		    post-H4 implementation walks the store's atom-parent
+		    reverse-index directly; the v0-side dispatch is here for
+		    dual existence.
+
+		    Returns 0 for null/stale handles and for unbound containers
+		    (orphan rows or freed slots). */
+		Size countAtoms() const
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->countAtoms() : 0;
+		}
+
 		protected:
 
 		void assertValid_() const
