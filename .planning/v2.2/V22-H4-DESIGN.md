@@ -1,12 +1,12 @@
 # V22-H4-DESIGN — The Flip (v0 retirement + canonical-name reconciliation)
 
-**Status:** DRAFT-R6 (post-Codex H4-DR round 5 GO-WITH-FIXES applied).
+**Status:** DRAFT-R7 (post-Codex H4-DR round 6 GO-WITH-FIXES applied).
 **Authored:** 2026-06-04 immediately post-H3d closing-CR round 4 GO at
 `4e71e63f4`.
 **Predecessor:** H3d (closed); see `V22-H3d-DESIGN.md` + D-H3d.CLOSE.
 **Companion:** `.planning/v2.x/V2X-ROADMAP.md` §2 H4 row.
-**DR needed:** YES — Codex H4-DR round 6 (closing gate, expected GO)
-against this R6 draft.
+**DR needed:** YES — Codex H4-DR round 7 (final lock)
+against this R7 draft.
 
 **Surface note:** Standing v2.2 protocol triggers maintainer surface
 on 3 NOT-GO rounds. R3, R4 both returned NOT-GO with GO-WITH-FIXES
@@ -15,8 +15,8 @@ Applying inline preserved the productive cycle. The pattern was
 convergent — each DR round localized the scope further (R3 KERNEL
 public API → R4 non-FORMAT production → R5 widened to symbol-sweep
 audit predicate). **R5 returned GO-WITH-FIXES** (first non-NOT-GO);
-R6 closes consistency fixes only (no structural finding remains).
-Implementation begins at commit 1 after R6 locks GO.
+R6/R7 closed only metadata drift (no structural finding remains).
+Implementation begins at commit 1 after R7/R8 lock GO.
 
 ## R4 -> R5 change summary
 
@@ -566,11 +566,11 @@ Commit 7b is potentially several smaller commits depending on
 ledger scope; the design commits to "one logical method cluster
 per commit" without pre-committing to the exact count.
 
-## Revised commit plan (R6)
+## Revised commit plan (R7)
 
 | # | Commit | Description |
 |---|---|---|
-| 0 | DR-R6 prep | Codex H4-DR round 6 closing gate (lock GO) |
+| 0 | DR-R6 prep | Codex H4-DR round 7 final lock |
 | 1 | Test scaffolding | Table-only topology invariant + JSON round-trip tests with semantic equality (D-H4.3 replacement of parity oracle; CR R2-Q2 answer) |
 | 2 | API-break ledger | Enumerate every H4 break in V22-API-BREAK-LEDGER.md with migration notes + reverse-alias policy (D-H4.2); deprecate aliases through v2.3, remove v2.4 |
 | 3 | apply replacement | Replace `Composite::apply<T>` molecular callers with `StructureQuery::apply` on handles (D-H4.12) |
@@ -650,11 +650,11 @@ splits one commit (10) into three sub-commits.
 13. **Commit 10 atomicity (CR R2-Q5)** — split into 10a (leaves) +
     10b (mid) + 10c (top), bottom-up.
 
-## Open questions for Codex H4-DR round 6 (if needed)
+## Open questions for Codex H4-DR round 8 (if any)
 
-(R5 returned GO-WITH-FIXES per Codex round 5; the R5→R6 fixes are
+(R5+R6+R7 all returned GO-WITH-FIXES with progressively shrinking metadata-only findings; R8 closing gate is
 consistency only. Open questions retained for the next round of
-review, but R6 is expected to lock GO.)
+expected to lock GO.)
 
 1. **VIEW indirect-include creep** — once commit 5a's audit ledger
    lands, do VIEW-side PDBAtom references creep into FORMAT/STRUCTURE
@@ -688,5 +688,5 @@ after Codex H4-DR round 1 NOT-GO; revised to R3 same day after
 Codex H4-DR round 2 NOT-GO; revised to R4 same day after Codex
 H4-DR round 3 NOT-GO; revised to R5 same day after Codex H4-DR
 round 4 NOT-GO; revised to R6 (post-fixes) same day after Codex
-H4-DR round 5 GO-WITH-FIXES. Codex H4-DR round 6 is the closing
-gate, expected to lock GO.*
+H4-DR round 5 GO-WITH-FIXES. Codex H4-DR round 7 is the closing
+gate, expected to lock GO (R6 returned GO-WITH-FIXES, only metadata drift remained).*
