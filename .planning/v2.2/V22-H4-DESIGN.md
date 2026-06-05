@@ -1,13 +1,49 @@
 # V22-H4-DESIGN — The Flip (v0 retirement + canonical-name reconciliation)
 
-**Status:** DRAFT-R3 (post-Codex H4-DR round 2 NOT-GO findings applied).
+**Status:** DRAFT-R4 (post-Codex H4-DR round 3 NOT-GO findings applied).
 **Authored:** 2026-06-04 immediately post-H3d closing-CR round 4 GO at
 `4e71e63f4`.
 **Predecessor:** H3d (closed); see `V22-H3d-DESIGN.md` + D-H3d.CLOSE.
 **Companion:** `.planning/v2.x/V2X-ROADMAP.md` §2 H4 row.
-**DR needed:** YES — Codex H4-DR round 3 against this R3 draft. Per
-the standing v2.2 surface protocol, round 3 NOT-GO is the surface
-threshold.
+**DR needed:** YES — Codex H4-DR round 4 against this R4 draft.
+
+**Surface note:** Standing v2.2 protocol triggers maintainer surface
+on 3 NOT-GO rounds. R3 returned NOT-GO on PDBAtom KERNEL public API
+scope + bridge audit count specification — both concrete and
+addressable inline. Applying R4 inline keeps the productive cycle
+intact rather than surfacing on findings that are clearly
+GO-WITH-FIXES quality. If R4 returns NOT-GO, the surface fires.
+
+## R3 -> R4 change summary
+
+R3 had two residual issues per Codex H4-DR round 3:
+
+- D-H4.14 R3 PDB audit covered FORMAT construction + dynamic_cast
+  but missed KERNEL public API (residue.h:247 getPDBAtom/
+  countPDBAtoms; PDBAtomIterator.h:55 typed iterators;
+  extractors.h:57 PDBAtomList; extractors.C:74 PDBAtoms() return
+  type; chain.C:128 / protein.C:165 / secondaryStructure.C:155
+  PDBAtom* returns). Codex H4-DR R3 CRITICAL.
+- D-H4.4 R3 hard-coded "29 files" for the bridge audit. Fresh
+  rg finds 34 files / 119 lines. The count drifts; the audit
+  must be specified by symbol grep + category, not fixed count.
+  Codex H4-DR R3 HIGH.
+
+R4 changes:
+
+- D-H4.14 R4 (CRITICAL): PDB finalization expanded to three
+  categories: (I) FORMAT construction (existing R3 scope), (II)
+  KERNEL public API migration to StructureQuery free functions
+  on Atom + reverse-aliases for PDBAtomList through v2.3, (III)
+  iterator-traits + extractor type collapse. Commit 5 expands
+  from 5a+5b to 5a/5b/5c/5d for the three categories.
+- D-H4.4 R4 (HIGH): bridge audit scope defined by rg predicate +
+  5-category classification (handle-accessor inline /
+  production migration / test-specific use / definition site /
+  comment-doc). Counts drift between commits; the ledger
+  refresh runs at commit-prep time.
+- Plan grows from 18 to 20 working commits via 5a/5b/5c/5d
+  split.
 
 ## R2 -> R3 change summary
 
@@ -136,24 +172,41 @@ Replacement plan:
   first v0 class is deleted (i.e. just before commit 8 in the new
   plan).
 
-### D-H4.4 (R3) — Dual-existence bridge removal at the end
+### D-H4.4 (R4) — Dual-existence bridge removal at the end
 
-Codex H4-DR R2 CRITICAL: R2's gating list missed that
-`atomHandle.h` + `bondHandle.h` accessors themselves still call
-`back_ptr`/`bond_back_ptr` (atomHandle.h:120, bondHandle.h:120),
-and STRUCTURE production code resolves through the bridge
-(atomTyper.C:180, buildBondsProcessor.C:319, HBondProcessor.C:150).
-Total: 29 files reference the bridge.
+Codex H4-DR R3 HIGH: R3 hard-coded "29 files" for the bridge audit
+scope. Fresh `rg` over `include source test` finds 34 files / 119
+lines referencing `back_ptr` | `bond_back_ptr` | `bond_idx_of` |
+`bond_sid_of`. The count drifts with every commit; the audit
+scope must be defined by symbol grep, not fixed count.
 
-R3 adds a pre-commit bridge-consumer migration gate:
+R4 specifies the audit ledger by predicate:
 
-- Commit 11.5 (NEW): bridge-consumer migration. Audit + edit all
-  29 bridge references to operate on sid/handle directly (or to
-  inline the table lookup at the call site). The audit ledger is
-  written first as `.planning/v2.2/V22-H4-BRIDGE-CONSUMER-AUDIT.md`;
-  the audit ledger lists every (file, line, replacement-pattern)
-  triple BEFORE the edit commit.
-- Commit 12 then drops the bridge methods themselves.
+- **Commit 11.5 (R4)**: bridge-consumer audit + migration. The
+  audit ledger
+  `.planning/v2.2/V22-H4-BRIDGE-CONSUMER-AUDIT.md` is generated
+  by running `rg -tcpp 'back_ptr|bond_back_ptr|bond_idx_of|
+  bond_sid_of' include source test` at the moment the commit is
+  prepared, then categorizing every hit into:
+    (a) **handle accessor inline**: the hit can become an inline
+        table lookup in the same header (atomHandle.h /
+        bondHandle.h pattern from Codex R2)
+    (b) **production migration**: the hit lives in STRUCTURE /
+        FORMAT / MOLMEC / ... production code and migrates to
+        the sid-keyed sites already added in H3a-d
+    (c) **test-specific bridge use**: the hit is in a test
+        verifying bridge behavior; the test is REWRITTEN to
+        verify the post-flip behavior
+    (d) **definition site**: the bridge method definitions
+        themselves; deleted in commit 12
+    (e) **comment / doc**: cosmetic mention; no edit needed
+  Counts per category go in the ledger header; production code
+  edits land within commit 11.5 itself. Test rewrites land in
+  commit 11.5 as well. Definitions are removed in commit 12.
+
+- **Commit 12** then drops the bridge methods themselves
+  (`back_ptr`, `bond_back_ptr`, `bond_idx_of`, `bond_sid_of` in
+  MoleculeStore + any declarations in headers).
 
 The bridge methods (`MoleculeStore::back_ptr(i)`, `bond_back_ptr(i)`,
 `bond_idx_of(const Bond*)`, `bond_sid_of(const Bond*)`) are removed
@@ -303,37 +356,80 @@ store-table values directly:
   preserves compatibility).
 - A JSON round-trip test (D-H4.3) catches any wire-format drift.
 
-### D-H4.14 (R3) — PDBAtom + FORMAT finalization
+### D-H4.14 (R4) — PDBAtom + FORMAT + KERNEL public API finalization
 
-Codex H4-DR R2 CRITICAL: R2 stated PDBFile goes through systemJson,
-which is factually wrong. Audit found `PDBAtom` constructed in:
-- `source/FORMAT/PDBFileDetails.C:366` and `:1526` (PDBFile loader)
-- `source/FORMAT/HINFile.C:461`
-- `source/FORMAT/dockResultFile.C:2016`
+Codex H4-DR R3 CRITICAL: R3's "audit construction + dynamic_cast"
+scope was still incomplete. Audit found PDBAtom exposed in CORE
+KERNEL public API, not just FORMAT construction:
 
-R3 makes PDBAtom's fate explicit:
+- `include/BALL/KERNEL/residue.h:247`: `getPDBAtom()`,
+  `countPDBAtoms()`, `prepend/append/insert/remove(PDBAtom&)`,
+  PDBAtom iterator creators.
+- `include/BALL/KERNEL/PDBAtomIterator.h:55`: iterator traits typed
+  on `KernelPredicate<PDBAtom>` + typedef iterators yielding
+  `PDBAtom`.
+- `include/BALL/KERNEL/extractors.h:57`: `PDBAtomList = std::list<
+  PDBAtom*>` public extractor type.
+- `source/KERNEL/extractors.C:74`: `PDBAtoms()` returns
+  `PDBAtomList` and filters via `dynamic_cast<const PDBAtom*>`.
+- `source/KERNEL/chain.C:128`, `protein.C:165`,
+  `secondaryStructure.C:155`: return `PDBAtom*`.
 
-**PDBAtom is DELETED** in commit 8 (alongside `Atom`) — there is no
-`PDBAtom` class post-H4. The PDB-origin payload (record type
-ATOM/HETATM, serial, alt-loc, occupancy, temp factor, segment
-identifier, charge string) is stored in atom-row columns that
-HCP-1 already added.
+This is the KERNEL public surface. Deleting the class without
+migrating these APIs would leave commit 8 broken.
 
-A handle-role-facade `PDBAtomView` is NOT introduced — there is no
-need for a distinct type because the PDB-origin payload is just
-extra atom-row columns. Callers that did
-`if (auto* p = dynamic_cast<PDBAtom*>(&atom)) p->getSerial();`
-become `if (atom.hasPDBOrigin()) atom.getPDBSerial();` — a
-predicate + accessor on the regular Atom handle.
+R4 expands the PDB finalization scope to cover three categories:
+
+(I) **CONSTRUCTION + CAST sites** (R3 scope, retained):
+    PDBFileDetails.C, HINFile.C, dockResultFile.C → store-slot
+    factories.
+
+(II) **KERNEL PUBLIC API sites** (NEW in R4): The PDB-specific
+     accessor methods on `Residue`/`Chain`/`Protein`/
+     `SecondaryStructure` are REPLACED by free functions in the
+     `StructureQuery::` namespace that filter on
+     `Atom::hasPDBOrigin()`:
+
+     ```cpp
+     // Before H4 (KERNEL public API):
+     Residue r; PDBAtom* p = r.getPDBAtom(...);
+     PDBAtomList list = r.PDBAtoms();
+     for (auto it = r.beginPDBAtom(); +it; ++it) ...
+
+     // After H4:
+     namespace BALL::StructureQuery {
+       Atom getPDBAtom(const ResidueHandle&, ...);
+       std::vector<Atom> pdbAtoms(const ResidueHandle&);
+       auto pdbAtomRange(const ResidueHandle&);   // range-for friendly
+     }
+     ```
+
+     Reverse aliases (`[[deprecated]] using PDBAtomList = std::list<
+     Atom>;`) cover transition through v2.3, removed v2.4 (same
+     policy as the *Handle aliases per D-H4.2 R2).
+
+(III) **ITERATOR TRAITS** (NEW in R4): `PDBAtomIterator` becomes
+      a filtered-handle iterator over the role-handle's
+      atom-CSR view that yields atoms where
+      `Atom::hasPDBOrigin()`. The iterator-traits type becomes
+      `HandleIteratorTraits<Atom>` filtered by predicate
+      `[](const Atom& a){ return a.hasPDBOrigin(); }`. No new
+      type is introduced — `PDBAtomIterator` is a `using` alias
+      for the filtered handle iterator.
 
 The pre-commit-5 audit ledger
-(`.planning/v2.2/V22-H4-PDB-CONSUMER-AUDIT.md`, NEW in R3) lists
-every PDBAtom* construction and dynamic_cast site with the
-replacement pattern, then commit 5 applies the edits.
+(`.planning/v2.2/V22-H4-PDB-CONSUMER-AUDIT.md`, NEW in R3) is
+expanded in R4 to enumerate three categories: (I) construction,
+(II) KERNEL public API surface, (III) iterator-traits + extractor
+type. Each category's edits land in separate commits within the
+commit-5 cluster (5a audit ledger + 5b construction/JSON + new
+**5c KERNEL public API migration** + new **5d iterator/extractor
+collapse**).
+
+`PDBAtom` itself is DELETED in commit 8 alongside `Atom`.
 
 The 54 VIEW Atom-RTTI sites remain out of scope (V21-VIEW-RTTI /
-D37; H7's job). The CORE_ONLY scope of H4 covers FORMAT/STRUCTURE
-PDBAtom sites including HINFile and dockResultFile.
+D37; H7's job).
 
 ### D-H4.15 (R3) — AtomContainer collapse with inventory ledger
 
@@ -374,8 +470,10 @@ per commit" without pre-committing to the exact count.
 | 3 | apply replacement | Replace `Composite::apply<T>` molecular callers with `StructureQuery::apply` on handles (D-H4.12) |
 | 4a | Iterator-consumer audit | Write `V22-H4-ITERATOR-CONSUMER-AUDIT.md` with the 159 deref-to-reference sites + 234-file iterator surface (D-H4.12 R3) |
 | 4b | Iterator migration | Replace Composite-backed molecular iterators with handle/table-backed ones; apply the per-site edits from the 4a ledger |
-| 5a | PDB-consumer audit | Write `V22-H4-PDB-CONSUMER-AUDIT.md` covering PDBFile + HINFile + dockResultFile PDBAtom sites (D-H4.14 R3) |
-| 5b | JSON + PDB rewrite | JSON load/save off `back_ptr`/`bond_back_ptr` (D-H4.13); PDBFile + HINFile + dockResultFile route through store-slot factories; PDB-origin payload on atom-row columns (D-H4.14) |
+| 5a | PDB-consumer audit | Write `V22-H4-PDB-CONSUMER-AUDIT.md` with 3 categories: (I) construction/cast in FORMAT, (II) KERNEL public API surface (residue.h, PDBAtomIterator.h, extractors.h, chain.C, protein.C, secondaryStructure.C), (III) iterator-traits + extractor types (D-H4.14 R4) |
+| 5b | JSON + PDB construction rewrite | JSON load/save off `back_ptr`/`bond_back_ptr` (D-H4.13); FORMAT files (PDBFile/HINFile/dockResultFile) route through store-slot factories; PDB-origin payload on atom-row columns (D-H4.14 R4 category I) |
+| 5c | PDB KERNEL public API migration | Residue/Chain/Protein/SecondaryStructure PDB accessors → StructureQuery free functions on Atom + hasPDBOrigin() predicate; deprecated reverse aliases for PDBAtomList through v2.3 (D-H4.14 R4 category II) |
+| 5d | PDB iterator + extractor collapse | PDBAtomIterator typedef'd to filtered handle iterator on Atom with predicate hasPDBOrigin(); PDBAtomList → vector<Atom> with deprecated alias (D-H4.14 R4 category III) |
 | 6 | Property persistence | PropertyManager& removal from JSON + bag serialization; visitor + propertyNames() API (D-H4.6 b) |
 | 7a | AtomContainer inventory ledger | `V22-H4-ATOMCONTAINER-AUDIT.md` enumerates every public method + every call site (245 files / 1493 lines per CR R2). Classify by destination (D-H4.15 R3) |
 | 7b | AtomContainer API migration | Per-method-cluster migration in dependency order: read-side → mutation → property/bond → constructor/dtor. May span several commits depending on ledger scope |
@@ -386,7 +484,7 @@ per commit" without pre-committing to the exact count.
 | 10b | Delete v0 mid containers | Residue, Nucleotide (chain/strand-level) |
 | 10c | Delete v0 top containers | Chain, Protein, NucleicAcid, Molecule (bottom-up sequence per CR R2-Q5) |
 | 11 | System base strip | Strip `System : AtomContainer, Composite` (System survives as store owner per D-H4.11) |
-| 11.5 | Bridge-consumer audit + migration | Write `V22-H4-BRIDGE-CONSUMER-AUDIT.md` covering 29 bridge-reference files (handle accessors + STRUCTURE production); apply per-site edits to operate on sid/handle directly (D-H4.4 R3) |
+| 11.5 | Bridge-consumer audit + migration | Write `V22-H4-BRIDGE-CONSUMER-AUDIT.md` generated by `rg -tcpp 'back_ptr|bond_back_ptr|bond_idx_of|bond_sid_of'` at commit-prep time, classified into 5 categories (a) handle-accessor inline / (b) production migration / (c) test rewrite / (d) definition site / (e) comment-doc. Apply per-category edits in this commit. (D-H4.4 R4) |
 | 12 | Drop bridge | `back_ptr`/`bond_back_ptr`/`bond_idx_of`/`bond_sid_of` removed (D-H4.4) |
 | 13 | sizeof asserts + helper retire | static_asserts in atom.h + bond.h; `compositeAsAtom_` + D41.1 CI gate retired (D-H4.7, D-H4.8) |
 | 14 | H4 close-CR | Codex H4-close-review; iterate to GO |
