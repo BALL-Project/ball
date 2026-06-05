@@ -240,6 +240,26 @@ namespace BALL
 			return c ? c->countAtoms() : 0;
 		}
 
+		/** v2.2 H4 commit 7b.3 (D-H4.15 R3 counts cluster):
+		    `countAtomContainers()` mirrors AtomContainer::countAtomContainers
+		    (recursive child AtomContainer count). */
+		Size countAtomContainers() const
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->countAtomContainers() : 0;
+		}
+
+		/** v2.2 H4 commit 7b.3 (D-H4.15 R3 counts cluster):
+		    `countBonds()` mirrors AtomContainer::countBonds (recursive
+		    bond count rooted at this container). */
+		Size countBonds() const
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->countBonds() : 0;
+		}
+
 		protected:
 
 		void assertValid_() const
