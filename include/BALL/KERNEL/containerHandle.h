@@ -550,6 +550,59 @@ namespace BALL
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->swap(other);
 		}
 
+		/** v2.2 H4 commit 7b.8 (positional insert cluster):
+		    insertBefore / insertAfter for both Atom& and AtomContainer&.
+		    The marker is a v0 Composite& during dual existence -- at
+		    H4 commit 8 (Atom/AtomContainer deletion) these overloads
+		    are rewritten to take the corresponding handle type per
+		    D63 rename. Bridge-dispatch through container_back_ptr. */
+		void insertBefore(Atom& atom, Composite& before)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertBefore(atom, before);
+		}
+		void insertAfter(Atom& atom, Composite& after)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertAfter(atom, after);
+		}
+		void insertBefore(AtomContainer& sub, Composite& before)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertBefore(sub, before);
+		}
+		void insertAfter(AtomContainer& sub, Composite& after)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertAfter(sub, after);
+		}
+
+		/** v2.2 H4 commit 7b.8 (continued): destroyBonds -- iterate
+		    intra-/inter-bonds and delete each. Bridge-dispatch to the
+		    v0 implementation; post-H4 commit 12 (bridge deletion) this
+		    becomes a direct bond-table walk. */
+		void destroyBonds()
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->destroyBonds();
+		}
+
+		/** v2.2 H4 commit 7b.8 (continued): bit-property setProperty /
+		    clearProperty overloads (BALL::Property is uint32_t index
+		    into the BitVector property bag, distinct from the named
+		    String->value bag). Mirrors AtomContainer::setProperty
+		    (Property) / clearProperty(Property). */
+		void setProperty(BALL::Property p)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->setProperty(p);
+		}
+		void clearProperty(BALL::Property p)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clearProperty(p);
+		}
+
 		protected:
 
 		void assertValid_() const
