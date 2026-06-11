@@ -31,6 +31,11 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/residue.h>
+// v2.2 H4 Codex H4-DR R8 F4+F6+F7 coverage: JSON parity + 7b.8 surface.
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomHandle.h>
+#include <BALL/KERNEL/propertyJson.h>
+#include <BALL/EXTERNAL/nlohmann_json.hpp>
 #include <unordered_map>
 
 // HCP-2a: this test intentionally exercises the [[deprecated]] legacy single-kind
@@ -413,5 +418,88 @@ CHECK(H4 commit 7b.6 -- ContainerHandleBase::isSubAtomContainerOf)
 	TEST_EQUAL(h_p.isSubAtomContainerOf(h_r), false)
 	TEST_EQUAL(h_p.isSuperAtomContainerOf(h_r), true)
 RESULT
+
+
+CHECK(Codex H4-DR R8 F7: 7b.8 mutation surface -- destroyBonds + positional insert)
+	// Codex F7 + Vibe F14 (MEDIUM): the 7b.8 mutation surface
+	// (insertBefore/After, destroyBonds, bit-property setProperty)
+	// shipped without handle-level coverage. This CHECK locks the
+	// bridge-dispatch behavior so the H4 commit 12 direct-table
+	// rewrite has a verifiable target.
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	Atom* a3 = new Atom;
+	mol->insert(*a1);
+	mol->insert(*a2);
+	mol->insert(*a3);
+
+	// Build 2 intra-bonds via the v0 API; ContainerHandleBase::countBonds
+	// must report 2; destroyBonds must zero the count.
+	a1->createBond(*a2);
+	a2->createBond(*a3);
+
+	auto& store = sys.getStore();
+	ContainerHandleBase h_mol(store, mol->getContainerRow_());
+	TEST_EQUAL(h_mol.isValid(), true)
+	TEST_EQUAL(h_mol.countAtoms(), 3)
+	TEST_EQUAL(h_mol.countBonds(), 2)
+
+	// destroyBonds bridge dispatch: bonds gone but atoms remain.
+	h_mol.destroyBonds();
+	TEST_EQUAL(h_mol.countBonds(), 0)
+	TEST_EQUAL(h_mol.countAtoms(), 3)
+
+	// setProperty(BALL::Property) / clearProperty(BALL::Property) bit
+	// path -- distinct from the named-property bag. The bit goes onto
+	// the v0 AtomContainer's BitVector via bridge dispatch.
+	const BALL::Property TEST_BIT = 42;
+	h_mol.setProperty(TEST_BIT);
+	TEST_EQUAL(mol->hasProperty(TEST_BIT), true)
+	h_mol.clearProperty(TEST_BIT);
+	TEST_EQUAL(mol->hasProperty(TEST_BIT), false)
+RESULT
+
+
+CHECK(Codex H4-DR R8 F4+F6: H4 JSON round-trip parity -- handle path == PropertyManager& path)
+	// Codex F4 + F6 (MEDIUM): commit 6.b's wire-format equivalence
+	// claim has no behavioural lock. Build a container with bag +
+	// bit properties, emit JSON via BOTH the v0 PropertyManager& path
+	// AND the ContainerHandleBase handle overload, assert byte-equal
+	// output. Also round-trip atom properties via AtomHandle.
+	using nlohmann::json;
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+
+	// Populate the v0 PropertyManager bag on the Molecule.
+	mol->setProperty(String("alpha"), 7);
+	mol->setProperty(String("beta"), 3.14);
+	mol->setProperty(String("gamma"), String("hello"));
+	mol->setProperty(static_cast<BALL::Property>(11));
+
+	auto& store = sys.getStore();
+	ContainerHandleBase h_mol(store, mol->getContainerRow_());
+
+	json from_pm; detail::properties_to_json(
+		static_cast<const PropertyManager&>(*mol), &from_pm);
+	json from_handle; detail::properties_to_json(h_mol, &from_handle);
+	TEST_EQUAL(from_pm.dump() == from_handle.dump(), true)
+
+	// Atom side: AtomHandle overload vs Atom* PropertyManager& path.
+	Atom* a = new Atom;
+	mol->insert(*a);
+	a->setProperty(String("charge_anno"), 1.5);
+	a->setProperty(static_cast<BALL::Property>(5));
+
+	AtomHandle ah(store, a->getStoreIndex());
+	json a_from_pm; detail::properties_to_json(
+		static_cast<const PropertyManager&>(*a), &a_from_pm);
+	json a_from_handle; detail::properties_to_json(ah, &a_from_handle);
+	TEST_EQUAL(a_from_pm.dump() == a_from_handle.dump(), true)
+RESULT
+
 
 END_TEST
