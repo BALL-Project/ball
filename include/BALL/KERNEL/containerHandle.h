@@ -429,6 +429,40 @@ namespace BALL
 			return ContainerHandleBase();
 		}
 
+		/** v2.2 H4 commit 7b.5 (D-H4.15 R3 splice/remove cluster):
+		    removeHavingProperty / removeNotHavingProperty mirror
+		    AtomContainer's filtered-remove operations. Dispatch through
+		    the container_back_ptr bridge during dual existence; post-H4
+		    they're rewritten against the container-row + atom-row
+		    state directly.
+
+		    Returns the number of children removed (matches
+		    AtomContainer's Size return). 0 for invalid/unbound. */
+		Size removeHavingProperty(const std::string& name)
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->removeHavingProperty(name) : 0;
+		}
+		Size removeNotHavingProperty(const std::string& name)
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->removeNotHavingProperty(name) : 0;
+		}
+
+		/** v2.2 H4 commit 7b.4 (D-H4.15 R3 mutation cluster):
+		    `clear()` mirrors AtomContainer::clear -- detach all children
+		    (atoms + containers) without destroying them. The container
+		    itself survives. Bridge dispatch only; the v0 clear()
+		    handles the mirror update through the same forward-only mirror
+		    used by H2b. */
+		void clear()
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clear();
+		}
+
 		protected:
 
 		void assertValid_() const
