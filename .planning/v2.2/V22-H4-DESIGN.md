@@ -421,6 +421,107 @@ PDB-consumer-audit predicate yields 665 hits (vs. baseline 654 at
 Vibe's reading was correct, Codex's narrower count was using a
 different predicate variant.
 
+### D-H4.16 — Bridge lifecycle + concurrency contract (R3 amendments)
+
+Folds the R2/R3 dual-reviewer findings into the design. Implemented
+across commits 8ec6fe73a (F1/F5), f0d2ae0cb (F3), d20adef0a (F4/F6/F7),
+c66d45cef (F2/F8), 03c3dee37 (R3.1 C1-C4), e9751e20a (R3.3), 7b633a403
+(R3.2), 5f3435e3f (R3.5).
+
+**Bridge concurrency contract (N1).** The `container_back_ptr_` bridge
+mutates in lock-step with `container_table_`, under the SAME per-System
+single-threaded-mutator contract documented at `moleculeStore.h:357`
+(bond mutation UB without external lock) + `V22-H3c-DESIGN.md:373`. The
+bridge does NOT add a mutex: doing so would imply a per-component thread
+guarantee the table itself does not make. Multi-thread store mutation
+(table + bridge + columns together) is a store-wide v2.x change, out of
+H4 scope. The `orphan_mutex_` / `bond_mutex_` are ONLY for the
+process-global orphan store (default-ctor'd atoms from arbitrary
+threads); orphan containers materialise at adoption into a per-System
+store under that store's single-thread contract.
+
+**D56 vs D73 supersede (N1 cont).** H2/D73 (free-standing containers
+have no store; they materialise at adoption — `V22-H2-DESIGN.md:242`)
+SUPERSEDES the older D56 orphan-container-store model
+(`V22-H0-ADDENDUM.md`). There is no live orphan CONTAINER store; only
+the orphan ATOM store remains. The bridge therefore never needs
+orphan-store locking.
+
+**Bridge teardown (N8/N12/C1-C4).** `container_back_ptr(idx)` is bounded
+by the bridge-vector size only (must be safe to call on a store whose
+table is being torn down — it must not deref `side_tables_`).
+`clear_freed_back_ptrs_` nulls a slot when its row is past the table end
+OR freed (`is_freed()` returns false out-of-range, so the explicit
+end-bound is required). `MoleculeStore::clear()` empties the bridge in
+lock-step with the fresh side-table. `~System` walks the bridge (the
+reverse list of bound containers) and unbinds every container — tree
+AND detached — while the store is alive, so no survivor's `~AtomContainer`
+derefs a freed store. `set_container_back_ptr` rejects out-of-table idx
+(no manufactured tails). MoleculeStore is explicitly non-movable.
+
+### D-H4.11.A REFRESH (Codex R2-N3) — System-strip ledger, derived from system.h
+
+The R1 hand-written table missed methods and referenced a non-existent
+`getStore().clear_bonds()`. This is the corrected, system.h-derived
+ledger. Source line refs are `include/BALL/KERNEL/system.h` @ HEAD.
+
+| System method (system.h) | Post-strip owner / replacement |
+|---|---|
+| `getStore()` (290) | UNCHANGED — System keeps `std::unique_ptr<MoleculeStore> store_` (361); this is System's reason to survive (D-H4.11). |
+| `getMolecule(name|position)` (114) | UNCHANGED — re-implemented as a typed walk of the System's root child edges (container table), returning a `MoleculeHandle` post-flip per D63. |
+| `getProtein` (134) / `getNucleicAcid` | Same as getMolecule, role-filtered. |
+| `countMolecules/Proteins/NucleicAcids` (149/164/184) | Re-implemented as role-filtered counts over the root child edges; today they go through the AtomContainer base, post-strip they read the table directly. |
+| `insert(Molecule&)` (218) | Rewritten against the store/table API (see 11.B' below) — the v0 `AtomContainer::insert` body is replaced by a `container_create_` + edge-link + `adoptSubtree`. |
+| `insertBefore/After(Molecule&, Composite&)` (224/230) | Composite& marker DELETED at commit 8; replaced by the MoleculeHandle-marker form (mirrors D-H4.11.B's ContainerHandleBase freeze). |
+| `remove(Molecule&)` (235) | Rewritten to `container_remove_container_` + orphan/destroy per autodelete. |
+| `adopt(Atom&)` (315) | UNCHANGED — already store-level (migrates an atom into store_; leaves parent_container_idx == CONTAINER_NONE). This is the orphan-atom primitive (see C5). |
+| `adoptSubtree(AtomContainer&)` (344) | UNCHANGED at the store level; the AtomContainer& parameter becomes a ContainerHandleBase post-flip. |
+| `clear()` / `destroy()` (inherited) | REHOMED onto System: `System::clear()` = `getStore().clear()` + reset System's own name/properties; `System::destroy()` replicates the AtomContainer teardown body directly (NOT a base call — the base is gone). |
+| `destroyBonds()` (inherited) | REHOMED: iterate the store's bond table and delete each (there is NO `clear_bonds()` API — the R1 ledger was wrong; the real path is a bond-table walk via the existing `for_each_bond_*` + `remove_bond` primitives). |
+| `count{Atoms,Bonds,...}` (inherited) | REHOMED as inline `getStore().*` wrappers. |
+| `getName/setName` (inherited) | UNCHANGED — System has its own `name_` (it is-a AtomContainer today, keeps the field post-strip). |
+| named/bit `*Property` (inherited via PropertyManager) | System keeps direct `property_columns_` + sparse-bag access via getStore() (the PropertyManager base disappears at commit 8 per D-H4.6 R2). |
+| Composite tree (`getParent/getChild/apply/...`) | DELETED at commit 8; System has no Composite base. Iteration via handle-yielding AtomIterator / MoleculeIterator (D-H4.12). |
+
+**Commit-11 sub-commits (refined):**
+- 11.A — Rehome `clear/destroy/destroyBonds/count*/getName/setName`
+  onto System (independent of the AtomContainer base).
+- **11.B' (NEW, Codex R2-N9)** — Rewrite `System::insert(Molecule&)` +
+  `remove` + `insertBefore/After` + `adoptSubtree` against the
+  store/table API. TODAY these delegate to inherited AtomContainer
+  methods + bind v0 containers via `setContainerRowBinding_`
+  (`system.C:283/650/661/671`); the base strip (11.D) CANNOT land until
+  this rewrite removes the AtomContainer dependency.
+- 11.C — Delete the Composite-tree inheritance usage.
+- 11.D — Strip `: public AtomContainer, public Composite` from system.h.
+- 11.E — Rebuild systemJson.C against the new System surface (incl. C5).
+
+**C5 — orphan-atom JSON post-flip (Codex R2-N4).** The writer emits
+`system_atom_indices` for live store rows with
+`parent_container_idx == CONTAINER_NONE` (`systemJson.C:158`). The
+reader currently restores via `sys.AtomContainer::insert(...)`
+(`systemJson.C:481`), which is deleted post-flip. **Post-flip
+replacement:** `sys.adopt(atom)` (already store-level; migrates the
+atom into store_ and leaves its parent_container_idx unset, i.e.
+CONTAINER_NONE) — NOT a hidden orphan Molecule (a synthetic molecule
+would be a schema hazard if ever serialized as a real molecule). The
+`system_atom_indices` JSON schema is UNCHANGED. A round-trip test
+(orphan atom survives save→load with parent == CONTAINER_NONE) is added
+to commit 11.E's verification list.
+
+### D-H4.12 SELECTION SURFACE (Codex R2-N10) — scheduled, not implemented
+
+`ContainerHandleBase` has `getSelectionCount()` but no
+`countSelectedAtoms()` / `countSelectedAtomContainers()`. The store's
+selection count still walks v0 back_ptr + `isSelected()`
+(`moleculeStore.C:798/822`); the `selected_bits_` machinery exists
+(`_moleculeStoreInternal.h:871`) but the handle API is not wired to it.
+**Scheduled as commit 7b.17** (not landed now): wire handle-side
+selected-atom/container counters to `selected_bits_`. Deferred because a
+v0-bridge version would be churn deleted at commit 12 — it should land
+directly against `selected_bits_` once the rollup is in place. Tracked
+in the pending list.
+
 ### D-H4.12 (R3) — Iterator + apply replacement
 
 Codex H4-DR R2 HIGH: R2 wording "spelling stays" was misleading.
@@ -883,6 +984,16 @@ V22-H4-ITERATOR-CONSUMER-AUDIT / V22-H4-BRIDGE-CONSUMER-AUDIT:
   atom_by_save_idx `std::vector<Atom*>` -> handle-keyed refactor;
   HandleKeyLeakGate enforces D-H3.8). Folds into a future 6.b.3
   sub-commit alongside the systemJson scratch-key migration.
+- **7b.9–7b.16** STRUCTURE pointer-key migrations surfaced by the R3.3
+  gate widening (assignBondOrderProcessor, kekulizer,
+  partialBondOrderAssignment, addHydrogenProcessor, atomTyper,
+  buildBondsProcessor, geometricProperties, hybridisationProcessor,
+  DNAMutator, reconstructFragmentProcessor) — each on the
+  GATE_ALLOWLIST until its retiring commit lands.
+- **7b.17** ContainerHandleBase selected-atom/container counters wired
+  to `selected_bits_` (Codex R2-N10; deferred per D-H4.12 amendment).
+- **11.B'** System molecule-insertion rewrite against the store/table
+  API (Codex R2-N9), prerequisite for the commit-11 base strip.
 - **6.c** Consumer migration (165 + 53 sites by directory cluster)
 - **5b/5c/5d/5e** PDB consumer migrations (16 + 101 + 24 + 34 + 17 sites)
 - **4b.1-4b.5** Iterator-consumer migration (159 + 466 sites by cluster)
