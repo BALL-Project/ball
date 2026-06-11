@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomHandle.h>    // v2.2 H4 commit 6.b: handle path
 #include <BALL/KERNEL/bond.h>          // v2.1 P4.2: Bond is-a PropertyManager
+#include <BALL/KERNEL/bondHandle.h>    // v2.2 H4 commit 6.b.2: BondHandle path
 #include <BALL/KERNEL/propertyJson.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
@@ -202,16 +203,17 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 		};
 		// v2.1 P4.2 (V21-BOND-PROPERTY-JSON): the Bond handle's
 		// PropertyManager bag (MMFF94SBMB / MMFF94RBL / VIRTUAL__BOND /
-		// HBondProcessor annotations) lives on the heap Bond* object,
-		// reached via bond_back_ptr. Emit it inline with the bond
-		// record, keyed "properties", only when non-empty. Store-only
-		// JSON (no Bond* objects) has bond_back_ptr == null and emits
-		// no properties — clean. Schema MINOR bump covers the addition.
-		const Bond* bp = store.bond_back_ptr(static_cast<std::uint32_t>(i));
-		if (bp != nullptr)
+		// HBondProcessor annotations) lives on the heap Bond* object.
+		// v2.2 H4 commit 6.b.2 (D-H4.6 R2): emit via the BondHandle
+		// overload of properties_to_json -- dispatches through
+		// bond_back_ptr during dual existence, then through a direct
+		// bond-CSR sparse-bag read post commit 12. Wire format
+		// preserved (round-trip test gates against drift).
+		BondHandle bh(const_cast<MoleculeStore&>(store), static_cast<std::uint32_t>(i));
+		if (bh.isValid() && bh.getBond() != nullptr)
 		{
 			json bprop = json::object();
-			detail::properties_to_json(*bp, &bprop);
+			detail::properties_to_json(bh, &bprop);
 			if (!bprop.empty())
 				bond_json["properties"] = std::move(bprop);
 		}

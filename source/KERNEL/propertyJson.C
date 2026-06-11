@@ -14,8 +14,10 @@
 // the handle headers + atom.h for the bridge dispatch.
 #include <BALL/KERNEL/containerHandle.h>
 #include <BALL/KERNEL/atomHandle.h>
+#include <BALL/KERNEL/bondHandle.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/moleculeStore.h>
 
 #include <string>
@@ -201,6 +203,27 @@ void json_to_properties(AtomHandle& h, const void* in_json)
 	Atom* a = h.getAtom();
 	if (a == nullptr) return;
 	json_to_properties(static_cast<PropertyManager&>(*a), in_json);
+}
+
+// v2.2 H4 commit 6.b.2 (D-H4.6 R2): BondHandle overloads. Dispatch
+// through BondHandle::getBond() which reads bond_back_ptr during dual
+// existence. Bond IS-A PropertyManager (via Composite/PropertyManager
+// inheritance), so the cast is valid through commit 8.
+void properties_to_json(const BondHandle& h, void* out_json)
+{
+	using nlohmann::json;
+	json& out = *static_cast<json*>(out_json);
+	out = json::object();
+	Bond* b = h.getBond();
+	if (b == nullptr) return;
+	properties_to_json(static_cast<const PropertyManager&>(*b), out_json);
+}
+
+void json_to_properties(BondHandle& h, const void* in_json)
+{
+	Bond* b = h.getBond();
+	if (b == nullptr) return;
+	json_to_properties(static_cast<PropertyManager&>(*b), in_json);
 }
 
 } // namespace detail

@@ -31,6 +31,7 @@ namespace BALL
 	class PropertyManager;
 	class ContainerHandleBase;        // v2.2 H4 commit 6.b
 	class AtomHandle;                 // v2.2 H4 commit 6.b
+	class BondHandle;                 // v2.2 H4 commit 6.b.2
 
 	namespace detail {
 		/** Emit a PropertyManager into an existing nlohmann::json object
@@ -73,6 +74,15 @@ namespace BALL
 				through AtomHandle::getAtom() during dual existence. */
 		BALL_EXPORT void properties_to_json(const AtomHandle& h, void* out_json);
 		BALL_EXPORT void json_to_properties(AtomHandle& h, const void* in_json);
+
+		/** v2.2 H4 commit 6.b.2 (D-H4.6 R2): BondHandle overloads.
+				Same contract; dispatches through BondHandle::getBond()
+				during dual existence and through the bond_back_ptr bridge.
+				At H4 commit 12 the implementation switches to a direct
+				read of the bond-CSR sparse property bag. Wire format
+				unchanged. */
+		BALL_EXPORT void properties_to_json(const BondHandle& h, void* out_json);
+		BALL_EXPORT void json_to_properties(BondHandle& h, const void* in_json);
 	}
 } // namespace BALL
 
