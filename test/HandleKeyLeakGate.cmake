@@ -50,12 +50,22 @@ set(GATE_ALLOWLIST
 	"source/STRUCTURE/buildBondsProcessor.C"                # H4 7b.12 — buildBonds cluster
 	"source/STRUCTURE/geometricProperties.C"                # H4 7b.13 — geometricProperties cluster
 	"source/STRUCTURE/hybridisationProcessor.C"             # H4 7b.14 — hybridisation cluster
+	# v2.2 H4 R3.3: sites surfaced by the deque/list widening (Codex R2-N2).
+	"source/STRUCTURE/DNAMutator.C"                         # H4 7b.15 — DNAMutator deque<Atom*>
+	"include/BALL/STRUCTURE/DNAMutator.h"                   # H4 7b.15 — DNAMutator deque<Atom*>
+	"source/STRUCTURE/reconstructFragmentProcessor.C"      # H4 7b.16 — reconstructFragment list<Atom*>
+	"include/BALL/STRUCTURE/reconstructFragmentProcessor.h" # H4 7b.16 — reconstructFragment list<Atom*>
 )
 foreach(F IN LISTS KERNEL_SOURCES)
 	get_filename_component(BASENAME "${F}" NAME)
 
 	# Skip the handle headers themselves + the focused handle/key tests.
-	if(BASENAME MATCHES "^(atomHandle|bondHandle|containerHandle)\\.h$")
+	# v2.2 H4 R3.3: also skip extractorsHandle.h -- it is a handle header
+	# (the D-H3.8 migration TARGET, returns std::vector<AtomHandle>); its
+	# only match is a DOC COMMENT mentioning the v0 "std::list<Atom*>"
+	# return type it replaces. The gate is a text scanner and can't tell
+	# comment from code, so the handle headers are excluded by name.
+	if(BASENAME MATCHES "^(atomHandle|bondHandle|containerHandle|extractorsHandle)\\.h$")
 		continue()
 	endif()
 	if(BASENAME MATCHES "^(AtomHandle_test|BondHandle_test|ContainerHandle_test)\\.C$")
@@ -74,9 +84,27 @@ foreach(F IN LISTS KERNEL_SOURCES)
 	# template parameter of these containers is the key (or the element for
 	# set/vector); we conservatively flag any of them when the type is a
 	# bare pointer to Atom/Bond.
+	# v2.2 H4 R3.3 (Codex R2-N2): container alternation now covers the full
+	# STL spelling set including deque/list/forward_list/multiset/multimap
+	# -- the original missed std::deque<Atom*> / std::list<Atom*> (e.g.
+	# DNAMutator.h). Pointer-identity in ANY of these forbidden by D-H3.8.
 	if(CONTENT MATCHES
-		"(HashSet|HashMap|StringHashMap|std::set|std::map|std::unordered_set|std::unordered_map|std::vector)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
-		list(APPEND LEAKS "${F}")
+		"(HashSet|HashMap|StringHashMap|std::(set|map|unordered_set|unordered_map|multiset|multimap|vector|deque|list|forward_list))[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
+		# v2.2 H4 R3.3: consult the allowlist here too. Widening the
+		# alternation to std::list/std::deque means qualified-form leaks in
+		# known-pending files (geometricProperties.C etc.) now reach THIS
+		# branch, not just the unqualified one below; without the allowlist
+		# check they would hard-fail the gate.
+		set(ALLOWED FALSE)
+		foreach(ALLOW IN LISTS GATE_ALLOWLIST)
+			if(F MATCHES "${ALLOW}$")
+				set(ALLOWED TRUE)
+				break()
+			endif()
+		endforeach()
+		if(NOT ALLOWED)
+			list(APPEND LEAKS "${F}")
+		endif()
 	endif()
 
 	# v2.2 H4 Codex F3 fix: also scan the sibling .h file (same
@@ -93,7 +121,7 @@ foreach(F IN LISTS KERNEL_SOURCES)
 		if(EXISTS "${SIB_PATH}")
 			file(READ "${SIB_PATH}" SIB_CONTENT)
 			if(SIB_CONTENT MATCHES
-				"(HashSet|HashMap|StringHashMap|std::(set|map|unordered_set|unordered_map|vector)|[^A-Za-z_](set|map|unordered_set|unordered_map|vector))[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
+				"(HashSet|HashMap|StringHashMap|std::(set|map|unordered_set|unordered_map|multiset|multimap|vector|deque|list|forward_list)|[^A-Za-z_](set|map|unordered_set|unordered_map|multiset|multimap|vector|deque|list|forward_list))[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
 				# Check allow-list before flagging.
 				set(ALLOWED FALSE)
 				foreach(ALLOW IN LISTS GATE_ALLOWLIST)
@@ -115,7 +143,7 @@ foreach(F IN LISTS KERNEL_SOURCES)
 	# matches the original gate's contract; the new sibling-.h scan
 	# above is the widened part.
 	if(CONTENT MATCHES
-		"[^A-Za-z_](set|map|unordered_set|unordered_map|vector)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
+		"[^A-Za-z_](set|map|unordered_set|unordered_map|multiset|multimap|vector|deque|list|forward_list)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
 		# Check allow-list before flagging.
 		set(ALLOWED FALSE)
 		foreach(ALLOW IN LISTS GATE_ALLOWLIST)
