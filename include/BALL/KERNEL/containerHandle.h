@@ -517,6 +517,39 @@ namespace BALL
 			return c ? c->remove(sub) : false;
 		}
 
+		/** v2.2 H4 commit 7b.5 (D-H4.15 R3 splice cluster):
+		    spliceBefore / spliceAfter / splice mirror
+		    AtomContainer::splice* -- transfer children FROM the argument
+		    container INTO this container. The argument's children list
+		    becomes empty (post-splice the argument is detached but its
+		    container row survives in the orphan store). Bridge-dispatch
+		    to the v0 AtomContainer::splice* which runs the H2b mirror. */
+		void spliceBefore(AtomContainer& src)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->spliceBefore(src);
+		}
+		void spliceAfter(AtomContainer& src)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->spliceAfter(src);
+		}
+		void splice(AtomContainer& src)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->splice(src);
+		}
+
+		/** v2.2 H4 commit 7b.4 (mutation cluster, swap): swap the
+		    children + scalar identity of two containers via the v0
+		    AtomContainer::swap. Bridge-dispatched; the H2b swap mirror
+		    (commit 103994a26) handles the table-side relink. */
+		void swap(AtomContainer& other)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->swap(other);
+		}
+
 		protected:
 
 		void assertValid_() const
