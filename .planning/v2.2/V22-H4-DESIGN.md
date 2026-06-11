@@ -342,6 +342,85 @@ System survives H4 with:
 
 Commit 11 (in the new plan) is "System base strip" — not deletion.
 
+#### D-H4.11.A (NEW per Codex H4-DR R8 F2) — System inherited-method migration plan
+
+Codex H4-DR R8 F2 + Vibe F9 (HIGH): D-H4.11 said System survives but
+did NOT enumerate which methods System inherits from AtomContainer /
+Composite. Without that enumeration, commit 11 has nothing concrete
+to execute against.
+
+The current System (system.h:42 `System : public AtomContainer`)
+re-uses ALL of AtomContainer's public surface. When AtomContainer is
+deleted at commit 10c, every inherited method disappears. The
+following table catalogs each method + its post-flip target:
+
+| Inherited method | Post-flip target |
+|---|---|
+| `insert/append/prepend/remove(Atom&)` | Replaced by `System::insert(Molecule&)` overload only; per D-H4.11 the System root holds Molecules, NOT bare atoms. Bare-atom orphan storage migrates to per-Molecule containers. |
+| `insert/append/prepend/remove(AtomContainer&)` | Replaced by `System::insert(Molecule&)` + `System::insert(SystemHandle::Fragment&)` per the typed-handle surface (D63 rename). |
+| `insertBefore/After(Atom\|AtomContainer&, Composite&)` | DELETED at commit 8 alongside Composite. Post-flip System exposes `insertBefore/After(Molecule&, MoleculeHandle marker)` taking the marker by handle. |
+| `splice*(AtomContainer&)` | DELETED at commit 8; replaced by `System::splice*(MoleculeHandle)` taking the source by handle. Splice cross-System is `migrate_subtree_from` on the store side. |
+| `swap(AtomContainer&)` | DELETED at commit 8; the AtomContainer-level swap has no System analog (a System swaps stores via `getStore().swap(other.getStore())`). |
+| `clear()` | Rehomed onto `System::clear()` directly. Calls `getStore().clear()` + resets System's own properties. |
+| `destroy()` | Rehomed onto `System::destroy()` directly (same body as the AtomContainer override). |
+| `countAtoms/Containers/Bonds/InterBonds/IntraBonds` | Rehomed onto `System` as inline `getStore().count_*` wrappers. |
+| `getAtom(name)/getAtom(position)/getAtomContainer(name\|pos)` | Replaced by free functions in `BALL::StructureQuery::` per D-H4.15 R3. System keeps `getMolecule(name)/getMolecule(position)` only. |
+| `getSuperAtomContainer / getAtomContainer(position)` | DELETED on System (System has no super; sub-containers iterate via Molecule handles). |
+| `isSub/SuperAtomContainerOf` | DELETED on System (the table-walk predicate operates on container rows; System has no row). |
+| `applyIntra/InterBond(UnaryProcessor<Bond>&)` | Replaced by `apply` over BondHandle. The handle-processor contract (D-H3a) is the destination. |
+| `destroyBonds()` | Rehomed onto `System::destroyBonds()` directly. Calls `getStore().clear_bonds()`. |
+| `hasProperty/setProperty/clearProperty` (named) | Survive on System as its own PropertyManager bag (System is-a PropertyManager DELETED at commit 8, but System keeps `property_columns_` + sparse bag access directly via getStore()). |
+| `getName/setName` | Survive on System directly (System already has `name_` field). |
+| Composite tree (`getParent/getChild/getDegree/getDescendant*/apply*`) | DELETED at commit 8. System has no Composite base. Iteration is via handle-yielding `AtomIterator` / `MoleculeIterator`. |
+
+Commit 11 plan refresh: System's strip is NOT one atomic step. Sub-
+commits:
+  11.A — Rehome `clear/destroy/destroyBonds/count*/getName/setName`
+         onto System directly (independent of AtomContainer base).
+  11.B — Replace `insert/append/prepend/remove(Atom&)` family with
+         `(Molecule&)` overloads + delete the Atom-direct path.
+  11.C — Delete the Composite-tree inheritance (getParent/getChild/
+         apply/etc.).
+  11.D — Strip `: public AtomContainer, public Composite` from
+         system.h:42.
+  11.E — Rebuild systemJson.C against the new System surface.
+
+The 11.E sub-commit covers Vibe F10 — systemJson.C still uses
+back_ptr for System-level JSON; that work is folded into the strip.
+
+### D-H4.11.B (NEW per Codex H4-DR R8 F8) — Post-flip positional-insert signature freeze
+
+Codex F8 + Vibe F2 (MEDIUM): `ContainerHandleBase::insertBefore/After`
+land today with `Composite& before/after` markers. The doc-comment
+says "rewritten at commit 8" but didn't freeze the exact post-flip
+type. Consumers adopting today take an un-gated break at commit 8.
+
+Frozen post-flip signatures (effective at commit 8 alongside the
+Composite class deletion):
+
+```cpp
+// Post-H4 commit 8 frozen surface (AtomHandle / ContainerHandleBase
+// are the only types referenced — Atom and Composite are GONE):
+void ContainerHandleBase::insertBefore(AtomHandle a, AtomHandle before);
+void ContainerHandleBase::insertAfter (AtomHandle a, AtomHandle after);
+void ContainerHandleBase::insertBefore(ContainerHandleBase sub,
+                                       ContainerHandleBase before);
+void ContainerHandleBase::insertAfter (ContainerHandleBase sub,
+                                       ContainerHandleBase after);
+```
+
+The Composite&-taking overloads are DELETED at commit 8; their
+declarations include a `[[deprecated]]` attribute landing at the
+next bounded commit (Codex F8 fix-half). The Composite&-consumer
+gate (a new CMake test in the H4 cluster) catches any new file
+introducing a Composite& usage during dual existence.
+
+Codex H4-DR R8 F9 + Vibe F11 NOTE: re-counted at HEAD `f0d2ae0cb`,
+PDB-consumer-audit predicate yields 665 hits (vs. baseline 654 at
+`7d35f0c35`, +1.7%). Within the documented ±20% refresh threshold;
+Vibe's reading was correct, Codex's narrower count was using a
+different predicate variant.
+
 ### D-H4.12 (R3) — Iterator + apply replacement
 
 Codex H4-DR R2 HIGH: R2 wording "spelling stays" was misleading.
