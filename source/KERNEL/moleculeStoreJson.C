@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/moleculeStoreJson.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomHandle.h>    // v2.2 H4 commit 6.b: handle path
 #include <BALL/KERNEL/bond.h>          // v2.1 P4.2: Bond is-a PropertyManager
 #include <BALL/KERNEL/propertyJson.h>
 #include <BALL/COMMON/exception.h>
@@ -152,15 +153,18 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 		is_freed.push_back(store.is_freed(i) ? 1 : 0);
 		origin_flags.push_back(static_cast<int>(store.origin_flags(i)));    // v2.2 H3a.3b
 
-		// K0.6.5b: per-atom PropertyManager bag. Lives on the heap-
-		// allocated Atom handle (PropertyManager is a base class), so
-		// we reach it via back_ptr. Empty {} if no handle (freed slot
-		// or pre-bind slot).
+		// K0.6.5b: per-atom PropertyManager bag.
+		// v2.2 H4 commit 6.b (D-H4.6 R2): rewritten to go through the
+		// AtomHandle overload of properties_to_json. The handle
+		// dispatches via AtomHandle::getAtom() during dual existence,
+		// and at H4 commit 12 (bridge deletion) the implementation
+		// switches to a direct property_columns_ + sparse-bag read on
+		// the store. Wire format unchanged.
 		json prop_obj = json::object();
-		const Atom* handle = store.back_ptr(static_cast<MoleculeStore::Index>(i));
-		if (handle != nullptr)
+		AtomHandle ah(const_cast<MoleculeStore&>(store), static_cast<std::uint32_t>(i));
+		if (ah.isValid())
 		{
-			detail::properties_to_json(*handle, &prop_obj);
+			detail::properties_to_json(ah, &prop_obj);
 		}
 		properties.push_back(std::move(prop_obj));
 	}
