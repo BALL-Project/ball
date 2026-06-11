@@ -24,9 +24,13 @@
 #include <BALL/KERNEL/_moleculeStoreInternal.h>   // build the table by hand
 #include <BALL/KERNEL/containerKind.h>
 #include <BALL/KERNEL/containerHandle.h>
-// v2.2 H4 commit 6.a coverage: need the v0 classes for the visitor test.
+// v2.2 H4 commit 6.a + 7b.* coverage: v0 classes for visitor + mutation
+// + predicate tests.
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/residue.h>
 #include <unordered_map>
 
 // HCP-2a: this test intentionally exercises the [[deprecated]] legacy single-kind
@@ -348,6 +352,66 @@ CHECK(H4 commit 7b.3 -- ContainerHandleBase::countAtoms)
 	// Null handle: 0.
 	ContainerHandleBase null_h;
 	TEST_EQUAL(null_h.countAtoms(), 0)
+RESULT
+
+
+CHECK(H4 commit 7b.4 -- ContainerHandleBase::insert/append/remove(Atom&))
+	// v2.2 H4 commit 7b.4 (D-H4.15 R3 mutation cluster).
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	auto& store = sys.getStore();
+	ContainerHandleBase h(store, mol->getContainerRow_());
+
+	TEST_EQUAL(h.countAtoms(), 0)
+
+	// insert via handle
+	Atom* a1 = new Atom;
+	h.insert(*a1);
+	TEST_EQUAL(h.countAtoms(), 1)
+
+	// append via handle (semantically same; AtomContainer::insert == append)
+	Atom* a2 = new Atom;
+	h.append(*a2);
+	TEST_EQUAL(h.countAtoms(), 2)
+
+	// remove via handle
+	bool removed = h.remove(*a1);
+	TEST_EQUAL(removed, true)
+	TEST_EQUAL(h.countAtoms(), 1)
+
+	// Null handle no-op
+	ContainerHandleBase null_h;
+	Atom* a3 = new Atom;
+	null_h.insert(*a3);   // no-op
+	TEST_EQUAL(null_h.countAtoms(), 0)
+	delete a3;
+	delete a1;
+RESULT
+
+
+CHECK(H4 commit 7b.6 -- ContainerHandleBase::isSubAtomContainerOf)
+	// v2.2 H4 commit 7b.6 (D-H4.15 R3 predicates cluster).
+	// Pure-table walk: System → Protein → Chain → Residue, the
+	// Residue handle should be a sub-container of all ancestors.
+	System sys;
+	Protein* p = new Protein;
+	sys.insert(*p);
+	Chain* c1 = new Chain;
+	p->insert(*c1);
+	Residue* r1 = new Residue;
+	c1->insert(*r1);
+
+	auto& store = sys.getStore();
+	ContainerHandleBase h_p(store, p->getContainerRow_());
+	ContainerHandleBase h_c(store, c1->getContainerRow_());
+	ContainerHandleBase h_r(store, r1->getContainerRow_());
+
+	TEST_EQUAL(h_r.isSubAtomContainerOf(h_p), true)
+	TEST_EQUAL(h_r.isSubAtomContainerOf(h_c), true)
+	TEST_EQUAL(h_c.isSubAtomContainerOf(h_p), true)
+	TEST_EQUAL(h_p.isSubAtomContainerOf(h_r), false)
+	TEST_EQUAL(h_p.isSuperAtomContainerOf(h_r), true)
 RESULT
 
 END_TEST
