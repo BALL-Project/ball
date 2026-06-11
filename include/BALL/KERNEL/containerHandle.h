@@ -378,6 +378,57 @@ namespace BALL
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clearProperty(n);
 		}
 
+		/** v2.2 H4 commit 7b.3 (D-H4.15 R3 counts cluster, completion):
+		    countInterBonds + countIntraBonds mirror AtomContainer's
+		    convenience counters. */
+		Size countInterBonds() const
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->countInterBonds() : 0;
+		}
+		Size countIntraBonds() const
+		{
+			if (!isValid()) return 0;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->countIntraBonds() : 0;
+		}
+
+		/** v2.2 H4 commit 7b.1 (D-H4.15 R3 parent/child access cluster):
+		    getSuperAtomContainer returns a base handle to the nearest
+		    AtomContainer-typed parent walking up the container_parent_
+		    chain. NOTE: ContainerHandleBase::getParent() returns the
+		    IMMEDIATE parent regardless of kind; getSuperAtomContainer
+		    skips Atom-only intermediate rows (none in v2.2 -- the
+		    container table is container-rows-only -- but we keep the
+		    semantic alignment with AtomContainer for direct caller
+		    migration). Pure-table walk; no bridge call. */
+		ContainerHandleBase getSuperAtomContainer() const
+		{
+			if (!isValid()) return ContainerHandleBase();
+			std::uint32_t p = store_->container_parent_(idx_);
+			if (p == MoleculeStore::CONTAINER_NONE) return ContainerHandleBase();
+			return ContainerHandleBase(*store_, p);
+		}
+
+		/** v2.2 H4 commit 7b.1 (D-H4.15 R3 parent/child access cluster):
+		    getAtomContainer(position) returns the position-th child
+		    container as a base handle. Skips atom-typed children. */
+		ContainerHandleBase getAtomContainer(Position position) const
+		{
+			if (!isValid()) return ContainerHandleBase();
+			std::size_t skipped = 0;
+			const auto cc = store_->container_child_count_(idx_);
+			for (std::size_t i = 0; i < cc; ++i)
+			{
+				auto edge = store_->container_child_(idx_, i);
+				if (edge.is_atom) continue;
+				if (skipped == position) return ContainerHandleBase(*store_, edge.idx);
+				++skipped;
+			}
+			return ContainerHandleBase();
+		}
+
 		protected:
 
 		void assertValid_() const
