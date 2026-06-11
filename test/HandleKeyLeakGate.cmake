@@ -25,6 +25,32 @@ file(GLOB_RECURSE KERNEL_SOURCES
 	"${SOURCE_DIR}/source/*.C")
 
 set(LEAKS "")
+# v2.2 H4 Codex H4-DR R8 F3 fix (D-H4.16 GATE-TIGHTENING): per-pair
+# scan. The original gate only checked a file against itself -- if a
+# .C file opts into atomHandle.h but stores raw Atom*/Bond* in a
+# SIBLING .h (same basename), the original gate missed it. The
+# tightened gate also scans the sibling .h when a .C file opts in.
+# Documented allow-list captures known-pre-existing violations that
+# need H3d-style migration commits to remove; the allow-list is the
+# audit ledger so the gate stays honest about coverage.
+set(GATE_ALLOWLIST
+	# Codex H4-DR R8 F3 known-pending sites surfaced by gate tightening.
+	# Each entry will retire under its own bounded migration commit.
+	# The audit ledger PDB-CONSUMER-AUDIT.md / ATOMCONTAINER-AUDIT.md
+	# captures these as part of the STRUCTURE H4 cluster.
+	"include/BALL/STRUCTURE/assignBondOrderProcessor.h"     # H4 7b.9 — HashMap<Atom*,int> + vector<Atom*>
+	"source/STRUCTURE/assignBondOrderProcessor.C"           # H4 7b.9 — sibling .C
+	"source/STRUCTURE/kekulizer.C"                          # H4 7b.9 — vector<Atom*> via using namespace std
+	"include/BALL/STRUCTURE/kekulizer.h"                    # H4 7b.9 — sibling .h
+	"include/BALL/STRUCTURE/BONDORDERS/partialBondOrderAssignment.h"  # H4 7b.9 — BONDORDERS cluster
+	"source/STRUCTURE/BONDORDERS/partialBondOrderAssignment.C"        # H4 7b.9 — BONDORDERS cluster
+	"include/BALL/STRUCTURE/addHydrogenProcessor.h"         # H4 7b.10 — addHydrogen cluster
+	"source/STRUCTURE/addHydrogenProcessor.C"               # H4 7b.10 — addHydrogen cluster
+	"include/BALL/STRUCTURE/atomTyper.h"                    # H4 7b.11 — atomTyper cluster
+	"source/STRUCTURE/buildBondsProcessor.C"                # H4 7b.12 — buildBonds cluster
+	"source/STRUCTURE/geometricProperties.C"                # H4 7b.13 — geometricProperties cluster
+	"source/STRUCTURE/hybridisationProcessor.C"             # H4 7b.14 — hybridisation cluster
+)
 foreach(F IN LISTS KERNEL_SOURCES)
 	get_filename_component(BASENAME "${F}" NAME)
 
@@ -52,19 +78,56 @@ foreach(F IN LISTS KERNEL_SOURCES)
 		"(HashSet|HashMap|StringHashMap|std::set|std::map|std::unordered_set|std::unordered_map|std::vector)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
 		list(APPEND LEAKS "${F}")
 	endif()
-	# v2.2 H3c CR finding 3 (REGISTERED, deliberately scoped out):
-	# the regex above intentionally requires the std:: qualifier (or the
-	# BALL HashSet/HashMap forms). Unqualified `vector<Atom*>` appearing
-	# under `using namespace std` is NOT caught. Extending the regex to
-	# catch it would surface pre-existing transient scratch in several
-	# STRUCTURE files whose public API still takes vector<vector<Atom*>>
-	# (e.g. setRings, SmartsMatcher::setSSSR), forcing cascading breaks
-	# that are H3d-bounded (SmartsMatcher cluster) -- not H3c. The
-	# narrower gate is honest about WHAT it currently enforces (stored
-	# pointer-identity KEYS); the wider gate (transient scratch) is a
-	# follow-on after the SmartsMatcher/RingPerception public-API
-	# migration in H3d. Codex finding 3 is documented as "future
-	# tightening, accept incremental coverage now".
+
+	# v2.2 H4 Codex F3 fix: also scan the sibling .h file (same
+	# basename) so a .C opting in via atomHandle.h can't hide its
+	# stored pointer-identity keys in a public header. The sibling
+	# scan uses a WIDENED regex that ALSO catches unqualified
+	# `vector<Atom*>` / `HashMap<Atom*,...>` -- the H3c CR finding 3
+	# pattern -- because public headers are the most damaging place
+	# for a stored pointer key to hide.
+	if(BASENAME MATCHES "\\.C$")
+		string(REGEX REPLACE "\\.C$" ".h" SIB_BASENAME "${BASENAME}")
+		string(REGEX REPLACE "/source/" "/include/BALL/" SIB_PATH "${F}")
+		string(REGEX REPLACE "\\.C$" ".h" SIB_PATH "${SIB_PATH}")
+		if(EXISTS "${SIB_PATH}")
+			file(READ "${SIB_PATH}" SIB_CONTENT)
+			if(SIB_CONTENT MATCHES
+				"(HashSet|HashMap|StringHashMap|std::(set|map|unordered_set|unordered_map|vector)|[^A-Za-z_](set|map|unordered_set|unordered_map|vector))[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
+				# Check allow-list before flagging.
+				set(ALLOWED FALSE)
+				foreach(ALLOW IN LISTS GATE_ALLOWLIST)
+					if(SIB_PATH MATCHES "${ALLOW}$")
+						set(ALLOWED TRUE)
+						break()
+					endif()
+				endforeach()
+				if(NOT ALLOWED)
+					list(APPEND LEAKS "${SIB_PATH} (sibling of ${F})")
+				endif()
+			endif()
+		endif()
+	endif()
+
+	# v2.2 H4 Codex F3 fix: also catch the H3c CR finding 3 pattern
+	# (unqualified container<Atom*>) when the file itself opts in.
+	# The narrower scope of this check (own-file only, not transitive)
+	# matches the original gate's contract; the new sibling-.h scan
+	# above is the widened part.
+	if(CONTENT MATCHES
+		"[^A-Za-z_](set|map|unordered_set|unordered_map|vector)[ \t]*<[ \t]*(const[ \t]+)?(Atom|Bond)[ \t]*\\*")
+		# Check allow-list before flagging.
+		set(ALLOWED FALSE)
+		foreach(ALLOW IN LISTS GATE_ALLOWLIST)
+			if(F MATCHES "${ALLOW}$")
+				set(ALLOWED TRUE)
+				break()
+			endif()
+		endforeach()
+		if(NOT ALLOWED)
+			list(APPEND LEAKS "${F} (unqualified container<Atom*/Bond*>)")
+		endif()
+	endif()
 endforeach()
 
 if(LEAKS)
