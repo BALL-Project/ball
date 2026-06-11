@@ -602,6 +602,18 @@ namespace BALL
 			if (!isValid()) return;
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clearProperty(p);
 		}
+		/** v2.2 H4 R3.2 (Codex R2-N7): handle-side bit-property read,
+		    completing the set/clear/has triple for BALL::Property. Lets
+		    consumers + tests verify a bit property entirely through the
+		    handle API without reaching for the v0 PropertyManager bridge
+		    read. Dispatches through container_back_ptr during dual
+		    existence; post-H4 commit 12 it reads the BitVector column. */
+		bool hasProperty(BALL::Property p) const
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->hasProperty(p) : false;
+		}
 
 		protected:
 

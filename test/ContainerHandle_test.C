@@ -452,14 +452,34 @@ CHECK(Codex H4-DR R8 F7: 7b.8 mutation surface -- destroyBonds + positional inse
 	TEST_EQUAL(h_mol.countBonds(), 0)
 	TEST_EQUAL(h_mol.countAtoms(), 3)
 
-	// setProperty(BALL::Property) / clearProperty(BALL::Property) bit
-	// path -- distinct from the named-property bag. The bit goes onto
-	// the v0 AtomContainer's BitVector via bridge dispatch.
+	// v2.2 H4 R3.2 (Codex R2-N5): positional insert coverage. Insert a
+	// new atom BEFORE a2 (currently at position 1) and assert it lands
+	// at the right ordinal via the handle's getAtom(position). Mol order
+	// starts {a1, a2, a3}; insertBefore(a4, a2) -> {a1, a4, a2, a3}.
+	Atom* a4 = new Atom;
+	a4->setName("A4");
+	h_mol.insertBefore(*a4, *a2);
+	TEST_EQUAL(h_mol.countAtoms(), 4)
+	TEST_EQUAL(h_mol.getAtom(1) == a4, true)   // a4 now at position 1
+	TEST_EQUAL(h_mol.getAtom(2) == a2, true)   // a2 shifted to position 2
+	// insertAfter(a5, a4) -> {a1, a4, a5, a2, a3}
+	Atom* a5 = new Atom;
+	a5->setName("A5");
+	h_mol.insertAfter(*a5, *a4);
+	TEST_EQUAL(h_mol.countAtoms(), 5)
+	TEST_EQUAL(h_mol.getAtom(2) == a5, true)   // a5 lands right after a4
+
+	// setProperty(BALL::Property) / clearProperty / hasProperty bit path
+	// -- distinct from the named-property bag. v2.2 H4 R3.2 (Codex R2-N7):
+	// verify entirely THROUGH the handle (h_mol.hasProperty), not via the
+	// v0 mol->hasProperty bridge read, so the assertion survives commit 12.
 	const BALL::Property TEST_BIT = 42;
+	TEST_EQUAL(h_mol.hasProperty(TEST_BIT), false)
 	h_mol.setProperty(TEST_BIT);
-	TEST_EQUAL(mol->hasProperty(TEST_BIT), true)
+	TEST_EQUAL(h_mol.hasProperty(TEST_BIT), true)
+	TEST_EQUAL(mol->hasProperty(TEST_BIT), true)   // bridge consistency cross-check
 	h_mol.clearProperty(TEST_BIT);
-	TEST_EQUAL(mol->hasProperty(TEST_BIT), false)
+	TEST_EQUAL(h_mol.hasProperty(TEST_BIT), false)
 RESULT
 
 
@@ -499,6 +519,20 @@ CHECK(Codex H4-DR R8 F4+F6: H4 JSON round-trip parity -- handle path == Property
 		static_cast<const PropertyManager&>(*a), &a_from_pm);
 	json a_from_handle; detail::properties_to_json(ah, &a_from_handle);
 	TEST_EQUAL(a_from_pm.dump() == a_from_handle.dump(), true)
+
+	// v2.2 H4 R3.2 (Codex R2-N6): the UNBOUND-container contract. An
+	// AtomContainer that is NOT in any store (no container row) has an
+	// invalid ContainerHandleBase; the documented handle contract
+	// (propertyJson.h) is that properties_to_json emits an EMPTY object
+	// "{}" -- NOT the v0 bag -- because the handle path is store-row-based
+	// and an unbound container has no row to read. Lock that contract so a
+	// future change can't silently start emitting (or losing) data here.
+	Molecule unbound;
+	unbound.setProperty(String("ghost"), 99);   // populated but never adopted
+	ContainerHandleBase h_unbound(store, /*idx=*/0);   // null/invalid handle
+	TEST_EQUAL(h_unbound.isValid(), false)
+	json u_from_handle; detail::properties_to_json(h_unbound, &u_from_handle);
+	TEST_EQUAL(u_from_handle.empty() || u_from_handle.dump() == "{}", true)
 RESULT
 
 
