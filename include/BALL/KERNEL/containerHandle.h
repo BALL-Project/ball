@@ -491,6 +491,32 @@ namespace BALL
 			return c ? c->remove(atom) : false;
 		}
 
+		/** v2.2 H4 commit 7b.4 (continued): AtomContainer-level
+		    insert/append/prepend/remove overloads. Same bridge-
+		    dispatch pattern; the AtomContainer& reference contract
+		    survives dual existence. */
+		void insert(AtomContainer& sub)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insert(sub);
+		}
+		void append(AtomContainer& sub)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->append(sub);
+		}
+		void prepend(AtomContainer& sub)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->prepend(sub);
+		}
+		bool remove(AtomContainer& sub)
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->remove(sub) : false;
+		}
+
 		protected:
 
 		void assertValid_() const
