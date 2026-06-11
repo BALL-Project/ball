@@ -71,13 +71,26 @@ walkContainerInvariants(const MoleculeStore& store)
 		const auto kind = store.container_kind_(i);
 		const bool freed = store.container_is_freed_(i);
 
-		// (4) ContainerKind::NONE rows are skipped from topology
-		// checks — they're either the reserved sentinel (row 0) or
-		// freed slots awaiting reuse. Either way they participate
-		// in no parent/child relationship and shouldn't carry a
-		// payload offset that this test validates.
-		if (kind == ContainerKind::NONE) continue;
-		if (freed) continue;
+		// (4) ContainerKind::NONE rows / freed rows are skipped from
+		// PARENT/CHILD checks — they participate in no relationship.
+		// BUT we MUST verify the bridge slot for them is null (Codex
+		// H4-DR R8 F1 fix): a freed/NONE row whose container_back_ptr
+		// is non-null is a dangling pointer that a future row recycle
+		// hands to a fresh ContainerHandleBase. This invariant locks
+		// the row-recycle safety of the H4 bridge.
+		if (kind == ContainerKind::NONE || freed)
+		{
+			if (i != 0 && store.container_back_ptr(i) != nullptr)
+			{
+				std::ostringstream os;
+				os << "row " << i << " is "
+				   << (kind == ContainerKind::NONE ? "kind=NONE" : "freed")
+				   << " but container_back_ptr_ is non-null "
+				   << "(stale bridge -- row recycle would dangle)";
+				violations.push_back(os.str());
+			}
+			continue;
+		}
 
 		// (1) parent_idx in range.
 		const auto par = store.container_parent_(i);
@@ -293,6 +306,55 @@ CHECK(H4 D-H4.3 R6 invariant: detached molecule does not corrupt rooted table)
 	TEST_EQUAL(a.size(), 0)
 
 	delete mol_orphan;
+RESULT
+
+
+CHECK(Codex H4-DR R8 F1: row recycle clears stale container_back_ptr_)
+	// v2.2 H4 Codex H4-DR R8 F1 fix lock-test. Sequence:
+	//   1. Build System + Molecule (binds Molecule to some row R).
+	//   2. Detach Molecule (mol->remove) -- v0 dtor runs at delete.
+	//   3. Delete Molecule -- unbind path nulls bridge slot for row R.
+	//   4. Create another Molecule -- container_create_ MAY recycle row R.
+	//   5. Walk the container_back_ptr_ for the recycled row.
+	// Invariant (locked here): the bridge slot for any freed row is
+	// nullptr BEFORE the v0 setContainerRowBinding_ rebinds it. With
+	// the F1 fix, container_create_ resets the slot to nullptr on
+	// recycle; without the fix, the slot would still point to the
+	// destroyed old Molecule.
+	{
+		System sys;
+		auto& store = sys.getStore();
+
+		// Phase 1: allocate-and-drop 8 containers to seed the freed-row pool.
+		std::vector<std::uint32_t> seen_rows;
+		for (int i = 0; i < 8; ++i)
+		{
+			Molecule* m = new Molecule;
+			sys.insert(*m);
+			seen_rows.push_back(static_cast<std::uint32_t>(m->getContainerRow_()));
+			sys.remove(*m);
+			delete m;                       // v0 dtor runs unbind path
+		}
+
+		// Phase 2: verify bridge slots null after v0 destruction. Even
+		// when the row stays allocated (dual-existence keeps the row
+		// live past the v0 dtor), the bridge slot MUST be null --
+		// otherwise it dangles into freed memory. The F1 fix lives in
+		// AtomContainer::~AtomContainer's setContainerRowBinding_(0,0)
+		// call (atomContainer.C). Without the fix this slot still
+		// points to the deleted Molecule.
+		for (auto r : seen_rows)
+		{
+			if (r == 0) continue;
+			TEST_EQUAL(store.container_back_ptr(r) == nullptr, true)
+		}
+
+		// Phase 3: globally re-walk invariants -- with the tightened
+		// invariant (4), any leftover non-null bridge slot for a freed
+		// row would push a violation here.
+		auto c = walkContainerInvariants(store);
+		TEST_EQUAL(c.size(), 0)
+	}
 RESULT
 
 

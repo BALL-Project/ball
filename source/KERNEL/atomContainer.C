@@ -206,6 +206,15 @@ namespace BALL
 	AtomContainer::~AtomContainer()
 	{
 		setBeingDestroyed_();  // v2.2 H2a (D69): before destroy()'s teardown
+		// v2.2 H4 Codex H4-DR R8 F1 fix (D-H4.16 BRIDGE-LIFECYCLE):
+		// unbind from our container-row slot BEFORE the rest of the
+		// teardown. Without this, the bridge slot keeps pointing at
+		// this AtomContainer after our memory is reclaimed, and a
+		// later row recycle hands a fresh ContainerHandleBase the
+		// dangling pointer. The setContainerRowBinding_ override
+		// (atomContainer.h:413) clears the OLD store's slot when
+		// the slot still references *this*.
+		setContainerRowBinding_(0, 0);
 		destroy();
 	}
 

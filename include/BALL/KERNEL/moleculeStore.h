@@ -533,6 +533,15 @@ namespace BALL
 		AtomContainer*     container_back_ptr(std::uint32_t idx) const;
 		void               set_container_back_ptr(std::uint32_t idx, AtomContainer* p);
 
+		// v2.2 H4 Codex H4-DR R8 F1 fix (D-H4.16 BRIDGE-LIFECYCLE):
+		// post-walk the bridge vector and null out slots for freed rows.
+		// Called after bulk release paths (release_children_ / release_
+		// container_subtree_) where v0 dtors may not have run the
+		// setContainerRowBinding_(0,0) unbind path -- e.g. cross-store-
+		// move source-release. Without this, a stale back_ptr survives
+		// row recycling and a fresh handle dispatches into freed memory.
+		void               clear_freed_back_ptrs_();
+
 		// Sentinel returned by container_parent_ for a root / detached
 		// container (mirrors ContainerRow::NONE; kept public so handles can
 		// test for "no parent" without the internal type).

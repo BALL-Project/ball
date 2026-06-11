@@ -850,13 +850,21 @@ std::size_t MoleculeStore::container_table_size_() const
 std::uint32_t MoleculeStore::container_create_(ContainerKind kind)
 {
 	const std::uint32_t row = side_tables_->container_table_.allocate(kind);
-	// v2.2 H4 commit 6.a (D-H4.6 R2): keep container_back_ptr_ sized
-	// in lock-step with the container_table_ row index space. New rows
-	// start unbound (nullptr); the v0 AtomContainer::setContainerRowBinding_
-	// path populates them at bind time.
+	// v2.2 H4 commit 6.a (D-H4.6 R2) + Codex H4-DR R8 F1 fix: keep
+	// container_back_ptr_ sized in lock-step with the container_table_
+	// row index space. Fresh rows start unbound (nullptr); RECYCLED
+	// rows are forcibly reset to nullptr to drop any stale back-pointer
+	// from the prior occupant -- a freed row whose v0 AtomContainer was
+	// destroyed without an unbind would otherwise hand a fresh handle
+	// a pointer to deallocated memory through container_back_ptr().
+	// The v0 setContainerRowBinding_ path repopulates at bind time.
 	if (row >= container_back_ptr_.size())
 	{
 		container_back_ptr_.resize(static_cast<std::size_t>(row) + 1, nullptr);
+	}
+	else
+	{
+		container_back_ptr_[row] = nullptr;     // defensive on recycle
 	}
 	return row;
 }
@@ -957,12 +965,34 @@ void MoleculeStore::container_clear_children_(std::uint32_t row)
 	side_tables_->container_table_.clear_children(row);
 }
 
+// v2.2 H4 commit 6.a + Codex H4-DR R8 F1 fix (D-H4.16): post-walk the
+// bridge vector and null out slots that correspond to freed rows. Called
+// after any bulk release that doesn't go through a v0 dtor's
+// setContainerRowBinding_(0,0) unbind path -- e.g. the cross-store-move
+// source-release where the source v0 objects are moved-from and their
+// dtors don't run on the source store. Without this, freed rows carry
+// non-null back_ptrs that a future row recycle hands to a fresh handle.
+// O(N) where N is the bridge vector size; only runs on release events.
+void MoleculeStore::clear_freed_back_ptrs_()
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	const std::size_t n = std::min(container_back_ptr_.size(), t.size());
+	for (std::size_t i = 1; i < n; ++i)
+	{
+		if (t.is_freed(static_cast<std::uint32_t>(i)))
+		{
+			container_back_ptr_[i] = nullptr;
+		}
+	}
+}
+
 // v2.2 HCP-2c.3 (D-2c.6): free `row`'s child subtrees (recursively) but keep
 // `row` -- the rooted-full-replacement (set/operator=) primitive. Freed child
 // rows bump their generation, so handles into the replaced subtree go stale.
 void MoleculeStore::container_release_children_(std::uint32_t row)
 {
 	side_tables_->container_table_.release_children_(row);
+	clear_freed_back_ptrs_();                          // Codex F1 fix
 }
 
 // v2.2 HCP-2c.4 (D-2c.7): free `row` AND its whole subtree (the cross-store-move
@@ -971,6 +1001,7 @@ void MoleculeStore::container_release_children_(std::uint32_t row)
 void MoleculeStore::container_release_subtree_(std::uint32_t row)
 {
 	side_tables_->container_table_.release_container_subtree_(row);
+	clear_freed_back_ptrs_();                          // Codex F1 fix
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

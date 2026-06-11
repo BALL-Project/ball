@@ -412,13 +412,32 @@ namespace BALL
 		std::uint32_t  getContainerRow_() const override      { return container_row_idx_; }
 		void setContainerRowBinding_(MoleculeStore* store, std::uint32_t row) override
 		{
+			// v2.2 H4 commit 6.a (D-H4.6 R2) + Codex H4-DR R8 F1 fix
+			// (D-H4.16 BRIDGE-LIFECYCLE): populate the container-row → v0
+			// Composite bridge so ContainerHandleBase's eachProperty /
+			// propertyNames can reach this AtomContainer's PropertyManager
+			// bag through the dual-existence window.
+			//
+			// CRITICAL: on rebind / unbind, the OLD store's bridge slot for
+			// the OLD row must be cleared FIRST -- otherwise it dangles and
+			// a row-recycle on the old store hands a fresh handle the stale
+			// pointer to this destroyed/moved AtomContainer.
+			//
+			// Preconditions for "clear old":
+			//   (a) we had a non-null old store binding, AND
+			//   (b) the old slot currently still points to *this* (defensive:
+			//       another binding could have overwritten the slot via a
+			//       move; never clobber that).
+			MoleculeStore* const old_store = container_row_store_;
+			const std::uint32_t  old_row   = container_row_idx_;
+			const bool rebind_or_unbind = (old_store != 0)
+			                              && (old_store != store || old_row != row);
+			if (rebind_or_unbind && old_store->container_back_ptr(old_row) == this)
+			{
+				old_store->set_container_back_ptr(old_row, nullptr);
+			}
 			container_row_store_ = store;
 			container_row_idx_   = row;
-			// v2.2 H4 commit 6.a (D-H4.6 R2): populate the container-row →
-			// v0 Composite bridge so ContainerHandleBase's eachProperty /
-			// propertyNames can reach this AtomContainer's PropertyManager
-			// bag through the dual-existence window. Unbinding (store==0)
-			// clears the back-pointer.
 			if (store != 0) store->set_container_back_ptr(row, this);
 		}
 
