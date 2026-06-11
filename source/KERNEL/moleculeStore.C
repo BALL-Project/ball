@@ -874,13 +874,33 @@ std::uint32_t MoleculeStore::container_create_(ContainerKind kind)
 // PropertyManager bag through the dual-existence window.
 AtomContainer* MoleculeStore::container_back_ptr(std::uint32_t idx) const
 {
+	// Codex H4-DR R8.R3 C2: bound by the bridge-vector size ONLY. This
+	// accessor must be safe to call on a store whose container table is
+	// being torn down, so it must NOT dereference side_tables_ (an
+	// unbridged or cleared row is already covered: clear() empties this
+	// vector, and clear_freed_back_ptrs_ nulls freed/out-of-table slots,
+	// so a stale or hand-built table row resolves to nullptr here).
+	// Tests that allocate rows directly through ContainerTable leave
+	// idx >= container_back_ptr_.size() -> nullptr, which is correct
+	// (no v0 binding exists for such a row).
 	if (idx == 0 || idx >= container_back_ptr_.size()) return nullptr;
 	return container_back_ptr_[idx];
 }
 
+// Codex H4-DR R8.R3 C4: bridge-vector size, used by ~System to walk the
+// reverse list of bound containers and unbind them before the store dies.
+std::size_t MoleculeStore::container_back_ptr_count_() const
+{
+	return container_back_ptr_.size();
+}
+
 void MoleculeStore::set_container_back_ptr(std::uint32_t idx, AtomContainer* p)
 {
-	if (idx == 0) return;
+	// Codex H4-DR R8.R3 C3: do NOT manufacture bridge tails for rows that
+	// don't exist in the container table. Only container_create_ grows the
+	// bridge in lock-step with the table; a bind for an out-of-table idx is
+	// a contract violation (the row must be created first).
+	if (idx == 0 || idx >= container_table_size_()) return;
 	if (idx >= container_back_ptr_.size())
 	{
 		container_back_ptr_.resize(static_cast<std::size_t>(idx) + 1, nullptr);
@@ -975,11 +995,17 @@ void MoleculeStore::container_clear_children_(std::uint32_t row)
 // O(N) where N is the bridge vector size; only runs on release events.
 void MoleculeStore::clear_freed_back_ptrs_()
 {
+	// Codex H4-DR R8.R3 C1: ContainerTable::is_freed() returns FALSE for
+	// out-of-range indices (idx >= rows_.size()), NOT "freed". So a bridge
+	// vector that is LARGER than the table (after a clear() or a release
+	// that shrank the table) has tail slots [t.size(), back_ptr_.size())
+	// that is_freed() would never flag. Walk the FULL bridge vector and
+	// null a slot when its row is past the table end OR explicitly freed.
 	const ContainerTable& t = side_tables_->container_table_;
-	const std::size_t n = std::min(container_back_ptr_.size(), t.size());
-	for (std::size_t i = 1; i < n; ++i)
+	const std::size_t t_size = t.size();
+	for (std::size_t i = 1; i < container_back_ptr_.size(); ++i)
 	{
-		if (t.is_freed(static_cast<std::uint32_t>(i)))
+		if (i >= t_size || t.is_freed(static_cast<std::uint32_t>(i)))
 		{
 			container_back_ptr_[i] = nullptr;
 		}
@@ -1284,6 +1310,14 @@ void MoleculeStore::clear()
 	// ContainerTable re-seeds sentinel slot 0); the old rows are gone, so any
 	// held container handle now fails its freed/generation check.
 	side_tables_ = std::make_unique<MoleculeStoreSideTables>();
+
+	// Codex H4-DR R8.R3 C1: the dual-existence container bridge must be
+	// reset in lock-step with the container table. Without this, clear()
+	// leaves container_back_ptr_ at its old (large) size pointing at v0
+	// AtomContainers that the caller may still hold, while the fresh
+	// table has only the sentinel row -- a stale-bridge desync. Drop all
+	// slots; container_create_ re-grows the vector as new rows bind.
+	container_back_ptr_.clear();
 
 	// Generation advances unconditionally — any held column reference is
 	// now invalid.

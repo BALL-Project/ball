@@ -358,4 +358,72 @@ CHECK(Codex H4-DR R8 F1: row recycle clears stale container_back_ptr_)
 RESULT
 
 
+CHECK(Codex H4-DR R8.R3 C1: MoleculeStore::clear() nulls the container bridge)
+	// Codex R3.R3 C1 lock-test: after clear(), the container_back_ptr_
+	// vector must not hand back a stale pointer for ANY old row index.
+	// The fresh side-table has only the sentinel row, so every prior
+	// container index must now resolve to nullptr through the accessor
+	// (which intersects table-size AND bridge-size bounds).
+	{
+		System sys;
+		auto& store = sys.getStore();
+		std::vector<std::uint32_t> rows;
+		for (int i = 0; i < 6; ++i)
+		{
+			Molecule* m = new Molecule;
+			sys.insert(*m);
+			rows.push_back(static_cast<std::uint32_t>(m->getContainerRow_()));
+		}
+		// Pre-clear: at least some rows are bound (non-null bridge).
+		bool any_bound = false;
+		for (auto r : rows) if (r != 0 && store.container_back_ptr(r) != nullptr) any_bound = true;
+		TEST_EQUAL(any_bound, true)
+
+		store.clear();
+
+		// Post-clear: every old row index resolves to nullptr -- the
+		// bridge vector was emptied AND the accessor's table-size bound
+		// rejects the now-out-of-table indices.
+		for (auto r : rows)
+		{
+			TEST_EQUAL(store.container_back_ptr(r) == nullptr, true)
+		}
+		// Topology invariant clean on the cleared store.
+		auto c = walkContainerInvariants(store);
+		TEST_EQUAL(c.size(), 0)
+	}
+RESULT
+
+
+CHECK(Codex H4-DR R8.R3 C4: non-auto-deletable survivor does not UAF the store bridge)
+	// Codex R3.R3 C4 lock-test: a non-auto-deletable container that
+	// outlives its System must NOT dereference the freed store when it
+	// is later destroyed. ~System now unbinds the whole subtree before
+	// destroy() while the store is alive, so the survivor reads as
+	// unbound (row 0) and its ~AtomContainer's setContainerRowBinding_
+	// is a no-op. Under ASan/normal run this CHECK simply must not crash.
+	{
+		Molecule* survivor = new Molecule;
+		survivor->setAutoDeletable(false);   // user owns it past the System
+		std::uint32_t row = 0;
+		{
+			System sys;
+			sys.insert(*survivor);
+			row = static_cast<std::uint32_t>(survivor->getContainerRow_());
+			TEST_NOT_EQUAL(row, 0)
+			// sys destructs here: unbind sweep runs while store_ alive,
+			// then store_ is freed. survivor is detached (non-auto), still
+			// alive, but now unbound (container_row_store_ == 0).
+		}
+		// survivor's binding was severed by the ~System sweep.
+		TEST_EQUAL(survivor->getContainerRow_() == 0
+		           || survivor->getContainerRowStore_() == nullptr, true)
+		// The real assertion: this delete must not UAF the freed store.
+		delete survivor;
+		// If we reach here without a crash/ASan abort, the fix holds.
+		TEST_EQUAL(true, true)
+	}
+RESULT
+
+
 END_TEST

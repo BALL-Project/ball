@@ -134,6 +134,13 @@ namespace BALL
 		// follow-on (D12 persistence-format work).
 		MoleculeStore(const MoleculeStore&)            = delete;
 		MoleculeStore& operator=(const MoleculeStore&) = delete;
+		// Codex H4-DR R8.R3 (Vibe R3-N6): declaring the copy ops already
+		// suppresses implicit move generation, so a MoleculeStore is
+		// non-movable today. Make it explicit so a future edit can't
+		// silently reintroduce a move that would transfer container_back_ptr_
+		// (and back_ptr_) to a store the v0 objects are not bound to.
+		MoleculeStore(MoleculeStore&&)                 = delete;
+		MoleculeStore& operator=(MoleculeStore&&)      = delete;
 
 		//@}
 		/**	@name Atom column accessors (used by Atom handle)
@@ -541,6 +548,12 @@ namespace BALL
 		// move source-release. Without this, a stale back_ptr survives
 		// row recycling and a fresh handle dispatches into freed memory.
 		void               clear_freed_back_ptrs_();
+
+		// Codex H4-DR R8.R3 C4: size of the container bridge vector. ~System
+		// walks [1, count) as the reverse list of bound containers to unbind
+		// them before the store is torn down (prevents a surviving container's
+		// ~AtomContainer from dereferencing a freed store via the bridge).
+		std::size_t        container_back_ptr_count_() const;
 
 		// Sentinel returned by container_parent_ for a root / detached
 		// container (mirrors ContainerRow::NONE; kept public so handles can

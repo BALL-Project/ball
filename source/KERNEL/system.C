@@ -463,6 +463,33 @@ namespace BALL
 	System::~System()
 	{
 		setBeingDestroyed_();  // v2.2 H2a (D69): before destroy()'s teardown
+		// Codex H4-DR R8.R3 C4 (D-H4.16 BRIDGE-LIFECYCLE): unbind EVERY
+		// container still bound to this System's store BEFORE the store is
+		// destroyed (store_ dies after this dtor body). AtomContainer's
+		// dtor clears its bridge slot via setContainerRowBinding_(0,0),
+		// which dereferences container_row_store_ -> if a container (even
+		// a DETACHED, off-tree one -- e.g. a rooted-replace survivor that
+		// was re-materialised, or a non-auto-deletable child) outlives the
+		// store, its later ~AtomContainer would deref the FREED store. The
+		// bridge vector container_back_ptr_ IS the reverse list of every
+		// bound container, so walking it unbinds tree-attached AND detached
+		// containers in one pass while the store is alive. After this, every
+		// later container destruction sees container_row_store_ == 0 and the
+		// unbind is a no-op.
+		if (store_ != nullptr)
+		{
+			const std::size_t nb = store_->container_back_ptr_count_();
+			for (std::size_t i = 1; i < nb; ++i)
+			{
+				AtomContainer* c =
+					store_->container_back_ptr(static_cast<std::uint32_t>(i));
+				if (c != nullptr)
+				{
+					// store_ alive here: clears slot i + zeroes c's local binding.
+					c->setContainerRowBinding_(0, 0);
+				}
+			}
+		}
 		destroy();
 		// K0.4.2: invalidate atom handles bound to our store before the
 		// unique_ptr<MoleculeStore> deletes the store. Otherwise atoms
