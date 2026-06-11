@@ -552,25 +552,42 @@ namespace BALL
 
 		/** v2.2 H4 commit 7b.8 (positional insert cluster):
 		    insertBefore / insertAfter for both Atom& and AtomContainer&.
-		    The marker is a v0 Composite& during dual existence -- at
-		    H4 commit 8 (Atom/AtomContainer deletion) these overloads
-		    are rewritten to take the corresponding handle type per
-		    D63 rename. Bridge-dispatch through container_back_ptr. */
+		    The marker is a v0 Composite& during dual existence.
+
+		    v2.2 H4 R3.5 (Codex R2-N11) DEPRECATION + FROZEN SUCCESSOR:
+		    at H4 commit 8 (Atom/AtomContainer/Composite deletion) these
+		    Composite&-taking overloads are REMOVED and replaced by the
+		    handle-typed signatures frozen in D-H4.11.B:
+		        insertBefore(AtomHandle a, AtomHandle before)
+		        insertAfter (AtomHandle a, AtomHandle after)
+		        insertBefore(ContainerHandleBase sub, ContainerHandleBase before)
+		        insertAfter (ContainerHandleBase sub, ContainerHandleBase after)
+		    The successor's "before/after" marker uses a DEFAULT/invalid
+		    handle (AtomHandle() / ContainerHandleBase()) to mean "append at
+		    end"; a cross-store or wrong-kind marker is a no-op. The
+		    [[deprecated]] attribute lands now so any new consumer of the
+		    Composite& form takes a compile-time warning before the commit-8
+		    break (the focused test suppresses it via a file-level pragma;
+		    there are no production callers of the handle overloads today). */
+		[[deprecated("H4 commit 8: use the AtomHandle/ContainerHandleBase positional insert (D-H4.11.B)")]]
 		void insertBefore(Atom& atom, Composite& before)
 		{
 			if (!isValid()) return;
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertBefore(atom, before);
 		}
+		[[deprecated("H4 commit 8: use the AtomHandle/ContainerHandleBase positional insert (D-H4.11.B)")]]
 		void insertAfter(Atom& atom, Composite& after)
 		{
 			if (!isValid()) return;
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertAfter(atom, after);
 		}
+		[[deprecated("H4 commit 8: use the AtomHandle/ContainerHandleBase positional insert (D-H4.11.B)")]]
 		void insertBefore(AtomContainer& sub, Composite& before)
 		{
 			if (!isValid()) return;
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insertBefore(sub, before);
 		}
+		[[deprecated("H4 commit 8: use the AtomHandle/ContainerHandleBase positional insert (D-H4.11.B)")]]
 		void insertAfter(AtomContainer& sub, Composite& after)
 		{
 			if (!isValid()) return;
