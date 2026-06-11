@@ -29,6 +29,8 @@
 namespace BALL
 {
 	class PropertyManager;
+	class ContainerHandleBase;        // v2.2 H4 commit 6.b
+	class AtomHandle;                 // v2.2 H4 commit 6.b
 
 	namespace detail {
 		/** Emit a PropertyManager into an existing nlohmann::json object
@@ -40,6 +42,15 @@ namespace BALL
 				}
 				If the PropertyManager has neither named nor any set bits,
 				out_json is left as an empty object {}.
+
+				v2.2 H4 commit 6.b note: the PropertyManager& overload
+				below is the v0/dual-existence form. The ContainerHandle /
+				AtomHandle overloads in the same header are the post-flip
+				path; both dispatch into the same json layout for wire-
+				format equivalence. At H4 commit 8 the v0 PropertyManager
+				overload is REMOVED (per D-H4.6 R2 (b) -- the persistence
+				API break). The wire format is unchanged (H6b owns the
+				schema freeze).
 		*/
 		BALL_EXPORT void properties_to_json(const PropertyManager& pm, void* out_json);
 
@@ -48,6 +59,20 @@ namespace BALL
 				named-property type strings are silently skipped (forward-
 				compat with newer minor versions). */
 		BALL_EXPORT void json_to_properties(PropertyManager& pm, const void* in_json);
+
+		/** v2.2 H4 commit 6.b (D-H4.6 R2): ContainerHandleBase overloads.
+				Same wire format as the PropertyManager& path; the
+				implementation dispatches through the container_back_ptr
+				bridge (commit 6.a, d0772f204) so the v0 + handle paths
+				produce byte-identical JSON. */
+		BALL_EXPORT void properties_to_json(const ContainerHandleBase& h, void* out_json);
+		BALL_EXPORT void json_to_properties(ContainerHandleBase& h, const void* in_json);
+
+		/** v2.2 H4 commit 6.b (D-H4.6 R2): AtomHandle overloads. Same
+				contract as above but for atom-row properties; dispatches
+				through AtomHandle::getAtom() during dual existence. */
+		BALL_EXPORT void properties_to_json(const AtomHandle& h, void* out_json);
+		BALL_EXPORT void json_to_properties(AtomHandle& h, const void* in_json);
 	}
 } // namespace BALL
 

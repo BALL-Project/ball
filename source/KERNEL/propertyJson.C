@@ -10,6 +10,14 @@
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
 
+// v2.2 H4 commit 6.b: ContainerHandleBase + AtomHandle overloads need
+// the handle headers + atom.h for the bridge dispatch.
+#include <BALL/KERNEL/containerHandle.h>
+#include <BALL/KERNEL/atomHandle.h>
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/moleculeStore.h>
+
 #include <string>
 
 namespace BALL
@@ -147,6 +155,52 @@ void json_to_properties(PropertyManager& pm, const void* in_json)
 				pm.setProperty(static_cast<Property>(bit.get<int>()));
 		}
 	}
+}
+
+// v2.2 H4 commit 6.b (D-H4.6 R2): ContainerHandleBase + AtomHandle
+// overloads. Implementation note: both forward to the v0
+// PropertyManager& path via the dual-existence bridge (container_back_ptr
+// for ContainerHandleBase, AtomHandle::getAtom() for AtomHandle). This
+// guarantees byte-identical wire format with the v0 path -- the JSON
+// round-trip test added in H4 commit 1 catches any drift. At H4 commit
+// 12 the bridge is removed and the implementations are rewritten to
+// read property_columns_ + sparse bag directly. The wire format
+// remains unchanged.
+
+void properties_to_json(const ContainerHandleBase& h, void* out_json)
+{
+	using nlohmann::json;
+	json& out = *static_cast<json*>(out_json);
+	out = json::object();
+	if (!h.isValid()) return;
+	AtomContainer* c = h.getStore()->container_back_ptr(h.getStoreIndex());
+	if (c == nullptr) return;
+	properties_to_json(static_cast<const PropertyManager&>(*c), out_json);
+}
+
+void json_to_properties(ContainerHandleBase& h, const void* in_json)
+{
+	if (!h.isValid()) return;
+	AtomContainer* c = h.getStore()->container_back_ptr(h.getStoreIndex());
+	if (c == nullptr) return;
+	json_to_properties(static_cast<PropertyManager&>(*c), in_json);
+}
+
+void properties_to_json(const AtomHandle& h, void* out_json)
+{
+	using nlohmann::json;
+	json& out = *static_cast<json*>(out_json);
+	out = json::object();
+	Atom* a = h.getAtom();
+	if (a == nullptr) return;
+	properties_to_json(static_cast<const PropertyManager&>(*a), out_json);
+}
+
+void json_to_properties(AtomHandle& h, const void* in_json)
+{
+	Atom* a = h.getAtom();
+	if (a == nullptr) return;
+	json_to_properties(static_cast<PropertyManager&>(*a), in_json);
 }
 
 } // namespace detail
