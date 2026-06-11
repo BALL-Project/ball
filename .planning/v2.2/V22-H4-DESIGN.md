@@ -720,3 +720,96 @@ sequence + audit-ledger contracts, not the specific test code shape.
 Commit 1 implementation cycle is a normal plan-code-verify-commit
 loop within the lock; this note records the false start so the
 next iteration converges fast.
+
+---
+
+## Implementation progress (2026-06-05)
+
+Snapshot of H4 commits landed during the v2.2 H4 cycle this
+session, in addition to the design lock + audit ledgers.
+
+| Commit | Description | Status |
+|---|---|---|
+| 1   | Test scaffolding (H4TableTopologyInvariant_test.C)                                  | LANDED 44486b12c |
+| 2   | API-break ledger Class L (24 deletion rows)                                         | LANDED a893459b1 |
+| 3   | apply audit (0 explicit `apply<T>` production callers)                              | LANDED abcf70082 |
+| 4a  | Iterator-consumer audit ledger                                                       | LANDED a4aae1ad4 |
+| 5a  | PDB-consumer audit ledger (5 categories)                                            | LANDED 7d35f0c35 |
+| 6 audit-half | Property persistence audit ledger                                          | LANDED da7a0fd08 |
+| 6.a | ContainerHandleBase::propertyNames + eachProperty visitor surface                   | LANDED d0772f204 |
+| 6.a ext | ContainerHandleBase::has/set/clearProperty setter cluster                        | LANDED 462a2befa |
+| 7a  | AtomContainer inventory ledger                                                       | LANDED 5df46a461 |
+| 7b.1 | ContainerHandleBase::getSuperAtomContainer / getAtomContainer(position)              | LANDED 79c135fbb |
+| 7b.2 | ContainerHandleBase::getAtom(name) / getAtom(position)                               | LANDED 4fb98cced |
+| 7b.3 | ContainerHandleBase::countAtoms + countAtomContainers + countBonds                  | LANDED 0a41ebb06 + efd910dfe |
+| 7b.3 ext | ContainerHandleBase::countInterBonds + countIntraBonds                          | LANDED 79c135fbb |
+| 7b.4 | ContainerHandleBase::clear + insert/append/prepend/remove + swap                    | LANDED a8a3f4c1f + 3e802f38c + 157dc0669 + a0573cc6e |
+| 7b.5 | ContainerHandleBase::removeHaving/NotHavingProperty + spliceBefore/After/splice     | LANDED a8a3f4c1f + a0573cc6e |
+| 7b.6 | ContainerHandleBase::isSub/SuperAtomContainerOf (pure-table)                        | LANDED f03bd4a2e |
+| 7b.7 | ContainerHandleBase::applyIntra/InterBond                                            | LANDED af047b426 |
+| 11.5 audit-half | Bridge-consumer audit ledger                                              | LANDED 5d4ae1fe8 |
+| Test coverage | ContainerHandle_test 11 CHECKs (3 NEW for 6.a visitor + 1 NEW for 7b.3 counts) | LANDED 8e5d53377 |
+
+### ContainerHandleBase public surface as of HEAD `a0573cc6e`
+
+**Identity / validity** (H1b base):
+  `getKind`, `getName`, `getParentIndex`, `getParent`, `getChild`,
+  `countChildren`, `getChildContainer`, `as<T>()`, `isValid`,
+  `operator bool`.
+
+**Counts** (7b.3):
+  `countAtoms`, `countAtomContainers`, `countBonds`,
+  `countInterBonds`, `countIntraBonds`.
+
+**Atom lookup** (7b.2):
+  `getAtom(name)`, `getAtom(position)`.
+
+**Parent/child** (7b.1):
+  `getSuperAtomContainer`, `getAtomContainer(position)`.
+
+**Predicates** (7b.6, pure-table):
+  `isSubAtomContainerOf`, `isSuperAtomContainerOf`.
+
+**Mutation** (7b.4):
+  `clear`, `insert/append/prepend/remove(Atom&)`,
+  `insert/append/prepend/remove(AtomContainer&)`, `swap`.
+
+**Splice/remove** (7b.5):
+  `spliceBefore`, `spliceAfter`, `splice`,
+  `removeHavingProperty`, `removeNotHavingProperty`.
+
+**Bond application** (7b.7):
+  `applyIntraBond`, `applyInterBond`.
+
+**Property visitor surface** (6.a + ext):
+  `propertyNames()`, `eachProperty(Visitor)`,
+  `hasProperty`, `setProperty(name)` + 6 typed overloads,
+  `clearProperty`.
+
+### What's still pending
+
+Per V22-H4-PROPERTY-AUDIT / V22-H4-PDB-CONSUMER-AUDIT /
+V22-H4-ITERATOR-CONSUMER-AUDIT / V22-H4-BRIDGE-CONSUMER-AUDIT:
+
+- **6.b** JSON+bag persistence rewrite (9 sites in
+  propertyJson.C / moleculeStoreJson.C / systemJson.C)
+- **6.c** Consumer migration (165 + 53 sites by directory cluster)
+- **5b/5c/5d/5e** PDB consumer migrations (16 + 101 + 24 + 34 + 17 sites)
+- **4b.1-4b.5** Iterator-consumer migration (159 + 466 sites by cluster)
+- **7.5** HierarchyParity_test retirement (immediately before
+  commit 8)
+- **8/9** v0 Atom + Bond + PDBAtom class deletion
+- **10a/10b/10c** v0 container class deletion (bottom-up by role)
+- **11** System base strip (System SURVIVES per D-H4.11)
+- **11.5 migration-half** Bridge consumer migration (rewrites)
+- **12** Drop bridge methods
+- **13** sizeof asserts + compositeAsAtom_ retired
+- **14** H4 close-CR
+
+The H4 cycle's CONTAINER-HANDLE API SURFACE is now substantially
+complete on ContainerHandleBase. The remaining work is the
+consumer-side migration of 1,000+ call sites + the v0 class
+deletion sequence. Each is a substantial multi-commit effort
+per D-H4.9 cadence.
+
+*Progress snapshot recorded 2026-06-05.*
