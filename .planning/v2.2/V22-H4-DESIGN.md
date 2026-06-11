@@ -747,6 +747,10 @@ session, in addition to the design lock + audit ledgers.
 | 7b.5 | ContainerHandleBase::removeHaving/NotHavingProperty + spliceBefore/After/splice     | LANDED a8a3f4c1f + a0573cc6e |
 | 7b.6 | ContainerHandleBase::isSub/SuperAtomContainerOf (pure-table)                        | LANDED f03bd4a2e |
 | 7b.7 | ContainerHandleBase::applyIntra/InterBond                                            | LANDED af047b426 |
+| 7b.8 | ContainerHandleBase::insertBefore/After + destroyBonds + bit-property                | LANDED d8235cd1d |
+| 6.b   | propertyJson.h/C handle overloads (Container + Atom)                                | LANDED fd4ee220a |
+| 6.b.1 | moleculeStoreJson atom-property emit via AtomHandle overload                        | LANDED e9864852e |
+| 6.b.2 | propertyJson BondHandle overload + moleculeStoreJson bond emit migration            | LANDED 872d7ef5a |
 | 11.5 audit-half | Bridge-consumer audit ledger                                              | LANDED 5d4ae1fe8 |
 | Test coverage | ContainerHandle_test 11 CHECKs (3 NEW for 6.a visitor + 1 NEW for 7b.3 counts) | LANDED 8e5d53377 |
 
@@ -781,6 +785,11 @@ session, in addition to the design lock + audit ledgers.
 **Bond application** (7b.7):
   `applyIntraBond`, `applyInterBond`.
 
+**Positional insert + bond destroy** (7b.8):
+  `insertBefore/insertAfter(Atom&|AtomContainer&, Composite&)`,
+  `destroyBonds`, `setProperty(BALL::Property)`,
+  `clearProperty(BALL::Property)`.
+
 **Property visitor surface** (6.a + ext):
   `propertyNames()`, `eachProperty(Visitor)`,
   `hasProperty`, `setProperty(name)` + 6 typed overloads,
@@ -791,8 +800,10 @@ session, in addition to the design lock + audit ledgers.
 Per V22-H4-PROPERTY-AUDIT / V22-H4-PDB-CONSUMER-AUDIT /
 V22-H4-ITERATOR-CONSUMER-AUDIT / V22-H4-BRIDGE-CONSUMER-AUDIT:
 
-- **6.b** JSON+bag persistence rewrite (9 sites in
-  propertyJson.C / moleculeStoreJson.C / systemJson.C)
+- **6.b.3** systemJson.C handle-overload migration (BLOCKED on
+  atom_by_save_idx `std::vector<Atom*>` -> handle-keyed refactor;
+  HandleKeyLeakGate enforces D-H3.8). Folds into a future 6.b.3
+  sub-commit alongside the systemJson scratch-key migration.
 - **6.c** Consumer migration (165 + 53 sites by directory cluster)
 - **5b/5c/5d/5e** PDB consumer migrations (16 + 101 + 24 + 34 + 17 sites)
 - **4b.1-4b.5** Iterator-consumer migration (159 + 466 sites by cluster)
