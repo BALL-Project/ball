@@ -463,6 +463,34 @@ namespace BALL
 			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->clear();
 		}
 
+		/** v2.2 H4 commit 7b.4 (D-H4.15 R3 mutation cluster): Atom-level
+		    insert/append/prepend. Bridge-dispatch to the v0 AtomContainer
+		    mutator; the mirror is updated through composite.C's
+		    forward-only mirror added in H2a/b. Caller-managed Atom&
+		    lifetime survives the dual-existence window (post-H4 the Atom
+		    handle replaces the reference per D63 rename). */
+		void insert(Atom& atom)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->insert(atom);
+		}
+		void append(Atom& atom)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->append(atom);
+		}
+		void prepend(Atom& atom)
+		{
+			if (!isValid()) return;
+			if (AtomContainer* c = store_->container_back_ptr(idx_)) c->prepend(atom);
+		}
+		bool remove(Atom& atom)
+		{
+			if (!isValid()) return false;
+			AtomContainer* c = store_->container_back_ptr(idx_);
+			return c ? c->remove(atom) : false;
+		}
+
 		protected:
 
 		void assertValid_() const
