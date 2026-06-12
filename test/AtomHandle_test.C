@@ -17,6 +17,12 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/atomIterator.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/handleKey.h>     // v2.2 H4 7b: handle-as-key infra
+#include <BALL/DATATYPE/hashMap.h>
+#include <BALL/DATATYPE/hashSet.h>
+#include <set>
 #include <vector>
 ///////////////////////////
 
@@ -384,6 +390,63 @@ CHECK(StructureQuery::applyAtomProcessor - start/finish + CONTINUE/BREAK/ABORT)
 	} np;
 	TEST_EQUAL(StructureQuery::applyAtomProcessor(root, np), false)
 	TEST_EQUAL(np.n, 0)
+RESULT
+
+
+CHECK(v2.2 H4 7b: handleKey -- AtomHandle/BondHandle as container keys)
+	// Foundational infra for the gate-surfaced STRUCTURE pointer-key
+	// migrations: handles usable as keys in BALL HashMap (boost), BALL
+	// HashSet (BALL::Hash), std::set/map (operator<), std::unordered_*
+	// (std::hash); + makeHandle() Atom*/Bond* -> handle and getAtom()/
+	// getBond() resolution.
+	System sys;
+	Molecule* mol = new Molecule;
+	sys.insert(*mol);
+	Atom* a1 = new Atom; Atom* a2 = new Atom; Atom* a3 = new Atom;
+	mol->insert(*a1); mol->insert(*a2); mol->insert(*a3);
+	a1->createBond(*a2);
+
+	// makeHandle + resolve round-trip.
+	AtomHandle h1 = makeHandle(*a1);
+	TEST_EQUAL(h1.isValid(), true)
+	TEST_EQUAL(h1.getAtom() == a1, true)
+
+	// BALL HashMap<AtomHandle,int> (boost::hash -> hash_value).
+	HashMap<AtomHandle, int> hm;
+	hm[makeHandle(*a1)] = 11;
+	hm[makeHandle(*a2)] = 22;
+	TEST_EQUAL(hm[makeHandle(*a1)], 11)
+	TEST_EQUAL(hm[makeHandle(*a2)], 22)
+	TEST_EQUAL(hm.has(makeHandle(*a3)), false)
+
+	// BALL HashSet<AtomHandle> (BALL::Hash).
+	HashSet<AtomHandle> hs;
+	hs.insert(makeHandle(*a1));
+	hs.insert(makeHandle(*a1));   // dedup
+	hs.insert(makeHandle(*a2));
+	TEST_EQUAL(hs.size(), 2)
+	TEST_EQUAL(hs.has(makeHandle(*a1)), true)
+	TEST_EQUAL(hs.has(makeHandle(*a3)), false)
+
+	// std::set<AtomHandle> (operator<).
+	std::set<AtomHandle> ss;
+	ss.insert(makeHandle(*a1)); ss.insert(makeHandle(*a1)); ss.insert(makeHandle(*a2));
+	TEST_EQUAL(ss.size(), (std::size_t)2)
+
+	// BondHandle key path.
+	const Bond* bd = a1->getBond((Size)0);
+	BondHandle bh = makeHandle(*bd);
+	TEST_EQUAL(bh.isValid(), true)
+	TEST_EQUAL(bh.getBond() == bd, true)
+	HashSet<BondHandle> bset; bset.insert(makeHandle(*bd));
+	TEST_EQUAL(bset.has(makeHandle(*bd)), true)
+	std::set<BondHandle> bss; bss.insert(makeHandle(*bd)); bss.insert(makeHandle(*bd));
+	TEST_EQUAL(bss.size(), (std::size_t)1)
+
+	// Unbound atom -> null handle (no store crash).
+	Atom orphan_local;   // bound to the process orphan store, still valid
+	AtomHandle oh = makeHandle(orphan_local);
+	TEST_EQUAL(oh.isNull(), false)   // orphan store is a real store
 RESULT
 
 /////////////////////////////////////////////////////////////
