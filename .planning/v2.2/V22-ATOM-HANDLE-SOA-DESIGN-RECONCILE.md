@@ -6,6 +6,16 @@ speculative parts of `H4-ATOM-AS-PURE-HANDLE-GROMACS-SOA-DESIGN.md`
 (Vibe draft, commit `acae66147`) where they conflict.
 **Authored:** 2026-06-12. HEAD `acae66147`. No code change — design only.
 
+> **DECISION LOCKED (2026-06-12): Option A — GROMACS-faithful.** Keep
+> AoS `Vector3` columns; repack SoA transiently inside hot kernels only;
+> add interaction-term bonded arrays + derived `AtomRange` + (later)
+> molblock-style instancing — **all API-additive, NO `Vector3&`
+> retirement.** Option B (primary `Vec3SoA` + killing the mutable
+> `Vector3&` API) is **explicitly deferred** to a profile-gated v2.3+
+> decision and is NOT a prerequisite for GROMACS-class layout. See §3.
+> Sequencing: §4 — everything follows the H4 flip; pre-H4 work is
+> additive prep only.
+
 Two independent researchers (Codex checked out the live GROMACS tree at
 `/tmp/gromacs-src`; Vibe + my own web study cross-checked) converged.
 This doc records the convergence, corrects the draft's two errors, and
@@ -92,7 +102,7 @@ frames the one real decision.
 Both options keep Atom-as-handle, CSR bonds, separated tree, deferred GC.
 They differ ONLY in the position/velocity/force column layout.
 
-### Option A — GROMACS-faithful (recommended first)
+### Option A — GROMACS-faithful  ✅ SELECTED (2026-06-12)
 Keep **AoS `Vector3` columns** (already in `moleculeStore.h:668`). Repack
 to SoA **transiently inside the few vectorizable hot kernels only** (the
 nbnxn pattern). Add interaction-term arrays (§1.4) + derived ranges (§1.5).
@@ -102,7 +112,7 @@ nbnxn pattern). Add interaction-term arrays (§1.4) + derived ranges (§1.5).
 - Risk: LOW. Win: the bonded-term + range + handle wins (1.2–2.5×
   bonded, 1.1–2× scans) without an API break.
 
-### Option B — primary SoA x/y/z (higher ceiling, post-H4, profile-gated)
+### Option B — primary SoA x/y/z  ⏸ DEFERRED (profile-gated, v2.3+)
 Replace AoS columns with `Vec3SoA{x_,y_,z_ padded aligned}`. **Requires
 killing the mutable `Vector3&` API** — kernels take spans
 (`PositionSoA`/`ForceSoA`/`AtomRange`), scattered writes use value setters
@@ -186,6 +196,48 @@ for GROMACS-class layout.
 bonded arrays, derived `AtomRange`, span kernel APIs, molblock-style
 instancing for solvent. **Deferred + profile-gated:** Option B + spatial
 binning.
+
+## 8. Option-A execution plan (LOCKED)
+
+Concrete work items, all consistent with "keep AoS, no `Vector3&`
+break." Ordered by dependency; none precede the H4 flip except the
+additive prep in P0.
+
+**P0 — pre-H4, additive prep (safe to start now, no break):**
+- P0.1 Span/range kernel API surface on `MoleculeStore`:
+  `PositionSpan positions(AtomRange)`, `ForceSpan forces(AtomRange)`,
+  `AtomRange` type. AoS-backed today (a span over the `Vector3` column);
+  the same signatures survive an eventual Option-B swap. No call-site
+  change required — purely additive.
+- P0.2 Compile/grep gate flagging *new* mutable-`Vector3&` position/force
+  dependencies (mirror of HandleKeyLeakGate) so the hot-path surface
+  stops growing while H4 lands.
+
+**P1 — post-H4 (commit 8+), additive, measurable:**
+- P1.1 GROMACS-style interaction-term arrays. Force fields precompute
+  `BondTerm/AngleTerm/TorsionTerm` at setup; CHARMM/AMBER/MMFF bonded
+  loops iterate term arrays + `for_each_bond_of`/CSR instead of
+  `atom->getBond(i)`. Gate: `AmberFF_bench` / `CharmmFF_bench` (target
+  1.2–2.5×, validate before commit).
+- P1.2 Derived `AtomRange{begin,end,epoch}` cache for preorder-contiguous
+  containers; kernels take the range fast-path, fall back to scattered
+  `ChildRef`. Gate: `KernelIteration_bench`.
+- P1.3 Transient SoA repack helper for the few vectorizable inner loops
+  (the nbnxn pattern) — local to the kernel, AoS stays canonical.
+
+**P2 — later, additive:**
+- P2.1 molblock-style instancing for identical solvent/molecules (one
+  moltype shared by N copies) — memory win for large solvated systems;
+  needs a new instancing layer BALL lacks today.
+
+**Deferred (NOT scheduled): Option B + spatial binning** — revisit only
+with a post-H4 profile showing the energy/MD inner loops vectorization-
+bound on position loads.
+
+**Each P-item follows the standard gate:** build + 290/290 ctest +
+HandleKeyLeakGate + `AssignBondOrder_bench` ≤5%, and must show its
+claimed bench win *before* commit (the ABO precompile episode is the
+cautionary precedent — an "obvious" win that crashed the real workload).
 
 ---
 *Source docs: `H4-ATOM-AS-PURE-HANDLE-GROMACS-SOA-DESIGN.md` (Vibe full
