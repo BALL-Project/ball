@@ -12,6 +12,7 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/STRUCTURE/mutator.h>
 #include <BALL/STRUCTURE/nucleotideMapping.h>
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H4 7b.15 (D-H3.8): to_optimize_ keyed by AtomHandle
 
 #include <deque>
 #include <map>
@@ -241,7 +242,8 @@ namespace BALL
 			String getComplement_(const String& s) const;
 
 			std::map<Residue*, String> mutations_;
-			std::deque<Atom*> to_optimize_;
+			// v2.2 H4 7b.15 (D-H3.8): stable-id handles, not raw Atom*.
+			std::deque<AtomHandle> to_optimize_;
 	};
 }
 

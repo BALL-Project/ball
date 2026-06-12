@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomHandle.h>      // v2.2 H3c Pattern C: D-H3.8 opt-in
+#include <BALL/KERNEL/handleKey.h>       // v2.2 H4 7b.15: makeHandle()
 #include <BALL/KERNEL/moleculeStore.h>   // v2.2 H3d.E: Pattern C three-phase rewrite
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
@@ -122,10 +123,10 @@ namespace BALL
 		Residue* snd = 0;
 		for(MutIterator it = mutations_.begin(); it != mutations_.end(); ++it) {
 			mutateSingleBase_(it->first, it->second);
-			for(AtomIterator at = it->first->beginAtom(); +at; ++at) { to_optimize_.push_back(&*at); }
+			for(AtomIterator at = it->first->beginAtom(); +at; ++at) { to_optimize_.push_back(makeHandle(*at)); }
 			if(second_strand_ && (snd = mapping_.firstToSecond(it->first))) {
 				mutateSingleBase_(snd, getComplement_(it->second));
-				for(AtomIterator at = snd->beginAtom(); +at; ++at) { to_optimize_.push_back(&*at); }
+				for(AtomIterator at = snd->beginAtom(); +at; ++at) { to_optimize_.push_back(makeHandle(*at)); }
 			}
 		}
 	}
@@ -296,7 +297,8 @@ namespace BALL
 			return true;
 		}
 
-		Molecule* mol = to_optimize_.front()->getMolecule();
+		Atom* front_atom = to_optimize_.front().getAtom();
+		Molecule* mol = front_atom ? front_atom->getMolecule() : 0;
 		if(!mol) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "The atom is not contained in a molecule. This is "
 			                                                     "probably a bug in the Mutator.");
@@ -315,7 +317,7 @@ namespace BALL
 		Log.info() << "Setup of minimizer completed\n";
 
 		//Select all atoms in to_optimize_
-		std::for_each(to_optimize_.begin(), to_optimize_.end(), [](Atom* atom) { atom->select(); });
+		std::for_each(to_optimize_.begin(), to_optimize_.end(), [](const AtomHandle& h) { if (Atom* a = h.getAtom()) a->select(); });
 
 		if(!minimizer_->isValid()) {
 			return false;
@@ -326,7 +328,7 @@ namespace BALL
 		}
 
 		//Deselect all atoms in to_optimize_
-		std::for_each(to_optimize_.begin(), to_optimize_.end(), [](Atom* atom) { atom->deselect(); });
+		std::for_each(to_optimize_.begin(), to_optimize_.end(), [](const AtomHandle& h) { if (Atom* a = h.getAtom()) a->deselect(); });
 
 		return true;
 	}
@@ -400,10 +402,10 @@ namespace BALL
 		 * The sugar backbone should not contain a nitrogen. So lets simply
 		 * mark a nitrogen != n and do a BFS to mark the remaining base atoms
 		 */
-		std::deque<Atom*> queue;
+		std::deque<AtomHandle> queue;
 		for(AtomIterator it = res->beginAtom(); +it; ++it) {
 			if((it->getElement().getSymbol() == "N") && (&*it != n)) {
-				queue.push_back(&*it);
+				queue.push_back(makeHandle(*it));
 				break;
 			}
 		}
@@ -413,8 +415,9 @@ namespace BALL
 		}
 
 		while(!queue.empty()) {
-			Atom* current = queue.front();
+			Atom* current = queue.front().getAtom();
 			queue.pop_front();
+			if(!current) continue;
 
 			current->setProperty(prop_);
 
@@ -422,7 +425,7 @@ namespace BALL
 			for(int i = 0; i < num_bonds; ++i) {
 				Atom* partner = current->getPartnerAtom(i);
 				if(!partner->hasProperty(prop_)) {
-					queue.push_back(partner);
+					queue.push_back(makeHandle(*partner));
 				}
 			}
 		}
@@ -476,10 +479,10 @@ namespace BALL
 	 * It is needed as the TransformationProcessor applies its transformation to all atoms in an atom container
 	 * and not only the marked ones.
 	 */
-	void applyTrafoToList_(const Matrix4x4& trafo, const std::deque<Atom*>& atoms)
+	void applyTrafoToList_(const Matrix4x4& trafo, const std::deque<AtomHandle>& atoms)
 	{
-		for(std::deque<Atom*>::const_iterator it = atoms.begin(); it != atoms.end(); ++it) {
-			(*it)->setPosition(trafo * (*it)->getPosition());
+		for(std::deque<AtomHandle>::const_iterator it = atoms.begin(); it != atoms.end(); ++it) {
+			if(Atom* a = it->getAtom()) a->setPosition(trafo * a->getPosition());
 		}
 	}
 

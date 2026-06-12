@@ -51,8 +51,7 @@ set(GATE_ALLOWLIST
 	"source/STRUCTURE/geometricProperties.C"                # H4 7b.13 — geometricProperties cluster
 	"source/STRUCTURE/hybridisationProcessor.C"             # H4 7b.14 — hybridisation cluster
 	# v2.2 H4 R3.3: sites surfaced by the deque/list widening (Codex R2-N2).
-	"source/STRUCTURE/DNAMutator.C"                         # H4 7b.15 — DNAMutator deque<Atom*>
-	"include/BALL/STRUCTURE/DNAMutator.h"                   # H4 7b.15 — DNAMutator deque<Atom*>
+	# DNAMutator MIGRATED at 7b.15 (deque<AtomHandle>) -- off the allowlist.
 	"source/STRUCTURE/reconstructFragmentProcessor.C"      # H4 7b.16 — reconstructFragment list<Atom*>
 	"include/BALL/STRUCTURE/reconstructFragmentProcessor.h" # H4 7b.16 — reconstructFragment list<Atom*>
 )
