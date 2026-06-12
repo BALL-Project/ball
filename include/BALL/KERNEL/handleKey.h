@@ -88,20 +88,39 @@ namespace BALL
 	}
 
 	/** Null-safe Atom* -> AtomHandle at a container-insert boundary.
-			Returns a null handle for an unbound atom (no store). */
+			Returns a null handle for an unbound atom (no store).
+
+			Codex H4-7b-DR HIGH: also guards against a STALE Atom& whose
+			slot was released-then-recycled. The handle ctor captures the
+			slot's CURRENT stable id, so building from a stale Atom& whose
+			index now holds a different atom would silently capture the new
+			occupant's id (a valid handle to the WRONG atom). The store
+			slot's back_ptr points to the live v0 atom during dual
+			existence, so requiring back_ptr(idx) == &a rejects a stale
+			Atom& (returns a null handle). */
 	inline AtomHandle makeHandle(const Atom& a)
 	{
 		MoleculeStore* s = a.getStore();
-		return s ? AtomHandle(*s, a.getStoreIndex()) : AtomHandle();
+		if (s == 0) return AtomHandle();
+		if (s->back_ptr(a.getStoreIndex()) != &a) return AtomHandle();
+		return AtomHandle(*s, a.getStoreIndex());
 	}
 
 	/** Null-safe Bond* -> BondHandle. The bond's store/record index are
 			transitional public members during dual existence (bond.h); an
-			unmirrored bond (bond_store_ == null) yields a null handle. */
+			unmirrored bond (bond_store_ == null) yields a null handle.
+
+			Codex H4-7b-DR HIGH: Bond::destroy()/clear() do NOT reset
+			bond_store_/bond_record_idx_, and the store reuses dead bond
+			slots with fresh stable ids. Building blindly from a stale
+			Bond& could capture the recycled slot's new bond. Require the
+			store record's back_ptr to still point at THIS bond. */
 	inline BondHandle makeHandle(const Bond& b)
 	{
 		MoleculeStore* s = b.bond_store_;
-		return s ? BondHandle(*s, b.bond_record_idx_) : BondHandle();
+		if (s == 0) return BondHandle();
+		if (s->bond_back_ptr(b.bond_record_idx_) != &b) return BondHandle();
+		return BondHandle(*s, b.bond_record_idx_);
 	}
 }
 
