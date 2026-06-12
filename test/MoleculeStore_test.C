@@ -1045,4 +1045,78 @@ CHECK(HCP-1P.A: born-default type-name + atom_type round-trip via the offset/poo
 	TEST_EQUAL(store.atom_type(i3), (short)Atom::UNKNOWN_TYPE)
 RESULT
 
+
+CHECK(Option-A P0.1: span/range kernel API)
+	// v2.2 Option-A P0.1: the additive span/range surface. AoS-backed
+	// view over the contiguous columns; signature stable across Option-B.
+	MoleculeStore store;
+	const int N = 6;
+	for (int k = 0; k < N; ++k)
+	{
+		MoleculeStore::Index i = store.allocate_atom();
+		store.position(i) = Vector3((float)k, (float)(2*k), (float)(3*k));
+		store.force(i)    = Vector3((float)(-k), 0.f, 0.f);
+	}
+
+	// (1) whole-column span size + element parity with position(i).
+	ColumnSpan<Vector3> ps = store.positions();
+	TEST_EQUAL(ps.size(), (std::size_t)N)
+	TEST_EQUAL(ps.empty(), false)
+	bool parity = true;
+	for (int k = 0; k < N; ++k)
+		if (ps[k] != store.position(k)) parity = false;
+	TEST_EQUAL(parity, true)
+
+	// (2) range-for over the span sums the same as index iteration.
+	float sx = 0.f;
+	for (const Vector3& v : store.positions()) sx += v.x;
+	TEST_REAL_EQUAL(sx, 0.f+1.f+2.f+3.f+4.f+5.f)
+
+	// (3) write-through: mutating the span mutates the column (AoS).
+	store.positions()[2] = Vector3(99.f, 99.f, 99.f);
+	TEST_EQUAL(store.position(2), Vector3(99.f, 99.f, 99.f))
+
+	// (4) AtomRange half-open + clamp past end -> shorter span, never OOB.
+	AtomRange r{1u, 4u};
+	TEST_EQUAL(r.size(), 3u)
+	TEST_EQUAL(r.empty(), false)
+	ColumnSpan<Vector3> pr = store.positions(r);
+	TEST_EQUAL(pr.size(), 3u)
+	TEST_EQUAL(pr[0], store.position(1))
+	AtomRange past{4u, 999u};
+	TEST_EQUAL(store.positions(past).size(), (std::size_t)(N - 4))  // clamped to [4, N)
+	AtomRange inverted{5u, 2u};
+	TEST_EQUAL(store.positions(inverted).empty(), true)
+
+	// (5) const-store span is a read-only view.
+	const MoleculeStore& cstore = store;
+	ColumnSpan<const Vector3> cps = cstore.positions();
+	TEST_EQUAL(cps.size(), (std::size_t)N)
+	TEST_EQUAL(cps[2], Vector3(99.f, 99.f, 99.f))
+
+	// (6) forces span parity.
+	TEST_EQUAL(store.forces().size(), (std::size_t)N)
+	TEST_EQUAL(store.forces()[3], store.force(3))
+
+	// (7) Codex P0-review: empty store -> empty spans, begin()==end(),
+	// no null pointer arithmetic (UBSan-clean). Empty + clamped ranges.
+	MoleculeStore empty;
+	ColumnSpan<Vector3> eps = empty.positions();
+	TEST_EQUAL(eps.size(), (std::size_t)0)
+	TEST_EQUAL(eps.empty(), true)
+	TEST_EQUAL(eps.begin() == eps.end(), true)
+	int empty_iters = 0;
+	for (const Vector3& v : empty.positions()) { (void)v; ++empty_iters; }
+	TEST_EQUAL(empty_iters, 0)
+	TEST_EQUAL(empty.positions(AtomRange{0u, 10u}).size(), (std::size_t)0)
+	TEST_EQUAL(empty.positions(AtomRange{0u, 10u}).begin()
+	           == empty.positions(AtomRange{0u, 10u}).end(), true)
+
+	// (8) Codex P0-review: implicit mutable->const span widening, so a
+	// read-only kernel signature accepts a mutable store's span directly.
+	ColumnSpan<const Vector3> widened = store.positions();   // ColumnSpan<Vector3> -> <const Vector3>
+	TEST_EQUAL(widened.size(), (std::size_t)N)
+	TEST_EQUAL(widened[2], Vector3(99.f, 99.f, 99.f))
+RESULT
+
 END_TEST

@@ -34,6 +34,8 @@
 
 #include <cassert>
 #include <cstdint>
+#include <cstddef>      // v2.2 Option-A P0.1: std::size_t for ColumnSpan
+#include <type_traits>  // v2.2 Option-A P0.1: ColumnSpan const-widening SFINAE
 #include <cstdio>
 #include <cstdlib>
 #include <iosfwd>      // K0.6.5c: friend decls for loadStoreJSON/loadSystemJSON
@@ -75,6 +77,70 @@ namespace BALL
 		std::uint8_t  order;
 		std::uint8_t  type;
 		std::uint16_t flags;
+	};
+
+	// v2.2 Option-A P0.1 (V22-ATOM-HANDLE-SOA-DESIGN-RECONCILE §8): the
+	// span/range kernel-API surface. Additive, AoS-backed today (a view
+	// over the contiguous Vector3/scalar columns). GROMACS analog: kernels
+	// take ArrayRef/spans, never a per-atom object.
+	//
+	// Option-B (SoA x/y/z) survival, stated honestly: the `AtomRange`
+	// type and the *range-based access PATTERN* (kernels accept a range +
+	// ask the store for spans) survive unchanged. The concrete
+	// `ColumnSpan<Vector3> positions()` SIGNATURE does NOT survive a
+	// primary-SoA swap -- there is no contiguous `Vector3*` to view -- it
+	// would become component spans (`xs()/ys()/zs()` or a `Vec3SoA` view).
+	// So consumers that take an `AtomRange` and a scalar/x-y-z span port
+	// cleanly; consumers that grab a `Vector3` span re-touch at Option B
+	// (same class of change as the `Vector3&` retirement, just far fewer
+	// sites because spans are new). Under the LOCKED Option A this is moot
+	// -- AoS stays -- and the surface is purely additive today.
+	//
+	// Half-open atom-index range [begin, end). The contiguous-range fast
+	// path for a container is derived (see the design's derived-AtomRange
+	// item); this is the value type kernels accept.
+	struct AtomRange
+	{
+		std::uint32_t begin = 0;
+		std::uint32_t end   = 0;
+		std::uint32_t size() const { return end > begin ? end - begin : 0u; }
+		bool          empty() const { return end <= begin; }
+	};
+
+	// Minimal contiguous view {ptr, count} with range-for support. Kept
+	// header-local + dependency-free (no std::span: C++17 baseline). The
+	// pointer is valid only until the next store reallocation -- same D7
+	// generation contract as the reference-returning column accessors.
+	template <typename T>
+	class ColumnSpan
+	{
+		public:
+			ColumnSpan() = default;
+			ColumnSpan(T* p, std::size_t n) : ptr_(p), n_(n) {}
+
+			// Codex P0-review: implicit mutable->const widening so a
+			// read-only kernel taking ColumnSpan<const Vector3> accepts a
+			// mutable store's positions() without manual reconstruction.
+			// SFINAE-guarded to the const-adding conversion only (U* must
+			// convert to T*), so it never enables a const->mutable cast.
+			template <typename U,
+			          typename = typename std::enable_if<
+			              std::is_convertible<U*, T*>::value>::type>
+			ColumnSpan(const ColumnSpan<U>& o) : ptr_(o.data()), n_(o.size()) {}
+
+			// Codex P0-review: never form `null + n`. data() on an empty
+			// std::vector may be nullptr; pointer arithmetic on null (even
+			// `+0`) is UB-adjacent and trips UBSan. begin()/end() collapse
+			// to the same (possibly null) pointer when the span is empty.
+			T*          begin() const            { return ptr_; }
+			T*          end()   const            { return n_ ? ptr_ + n_ : ptr_; }
+			T&          operator[](std::size_t i) const { return ptr_[i]; }
+			std::size_t size()  const            { return n_; }
+			bool        empty() const            { return n_ == 0; }
+			T*          data()  const            { return ptr_; }
+		private:
+			T*          ptr_ = nullptr;
+			std::size_t n_   = 0;
 	};
 
 	/**	MoleculeStore — ground truth for per-atom and per-bond data.
@@ -162,6 +228,33 @@ namespace BALL
 		float&         radius(Index i)               { return radii_[i]; }
 		float          radius(Index i) const         { return radii_[i]; }
 
+		// v2.2 Option-A P0.1: bulk span accessors over the contiguous
+		// columns -- the GROMACS-faithful "kernels take spans, not per-atom
+		// objects" surface. Whole-column and [AtomRange) overloads. AoS
+		// (Vector3) today; the signature is stable across an Option-B SoA
+		// swap. The returned span is valid only until the next store
+		// reallocation (D7 generation contract); a kernel pass must not
+		// mutate the store's row set (insert/remove/compact) while holding
+		// a span. Bounds: an AtomRange past the column end is clamped to a
+		// shorter span (never out-of-bounds).
+		ColumnSpan<Vector3>       positions()        { return { positions_.data(), positions_.size() }; }
+		ColumnSpan<const Vector3> positions() const  { return { positions_.data(), positions_.size() }; }
+		ColumnSpan<Vector3>       velocities()       { return { velocities_.data(), velocities_.size() }; }
+		ColumnSpan<const Vector3> velocities() const { return { velocities_.data(), velocities_.size() }; }
+		ColumnSpan<Vector3>       forces()           { return { forces_.data(), forces_.size() }; }
+		ColumnSpan<const Vector3> forces() const     { return { forces_.data(), forces_.size() }; }
+		ColumnSpan<float>         charges()          { return { charges_.data(), charges_.size() }; }
+		ColumnSpan<const float>   charges() const    { return { charges_.data(), charges_.size() }; }
+
+		// Range overloads. Codex P0-review: when the clamped range is
+		// empty, return a default {nullptr, 0} span -- NEVER `data() + b`,
+		// since data() on an empty column may be null and `null + b` is
+		// UB-adjacent. spanRange_ centralises the clamp + null-safe form.
+		ColumnSpan<Vector3>       positions(AtomRange r)       { return spanRange_(positions_, r); }
+		ColumnSpan<const Vector3> positions(AtomRange r) const { return spanRange_(positions_, r); }
+		ColumnSpan<Vector3>       forces(AtomRange r)          { return spanRange_(forces_, r); }
+		ColumnSpan<const Vector3> forces(AtomRange r) const    { return spanRange_(forces_, r); }
+
 		short&         atom_type(Index i)            { return atom_types_[i]; }
 		short          atom_type(Index i) const      { return atom_types_[i]; }
 
@@ -220,6 +313,22 @@ namespace BALL
 		// K0.6.5c extends the friend to loadSystemJSON which builds its
 		// own fresh-index-keyed StableId vector.
 		private:
+		// v2.2 Option-A P0.1 (Codex P0-review): null-safe clamped range
+		// span. Deduces element const-ness from the column ref; returns a
+		// default {nullptr,0} span when the clamped range is empty so no
+		// `data() + b` pointer arithmetic runs on a possibly-null base.
+		template <typename Vec>
+		static auto spanRange_(Vec&& col, AtomRange r)
+		    -> ColumnSpan<typename std::remove_pointer<decltype(col.data())>::type>
+		{
+			using T = typename std::remove_pointer<decltype(col.data())>::type;
+			const std::size_t n = col.size();
+			const std::size_t b = (static_cast<std::size_t>(r.begin) < n) ? static_cast<std::size_t>(r.begin) : n;
+			const std::size_t e = (static_cast<std::size_t>(r.end)   < n) ? static_cast<std::size_t>(r.end)   : n;
+			if (e <= b) return ColumnSpan<T>{};
+			return ColumnSpan<T>{ col.data() + b, e - b };
+		}
+
 		friend void loadStoreJSON(MoleculeStore&, std::istream&);
 		friend void loadSystemJSON(System&, std::istream&);
 		void restore_stable_ids_for_load_(const std::vector<StableId>& ids);

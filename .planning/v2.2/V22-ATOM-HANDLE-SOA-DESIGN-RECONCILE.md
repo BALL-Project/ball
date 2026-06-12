@@ -205,13 +205,29 @@ additive prep in P0.
 
 **P0 — pre-H4, additive prep (safe to start now, no break):**
 - P0.1 Span/range kernel API surface on `MoleculeStore`:
-  `PositionSpan positions(AtomRange)`, `ForceSpan forces(AtomRange)`,
-  `AtomRange` type. AoS-backed today (a span over the `Vector3` column);
-  the same signatures survive an eventual Option-B swap. No call-site
-  change required — purely additive.
-- P0.2 Compile/grep gate flagging *new* mutable-`Vector3&` position/force
-  dependencies (mirror of HandleKeyLeakGate) so the hot-path surface
-  stops growing while H4 lands.
+  `ColumnSpan<Vector3> positions()/forces()` (whole-column + `AtomRange`
+  overloads), `AtomRange` type, `ColumnSpan<T>` view. AoS-backed today.
+  Purely additive, no call-site change. **Survival precision:** the
+  `AtomRange` type + range-based *access pattern* survive an Option-B
+  SoA swap unchanged; the `ColumnSpan<Vector3>` *signature* does not (no
+  contiguous `Vector3*` under SoA) — it would become component spans.
+  Under the LOCKED Option A (AoS stays) this is moot. **DONE** (commit
+  pending; `MoleculeStore_test` "Option-A P0.1" CHECK).
+- P0.2 Gate flagging *new* mutable-`Vector3&` position/velocity/force
+  accessor declarations (mirror of HandleKeyLeakGate) so the Option-B
+  retirement surface stops growing while H4 lands. `PositionRefGate`
+  ctest, baseline 6 (3 durable `MoleculeStore` + 3 `Atom` facade, the
+  latter dropping at H4 commit 8). **DONE.** Lower the baseline to 3
+  when H4 commit 8 deletes the `Atom` accessors (the gate is a ceiling,
+  not an auto-ratchet — Codex P0-review LOW).
+
+**P0 STATUS: COMPLETE** (commit pending). Both items landed additive,
+adversarially reviewed (Codex + Vibe), 291/291 ctest GREEN, benchmarks
+flat (ABO within ±1% of baseline). Review fixes applied: empty-span
+null-safety, mutable→const span widening, broadened gate regex
+(`Vector3 &` + qualifiers, const-filtered), empty-store test coverage.
+Honest-framing correction: the `ColumnSpan<Vector3>` *signature* does
+not survive an Option-B SoA swap; the `AtomRange` + range *pattern* do.
 
 **P1 — post-H4 (commit 8+), additive, measurable:**
 - P1.1 GROMACS-style interaction-term arrays. Force fields precompute

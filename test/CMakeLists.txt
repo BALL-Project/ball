@@ -283,6 +283,14 @@ ADD_TEST(NAME HandleKeyLeakGate_test
 		-DSOURCE_DIR=${CMAKE_SOURCE_DIR}
 		-P ${CMAKE_SOURCE_DIR}/test/HandleKeyLeakGate.cmake)
 
+# v2.2 Option-A P0.2: freeze the mutable-Vector3& position/velocity/force
+# API surface so the Option-B (SoA) retirement blast radius cannot grow
+# while H4 lands. Script-only ctest entry (not a binary target).
+ADD_TEST(NAME PositionRefGate_test
+	COMMAND ${CMAKE_COMMAND}
+		-DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+		-P ${CMAKE_SOURCE_DIR}/test/PositionRefGate.cmake)
+
 # Set the timeout of some tests to 2h
 # This is needed for the memcheck running on the CI server
 # which takes _very_ long
