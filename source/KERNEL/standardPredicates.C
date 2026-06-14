@@ -6,14 +6,15 @@
 
 #include <BALL/KERNEL/standardPredicates.h>
 
-// v2.2 H3d.A (D-H3.8): file-level H3a.5 gate opt-in deferred -- this TU
-// also holds ConnectedToPredicate / InRingPredicate / RingFinder, whose
-// DFS scratch (HashSet<const Bond*> visited) is transient-local v0 (not
-// a forward-stability concern). Opting the file in would flag those
-// transient sites without flagging any persistent leak; SMARTSPredicate
-// (the only persistent-state predicate in this TU, last_molecule_ +
-// matches_ cache) is migrated to sid-keyed matches_ +
-// last_match_store_ on its own merits regardless of gate scope.
+// v2.2 H4 7b.17 (D-H3.8): file opted into the handle API. RingFinder
+// (visited_bonds_/ring_atoms_) and ConnectedToPredicate::find_ (its
+// transient `visited` DFS set) are now keyed on BondHandle/AtomHandle
+// rather than raw Bond*/Atom*. Even though those DFS sets are
+// transient-local (not a forward-stability concern across mutations),
+// the H3a.5 gate is a text scanner that cannot distinguish transient
+// from persistent, so they were migrated to keep the TU gate-clean once
+// RingFinder's stored containers became handle-typed. SMARTSPredicate's
+// persistent matches_ cache was already migrated to sid keys (H3d.A).
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
@@ -23,6 +24,7 @@
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/handleKey.h>     // v2.2 H4 7b.17 (D-H3.8): makeHandle for RingFinder
 
 // #define DEBUG
 
@@ -1151,7 +1153,7 @@ namespace BALL
 
 	}
 
-	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<const Bond*>& visited) const
+	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<BondHandle>& visited) const
 	{
 		Atom* partner;
 		const Bond* bond;
@@ -1179,7 +1181,11 @@ namespace BALL
 			for (Size j = 0; j < atom.countBonds(); ++j)
 			{
 				bond = atom.getBond(j);
-				if (!visited.has(bond))
+				// v2.2 H4 7b.17 (D-H3.8): key the transient DFS set on the
+				// stable-id handle (predicate matching runs on in-System atoms,
+				// so the bond is mirrored and makeHandle() is non-null).
+				BondHandle bh = makeHandle(*bond);
+				if (!visited.has(bh))
 				{
 					if (bondOrderMatch_(*bond, **child_it))
 					{
@@ -1194,7 +1200,7 @@ namespace BALL
 								|| (((*child_it)->getSymbol() == "R") 
 										&& (inRing(*partner))))
 						{
-							visited.insert(bond);
+							visited.insert(bh);
 							this_result = find_(*partner, *child_it, visited);
 							if (this_result)
 							{
@@ -1207,7 +1213,7 @@ namespace BALL
 							}
 							else
 							{
-								visited.erase(bond);
+								visited.erase(bh);
 							}
 						}
 					}
@@ -1279,7 +1285,7 @@ namespace BALL
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
 	{
-		HashSet<const Bond*> visited;
+		HashSet<BondHandle> visited;
 		return find_(atom, tree_, visited);
 	}
 
@@ -1423,8 +1429,11 @@ namespace BALL
 			return(false);
 		}
 
-		const vector<const Atom*>& ring_atoms = in_ring.getRingAtoms();
-		const HashSet<const Bond*>& visited_bonds = in_ring.getVisitedBonds();
+		// v2.2 H4 7b.17 (D-H3.8): the finder now stores stable-id handles;
+		// resolve each to a const Atom* at the deref sites below (via
+		// .getAtom()) so no raw-pointer container is introduced here.
+		const std::vector<AtomHandle>& ring_atoms = in_ring.getRingAtoms();
+		const HashSet<BondHandle>& visited_bonds = in_ring.getVisitedBonds();
 
 		if ((ring_atoms.size() < 5) || (ring_atoms.size() > 6))
 		{
@@ -1455,9 +1464,9 @@ namespace BALL
 		// it is actually not really necessary to know which one is C3 and
 		// which one C5 but it makes sign determination easier.
 		
-		C3 = ring_atoms[ring_atoms.size() - 3];
+		C3 = ring_atoms[ring_atoms.size() - 3].getAtom();
 		c3 = C3->getPosition();
-		C5 = ring_atoms[1];
+		C5 = ring_atoms[1].getAtom();
 		c5 = C5->getPosition();
 #ifdef DEBUG
 		std::cout << "C3: " << C3->getFullName() << std::endl;
@@ -1472,7 +1481,7 @@ namespace BALL
 		AtomBondConstIterator bond_it = atom.beginBond();
 		for (; +bond_it; ++bond_it)
 		{
-			if (!visited_bonds.has(&*bond_it))
+			if (!visited_bonds.has(makeHandle(*bond_it)))
 			{
 				if ((H == 0)
 						&& (bond_it->getPartner(atom)->getElement() == PTE[Element::H]))
@@ -1545,7 +1554,12 @@ namespace BALL
 			return(false);
 		}
 
-		vector<const Atom*> ring_atoms = in_6_ring.getRingAtoms();
+		// v2.2 H4 7b.17 (D-H3.8): the finder stores stable-id handles; the
+		// at() accessor resolves an index to a const Atom* on demand, so the
+		// index-based ring analysis below is unchanged and no raw-pointer
+		// container is introduced.
+		const std::vector<AtomHandle>& ring_atoms = in_6_ring.getRingAtoms();
+		auto at = [&ring_atoms](Size i) -> const Atom* { return ring_atoms[i].getAtom(); };
 
 		ConnectedToPredicate isC5;
 		isC5.setArgument("(C)(C)(O)");
@@ -1555,13 +1569,13 @@ namespace BALL
 		Size C2_index = 0;
 		Size C5_index = 0;
 
-		while ((ring_atoms[O_index]->getElement() != PTE[Element::O])
+		while ((at(O_index)->getElement() != PTE[Element::O])
 			&& (O_index < 6))
 		{
 			++O_index;
 		}
 
-		if (isC5(*(ring_atoms[((O_index == 5) ? 0 : (O_index + 1) % 6)])))
+		if (isC5(*(at((O_index == 5) ? 0 : (O_index + 1) % 6))))
 		{
 			C1_index = (O_index == 0) ? 5 : (O_index - 1) % 6;
 			C2_index = (C1_index == 0) ? 5 : (C1_index - 1) % 6;
@@ -1569,7 +1583,7 @@ namespace BALL
 		}
 		else
 		{
-			if (isC5(*(ring_atoms[((O_index == 0) ? 5 : (O_index - 1) % 6)])))
+			if (isC5(*(at((O_index == 0) ? 5 : (O_index - 1) % 6))))
 			{
 				C1_index = (O_index == 5) ? 0 : (O_index + 1) % 6;
 				C2_index = (C1_index == 5) ? 0 : (C1_index + 1) % 6;
@@ -1584,18 +1598,18 @@ namespace BALL
 
 		// now compute the halfspace of C1
 
-		Vector3 c1 = ring_atoms[C1_index]->getPosition();
-		Vector3 c2 = ring_atoms[C2_index]->getPosition();
-		Vector3 c5 = ring_atoms[C5_index]->getPosition();
-		Vector3 o = ring_atoms[O_index]->getPosition();
+		Vector3 c1 = at(C1_index)->getPosition();
+		Vector3 c2 = at(C2_index)->getPosition();
+		Vector3 c5 = at(C5_index)->getPosition();
+		Vector3 o = at(O_index)->getPosition();
 		Vector3 n = (c5 - o) % (c2 - o);
 		Vector3 d = (c1 - o);
 
 #ifdef DEBUG
-		std::cout << "C1: " << ring_atoms[C1_index]->getFullName() << std::endl;
-		std::cout << "C2: " << ring_atoms[C2_index]->getFullName() << std::endl;
-		std::cout << "C5: " << ring_atoms[C5_index]->getFullName() << std::endl;
-		std::cout << "O: " << ring_atoms[O_index]->getFullName() << std::endl;
+		std::cout << "C1: " << at(C1_index)->getFullName() << std::endl;
+		std::cout << "C2: " << at(C2_index)->getFullName() << std::endl;
+		std::cout << "C5: " << at(C5_index)->getFullName() << std::endl;
+		std::cout << "O: " << at(O_index)->getFullName() << std::endl;
 		std::cout << "c1: " << c1 << std::endl;
 		std::cout << "c2: " << c2 << std::endl;
 		std::cout << "c5: " << c5 << std::endl;
@@ -1692,21 +1706,25 @@ namespace BALL
 		for (i = 0; i < atom.countBonds(); ++i)
 		{
 			bond = atom.getBond(i);
-			if (!visited_bonds_.has(bond))
+			// v2.2 H4 7b.17 (D-H3.8): key visited bonds on the stable-id handle,
+			// not the raw Bond*. RingFinder runs on in-System atoms, so the bond
+			// is mirrored and makeHandle() yields a valid (non-null) handle.
+			BondHandle bh = makeHandle(*bond);
+			if (!visited_bonds_.has(bh))
 			{
 				descend = bond->getPartner(atom);
-				visited_bonds_.insert(bond);
+				visited_bonds_.insert(bh);
 				if (dfs(*descend, limit-1))
 				{
 // #ifdef DEBUG
 // 					std::cout << "Pushing back " << atom.getFullName() << std::endl;
 // #endif
-					ring_atoms_.push_back(&atom);
+					ring_atoms_.push_back(makeHandle(atom));
 					return true;
 				}
 				else
 				{
-					visited_bonds_.erase(bond);
+					visited_bonds_.erase(bh);
 				}
 			}
 		}
@@ -1719,12 +1737,12 @@ namespace BALL
 		n_ = n;
 	}
 
-	const HashSet<const Bond*>& RingFinder::getVisitedBonds() const
+	const HashSet<BondHandle>& RingFinder::getVisitedBonds() const
 	{
 		return visited_bonds_;
 	}
 
-	const vector<const Atom*>& RingFinder::getRingAtoms() const
+	const vector<AtomHandle>& RingFinder::getRingAtoms() const
 	{
 		return ring_atoms_;
 	}

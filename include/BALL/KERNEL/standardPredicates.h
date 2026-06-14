@@ -19,6 +19,14 @@
 #	include <BALL/KERNEL/bond.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMHANDLE_H
+#	include <BALL/KERNEL/atomHandle.h>     // v2.2 H4 7b.17 (D-H3.8): RingFinder keys on handles
+#endif
+
+#ifndef BALL_KERNEL_BONDHANDLE_H
+#	include <BALL/KERNEL/bondHandle.h>
+#endif
+
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include <BALL/KERNEL/expression.h>
 #endif
@@ -726,7 +734,7 @@ namespace BALL
 			bool bondOrderMatch_(const Bond& bond, const CTPNode& node) const;
 
 			bool find_(const Atom& atom, const CTPNode* current,
-					HashSet<const Bond*>& visited) const;
+					HashSet<BondHandle>& visited) const;
 
 	};
 
@@ -870,11 +878,11 @@ namespace BALL
 
 			/** Return the hashset containing all visited bonds.
 			*/
-			const HashSet<const Bond*>& getVisitedBonds() const;
+			const HashSet<BondHandle>& getVisitedBonds() const;
 
 			/** Return the vector of ring atoms.
 			*/
-			const std::vector<const Atom*>& getRingAtoms() const;
+			const std::vector<AtomHandle>& getRingAtoms() const;
 
 		private:
 
@@ -890,13 +898,13 @@ namespace BALL
 			*/
 			bool exact_;
 
-			/*_
+			/*_  v2.2 H4 7b.17 (D-H3.8): stable-id handles, not raw pointers.
 			*/
-			HashSet<const Bond*> visited_bonds_;
+			HashSet<BondHandle> visited_bonds_;
 
-			/*_
+			/*_  v2.2 H4 7b.17 (D-H3.8): stable-id handles, not raw pointers.
 			*/
-			std::vector<const Atom*> ring_atoms_;
+			std::vector<AtomHandle> ring_atoms_;
 
 	};
 
