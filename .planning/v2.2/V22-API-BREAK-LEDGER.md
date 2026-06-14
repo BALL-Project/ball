@@ -64,6 +64,20 @@ reallocation must be re-checked against the handle generation contract.
 | `HashMap<Atom*, T>` keyed by atom pointer | key by `Atom` handle or `stable_id` | H3 | PLANNED |
 | `Residue*` cached in a class field | store `Residue` handle | H3 | PLANNED |
 
+### Landed pre-flip handle re-keys (D-H3.8 / D61)
+
+These re-key *latent* (non-gate-tracked) stored pointer-identity
+containers onto stable-id handles **now**, under dual existence —
+consumers resolve `.getAtom()`/`.getBond()` at the deref boundary so
+behaviour is unchanged. They are genuine public-surface changes (typedef
+/ getter return types) and are enumerated here per the D61 contract.
+
+| File | Was | Now | Consumers | Commit | Status |
+|---|---|---|---|---|---|
+| `RingFinder` (`standardPredicates.h`) | `HashSet<const Bond*> visited_bonds_`, `vector<const Atom*> ring_atoms_`; getters return those | `HashSet<BondHandle>`, `vector<AtomHandle>`; getters return handle containers | in-file ring geometry (resolve `.getAtom()`); `DNAMutator.C:619` (`.size()` only) | `69aa1b988` | LANDED |
+| `ConnectedToPredicate::find_` (`standardPredicates.h`) | `HashSet<const Bond*>& visited` param | `HashSet<BondHandle>&` | in-file caller local | `69aa1b988` | LANDED |
+| `ConnectedComponentsProcessor::Component` (`connectedComponentsProcessor.h`) | `typedef std::vector<Atom*> Component` (+ `components_` member) | `typedef std::vector<AtomHandle> Component` | only `getComponents()` → test (`.size()` only); convenience getters are `Molecule`-based, unaffected | 7b.18 | LANDED |
+
 ## Class C — pointer identity comparison / ordering
 
 `a == b` / `a < b` / `std::set<Atom*>` / ordered map keyed on pointer

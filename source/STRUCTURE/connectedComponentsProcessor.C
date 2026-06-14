@@ -3,6 +3,7 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/handleKey.h>     // v2.2 H4 7b.18 (D-H3.8/D61): makeHandle at the Component boundary
 #include <map>
 #include <vector>
 
@@ -85,12 +86,12 @@ namespace BALL
 			idx = pnames[par];
 			if (idx != -1)
 			{ // add element to existing component
-				components_[idx].push_back(i_to_atm[i]);
+				components_[idx].push_back(makeHandle(*i_to_atm[i]));
 			}
 			else
 			{ // create new component for current element:
 				Component tmp;
-				tmp.push_back(i_to_atm[i]);
+				tmp.push_back(makeHandle(*i_to_atm[i]));
 				components_.push_back(tmp);
 				pnames[par] = num;
 				num++;
@@ -138,7 +139,7 @@ namespace BALL
 
 		for (size_t i = 0; i < components_[pos].size(); i++)
 		{
-			result.insert( *(components_[pos][i]) );
+			result.insert( *(components_[pos][i].getAtom()) );
 		}
 	}
 	
@@ -154,7 +155,7 @@ namespace BALL
 				
 				for(size_t k = 0; k < siz; k++)
 				{
-					tmp.insert( *(components_[i][k]) );
+					tmp.insert( *(components_[i][k].getAtom()) );
 				}
 				result.push_back(tmp);
 			}
@@ -169,7 +170,7 @@ namespace BALL
 			
 			for(size_t k = 0; k < components_[i].size(); k++)
 			{
-				tmp.insert( *(components_[i][k]) );
+				tmp.insert( *(components_[i][k].getAtom()) );
 			}
 			results.push_back(tmp);
 		}

@@ -9,6 +9,10 @@
 #include <BALL/KERNEL/molecule.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMHANDLE_H
+#include <BALL/KERNEL/atomHandle.h>     // v2.2 H4 7b.18 (D-H3.8/D61): Component keyed by AtomHandle
+#endif
+
 #ifndef BOOST_PENDING_DISJOINT_SETS_HPP
 #include <boost/pending/disjoint_sets.hpp>
 #endif
@@ -35,7 +39,9 @@ namespace BALL
 		/** @name Type definitions
 		 */
 		//@{
-		typedef std::vector<Atom*>      Component;
+		// v2.2 H4 7b.18 (D-H3.8/D61): a Component is a list of stable-id atom
+		// handles, not raw Atom* (pointer identity churns at the H4 flip).
+		typedef std::vector<AtomHandle>  Component;
 		typedef std::vector<Molecule>   MolVec;
 		typedef	std::vector<Component>  ComponentVector;
 		//@}
